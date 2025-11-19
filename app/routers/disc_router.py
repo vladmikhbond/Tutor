@@ -28,59 +28,58 @@ async def get_question_list(
     """ 
     Усі дисципліни користувача.
     """   
-    discs = db.query(Disc).filter(Disc.username == username)
+    discs = db.query(Disc).filter(Disc.username == username).all()
 
     return templates.TemplateResponse("disc/list.html", 
             {"request": request, "discs": discs})
 
 
-# # ------- new 
+# ------- new 
 
-# @router.get("/new")
-# async def get_question_new(
-#     request: Request,
-#     user: User=Depends(get_current_tutor)
-# ):
-#     """ 
-#     Створення нового питання.
-#     """
-#     question = Question(attr="", kind="", text="", answers = "") 
-#     return templates.TemplateResponse("question/new.html", {"request": request, "question": question})
+@router.get("/new")
+async def get_disc_new(
+    request: Request,
+    username: str = Depends(get_current_user)
+):
+    """ 
+    Створення нової дисципліни.
+    """
+    disc = Disc(title="", lang="", theme="") 
+    return templates.TemplateResponse("disc/new.html", {"request": request, "disc": disc})
 
 
-# @router.post("/new")
-# async def post_question_new(
-#     request: Request,
-#     attr: str = Form(...),
-#     kind: str = Form(...),
-#     text: str = Form(...),
-#     answers: str = Form(...),
-#     db: Session = Depends(get_db),
-#     user: User=Depends(get_current_tutor)
-# ):
-#     question = Question(
-#         attr = attr,
-#         kind = kind, 
-#         text= text,
-#         answers = answers,
-#     )
-#     try:
-#         db.add(question) 
-#         db.commit()
-#     except Exception as e:
-#         db.rollback()
-#         err_mes = f"Error during a new question adding: {e}"
-#         return templates.TemplateResponse("question/new.html", {"request": request, "question": question})
-#     return RedirectResponse(url="/question/list", status_code=302)
+@router.post("/new")
+async def post_disc_new(
+    request: Request,
+    title: str = Form(...),
+    lang: str = Form(...),
+    theme: str = Form(...),
+    db: Session = Depends(get_db),
+    username: str=Depends(get_current_user)
+):
+    disc = Disc(
+        title = title,
+        theme = theme, 
+        lang = lang,
+        username = username,
+    )
+    try:
+        db.add(disc) 
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        err_mes = f"Error during a new disc adding: {e}"
+        return templates.TemplateResponse("disc/new.html", {"request": request, "disc": disc})
+    return RedirectResponse(url="/disc/list", status_code=302)
 
 # # ------- edit 
 
 # @router.get("/edit/{id}")
-# async def get_question_edit(
+# async def get_disc_edit(
 #     id: int, 
 #     request: Request, 
 #     db: Session = Depends(get_db),
-#     user: User=Depends(get_current_tutor)
+#     username: str=Depends(get_current_user)
 # ):
 #     """ 
 #     Редагування питання.
@@ -92,7 +91,7 @@ async def get_question_list(
 
 
 # @router.post("/edit/{id}")
-# async def post_question_edit(
+# async def post_disc_edit(
 #     id: int,
 #     request: Request,
 #     attr: str = Form(...),
@@ -100,7 +99,7 @@ async def get_question_list(
 #     text: str = Form(...),
 #     answers: str = Form(...),
 #     db: Session = Depends(get_db),
-#     user: User=Depends(get_current_tutor)
+#     username: str=Depends(get_current_user)
 # ):
 #     question = db.get(Question, id)
 #     if not question:
@@ -114,42 +113,42 @@ async def get_question_list(
 #     db.commit()
 #     return RedirectResponse(url="/question/list", status_code=302)
    
-# # ------- del 
+# ------- del 
 
-# @router.get("/del/{id}")
-# async def get_question_del(
-#     id: int, 
-#     request: Request, 
-#     db: Session = Depends(get_db),
-#     user: User=Depends(get_current_tutor)
-# ):
-#     """ 
-#     Видалення питання.
-#     """
-#     question = db.get(Question, id)
-#     if not question:
-#         return RedirectResponse(url="/question/list", status_code=302)
+@router.get("/del/{id}")
+async def get_disc_del(
+    id: int, 
+    request: Request, 
+    db: Session = Depends(get_db),
+    username: str=Depends(get_current_user)
+):
+    """ 
+    Видалення дисципліни.
+    """
+    disc = db.get(Disc, id)
+    if not disc:
+        return RedirectResponse(url="/disc/list", status_code=302)
     
-#     return templates.TemplateResponse("question/del.html", {"request": request, "question": question})
+    return templates.TemplateResponse("disc/del.html", {"request": request, "disc": disc})
 
 
-# @router.post("/del/{id}")
-# async def post_question_del(
-#     id: int,
-#     request: Request,
-#     db: Session = Depends(get_db),
-#     user: User=Depends(get_current_tutor)
-# ):
-#     question = db.get(Question, id)
-#     db.delete(question)
-#     db.commit()
-#     return RedirectResponse(url="/question/list", status_code=302)
+@router.post("/del/{id}")
+async def post_disc_del(
+    id: int,
+    request: Request,
+    db: Session = Depends(get_db),
+    username: str=Depends(get_current_user)
+):
+    disc = db.get(Disc, id)
+    db.delete(disc)
+    db.commit()
+    return RedirectResponse(url="/disc/list", status_code=302)
 
 
 # #---------------- import 
 
 # @router.get("/question/import")
-# async def get_question_import(
+# async def get_disc_import(
 #     request: Request,
 #     db: Session = Depends(get_db),
 #     user: User=Depends(get_current_tutor)
@@ -161,7 +160,7 @@ async def get_question_list(
 
 
 # @router.post("/question/import")
-# async def post_question_import(
+# async def post_disc_import(
 #     request: Request,
 #     attr: str = Form(...),
 #     body: str = Form(...),

@@ -5,33 +5,24 @@
 {% block content %}
 <section class="section">
   <div class="container">
-    <h2 class="title">New Question</h2>
+    <h2 class="title">New discipline</h2>
     <form method="post" >
       <label>
-        Attr
-        <input type="text" name="attr" value="{{ question.attr }}" required>
+        Title
+        <input name="title" value="{{ disc.title }}" required>
       </label>
       <label>
-      <div>
-        Kind
-          <input type="radio" name="kind" value="!" required style="margin-left: 30px;"
-            {% if question.kind == '!' %}checked{% endif %}> mono
-          <input type="radio" name="kind" value="#" required style="margin-left: 30px;" 
-          {% if question.kind == '#' %}checked{% endif %}> poly
-        </div>
+        Language
+        <input name="lang" value="{{ disc.lang }}" required>
       </label>
       <label>
-        Text
-        <textarea name="text" rows=5 style="width: 100%" required>{{ question.text }}</textarea>
+        Theme
+        <input name="theme" value="{{ disc.theme }}" required>
       </label>
 
-      <label>
-        Answers
-        <textarea name="answers" rows=5 style="width: 100%" required>{{question.answers }}</textarea> 
-      </label>
       <footer class="grid">
         <button type="submit" >Save</button>
-        <a href="/question/list" role="button" class="secondary">Cancel</a>
+        <a href="/disc/list" role="button" class="secondary">Cancel</a>
       </footer>      
 
     </form>
