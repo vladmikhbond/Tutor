@@ -1,16 +1,22 @@
+TODO
+crud for disc
+crud for lectures
+
+
 --- dev
-cd c:\git\dock\durometer
-docker stop duro_img
-docker rm duro_img
-docker image rm duro_img
-docker build -t duro_img .
-docker save -o duro.tar duro_img
+cd c:\git\dock\tutor
+docker stop tutor_img
+docker rm tutor_img
+docker image rm tutor_img
+docker build -t tutor_img .
+docker save -o tutor.tar tutor_img
+
 --- prod
-docker stop duro_img
-docker rm duro_img
-docker image rm duro_img
-docker load -i duro.tar
-docker run -p 7002:7002  -v ./:/data  --name duro_cont  duro_img 
+docker stop tutor_img
+docker rm tutor_img
+docker image rm tutor_img
+docker load -i tutor.tar
+docker run -p 7002:7002  -v ./:/data  --name tutor_cont  tutor_img 
 
 
 

@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+    
+<h2>Disciplines</h2>
+
+<a href="/disc/new" style="margin-right: 60px;">New disc</a>
+
+<!-- <a href="/disc/import">Import</a> &nbsp;&nbsp;
+<a href="/disc/export">Export</a> -->
+
+{% if disc and disc|length %}
+<table>
+  <tbody>
+    {% for disc in discs %}
+    <tr>
+      <td title="{{disc.title}}">{{ disc.text[:80] }}...</td>
+      <td>
+          <a href="/disc/edit/{{disc.id}}">edit</a> | 
+          <a href="/disc/del/{{disc.id}}">del</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+  <div>
+    No disciplines.
+  </div>
+{% endif %}
+
+{% endblock %}

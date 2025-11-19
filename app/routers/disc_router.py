@@ -3,10 +3,10 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 
 from sqlalchemy.orm import Session
-# from app.models.models import Question
+from ..models.models import Disc, User
 # from app.routers.filter_router import get_filtered_questions
-# from app.routers.login_router import get_current_tutor
-# from ..dal import get_db  # Функція для отримання сесії БД
+from ..routers.login_router import get_current_user
+from ..dal import get_db  # Функція для отримання сесії БД
 # from ..models.pss_models import User
 # from ..models.models import Question
 # from ..models.parser import parse_test_body
@@ -17,26 +17,26 @@ templates = Jinja2Templates(directory="app/templates")
 
 router = APIRouter()
 
-# # ----------------------- list
+# ----------------------- list
 
-# @router.get("/question/list")
-# async def get_question_list(
-#     request: Request, 
-#     db: Session = Depends(get_db),
-#     user: User=Depends(get_current_tutor)
-# ):
-#     """ 
-#     Усі питання.
-#     """   
-#     questions= get_filtered_questions(db, request)
+@router.get("/list")
+async def get_question_list(
+    request: Request, 
+    db: Session = Depends(get_db),
+    username: str = Depends(get_current_user)
+):
+    """ 
+    Усі дисципліни користувача.
+    """   
+    discs = db.query(Disc).filter(Disc.username == username)
 
-#     return templates.TemplateResponse("question/list.html", 
-#             {"request": request, "questions": questions, "filter": filter})
+    return templates.TemplateResponse("disc/list.html", 
+            {"request": request, "discs": discs})
 
 
 # # ------- new 
 
-# @router.get("/question/new")
+# @router.get("/new")
 # async def get_question_new(
 #     request: Request,
 #     user: User=Depends(get_current_tutor)
@@ -48,7 +48,7 @@ router = APIRouter()
 #     return templates.TemplateResponse("question/new.html", {"request": request, "question": question})
 
 
-# @router.post("/question/new")
+# @router.post("/new")
 # async def post_question_new(
 #     request: Request,
 #     attr: str = Form(...),
@@ -75,7 +75,7 @@ router = APIRouter()
 
 # # ------- edit 
 
-# @router.get("/question/edit/{id}")
+# @router.get("/edit/{id}")
 # async def get_question_edit(
 #     id: int, 
 #     request: Request, 
@@ -91,7 +91,7 @@ router = APIRouter()
 #     return templates.TemplateResponse("question/edit.html", {"request": request, "question": question})
 
 
-# @router.post("/question/edit/{id}")
+# @router.post("/edit/{id}")
 # async def post_question_edit(
 #     id: int,
 #     request: Request,
@@ -116,7 +116,7 @@ router = APIRouter()
    
 # # ------- del 
 
-# @router.get("/question/del/{id}")
+# @router.get("/del/{id}")
 # async def get_question_del(
 #     id: int, 
 #     request: Request, 
@@ -133,7 +133,7 @@ router = APIRouter()
 #     return templates.TemplateResponse("question/del.html", {"request": request, "question": question})
 
 
-# @router.post("/question/del/{id}")
+# @router.post("/del/{id}")
 # async def post_question_del(
 #     id: int,
 #     request: Request,

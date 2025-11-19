@@ -59,8 +59,8 @@ async def login(
         samesite="lax",       # ❗ Захист від CSRF
         max_age=ACCESS_TOKEN_EXPIRE_MINUTES * 60,  # in seconds 
     )
-    # return redirect    
-    return "OK"
+    return redirect    
+ 
     
 
 @router.get("/logout")
@@ -85,6 +85,8 @@ def get_authenticated_user(username: str, password: str, db: Session):
         if isinstance(user.hashed_password, str) \
         else user.hashed_password
      
+    # psw = bcrypt.hashpw(b"123456", bcrypt.gensalt())
+    
     try:
         if bcrypt.checkpw(password.encode('utf-8'), hashed_password):
             return user
@@ -97,9 +99,10 @@ def get_authenticated_user(username: str, password: str, db: Session):
 # описуємо джерело токена - це cookie
 cookie_scheme = APIKeyCookie(name="access_token")
 
-def get_current_user(token: str = Security(cookie_scheme)):
+def get_current_user(token: str = Security(cookie_scheme)) -> str:
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        return User(username=payload.get("sub"), role=payload.get("role"))
+        return payload.get("sub")
+    
     except Exception:
         raise HTTPException(status_code=401, detail="Invalid or expired token")
