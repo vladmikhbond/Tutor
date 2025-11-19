@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <h2 class="title">New Question</h2>
+    <form method="post" >
+      <label>
+        Attr
+        <input type="text" name="attr" value="{{ question.attr }}" required>
+      </label>
+      <label>
+      <div>
+        Kind
+          <input type="radio" name="kind" value="!" required style="margin-left: 30px;"
+            {% if question.kind == '!' %}checked{% endif %}> mono
+          <input type="radio" name="kind" value="#" required style="margin-left: 30px;" 
+          {% if question.kind == '#' %}checked{% endif %}> poly
+        </div>
+      </label>
+      <label>
+        Text
+        <textarea name="text" rows=5 style="width: 100%" required>{{ question.text }}</textarea>
+      </label>
+
+      <label>
+        Answers
+        <textarea name="answers" rows=5 style="width: 100%" required>{{question.answers }}</textarea> 
+      </label>
+      <footer class="grid">
+        <button type="submit" >Save</button>
+        <a href="/question/list" role="button" class="secondary">Cancel</a>
+      </footer>      
+
+    </form>
+{% endblock %}

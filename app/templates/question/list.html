@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+    
+<h2>Questions</h2>
+
+<a href="/question/new" style="margin-right: 60px;">New Question</a>
+
+<a href="/question/import">Import</a> &nbsp;&nbsp;
+<a href="/question/export">Export</a>
+
+{% if questions and questions|length %}
+<table>
+  <tbody>
+    {% for question in questions %}
+    <tr>
+      <td>{{ question.attr }}</td>
+      <td title="{{question.text +'\n--------------------\n'+ question.answers}}">{{ question.text[:80] }}...</td>
+      <td>
+          <a href="/question/edit/{{question.id}}">edit</a> | 
+          <a href="/question/del/{{question.id}}">del</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+  <div>
+    No questions.
+  </div>
+{% endif %}
+
+{% endblock %}

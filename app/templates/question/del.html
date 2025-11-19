@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+
+    <h1>Delete Question</h1>
+    <form method="post" >
+      <textarea name="text"  rows=5 style="width: 100%" readonly>{{ question.text }}</textarea>
+      <textarea name="answers" rows=4 style="width: 100%" required>{{question.answers }}</textarea> 
+
+      <footer class="grid">
+        <button type="submit" >Delete</button>
+        <a href="/test/list" role="button" class="secondary">Cancel</a>
+      </footer>      
+    </form>
+{% endblock %}

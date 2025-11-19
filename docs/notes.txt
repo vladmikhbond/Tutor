@@ -1,0 +1,19 @@
+--- dev
+cd c:\git\dock\durometer
+docker stop duro_img
+docker rm duro_img
+docker image rm duro_img
+docker build -t duro_img .
+docker save -o duro.tar duro_img
+--- prod
+docker stop duro_img
+docker rm duro_img
+docker image rm duro_img
+docker load -i duro.tar
+docker run -p 7002:7002  -v ./:/data  --name duro_cont  duro_img 
+
+
+
+---
+git config --global user.email "vladmikhbond@gmale.com"
+git config --global user.name "vladmikhbond"

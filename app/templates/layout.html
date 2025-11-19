@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} {% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/pico.min.css">
+    <link rel="stylesheet" href="/static/css/app.css">
+    <link rel="icon" href="/static/favicon.ico">
+</head>
+<body>
+
+    <main class="container">
+        <nav>
+        <ul>
+            <li style="color: darkred"><strong>Durometer</strong></li>
+        </ul>
+        <ul>
+            <li><a href="/seance/list">Sessions</a></li>
+            <li><a href="/question/list">Questions</a></li>
+            <li><a href="/ticket/report">Report</a></li>
+            <li><a href="/check/open_list">Check</a></li>
+            <li><a href="/static/help.html">Help</a></li>
+            <li><a href="/logout">Bye</a></li>
+        </ul>
+        <form action="/filter/question" method="post" >
+            <fieldset role="group" style="margin-top: 16px;">
+                <input name="filter_value"  id="q_filter_value" style="height: 10px; width: 200px;">        
+                <input type="hidden" name="referer" id="q_referer">
+                <button type="submit" class="small" title="Questions">Q</button>
+            </fieldset>
+        </form>
+        <form action="/filter/seance" method="post" >
+            <fieldset role="group" style="margin-top: 16px;">
+                <input name="filter_value"  id="s_filter_value" style="height: 10px; width: 200px;" >        
+                <input type="hidden" name="referer" id="s_referer">
+                <button type="submit" class="small" title="Sessions">S</button>
+            </fieldset>
+        </form>        
+        <form action="/filter/user" method="post" >
+            <fieldset role="group" style="margin-top: 16px;">
+                <input name="filter_value"  id="u_filter_value" style="height: 10px; width: 200px;" >        
+                <input type="hidden" name="referer" id="u_referer">
+                <button type="submit" class="small" title="Users">U</button>&nbsp;
+                <a href="https://regex101.com/" style="color: gray;">re</a>  
+            </fieldset>
+            
+        </form>        
+  
+            
+     
+        </nav>
+        {% block content %}{% endblock %}
+    </main>
+    <script>
+        // Встановлює значення в поле фільтру при завантаженні сторінки
+        const QUESTION_FILTER = "durometer_question_filter"
+        const SEANCE_FILTER = "durometer_seance_filter"
+        const USER_FILTER = "durometer_user_filter"
+
+        q_referer.value = s_referer.value = u_referer.value = document.location.pathname;
+
+        const questionFilterValue = getCookieValue(QUESTION_FILTER)
+        if (questionFilterValue != undefined){
+            q_filter_value.value = questionFilterValue
+        }
+        const seanceFilterValue = getCookieValue(SEANCE_FILTER)
+        if (seanceFilterValue != undefined){
+            s_filter_value.value = seanceFilterValue
+        }
+        const userFilterValue = getCookieValue(USER_FILTER)
+        if (userFilterValue != undefined){
+            u_filter_value.value = userFilterValue
+        }
+                  
+        function getCookieValue(key) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${key}=`);
+            if (parts.length === 2) {
+                let value = parts.pop().split(';').shift();
+                value = decodeURIComponent(value);
+                return value
+            }
+        }
+    </script>
+</body>
+</html>
