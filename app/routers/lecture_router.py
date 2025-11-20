@@ -8,7 +8,7 @@ from ..models.models import Disc, Lecture, User
 
 from .login_router import get_current_user
 from ..dal import get_db  # Функція для отримання сесії БД
-
+from ..lectorium.main import trans
 
 # шаблони Jinja2
 templates = Jinja2Templates(directory="app/templates")
@@ -112,6 +112,13 @@ async def post_lecture_edit(
     lecture.is_public = is_public
     lecture.modified = dt.datetime.now()
     db.commit()
+
+    # ##########################################################################
+    body, fname = trans(lecture.content, theme="github", lang="javascript")
+    with open(f"/workspaces/Tutor/app/static/output/work.html", "w") as f:
+        f.write(body)
+    # ##########################################################################
+
     return RedirectResponse(url=url, status_code=302)
    
 # ------- del 
