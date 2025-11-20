@@ -7,10 +7,6 @@ from ..models.models import Disc, User
 
 from ..routers.login_router import get_current_user
 from ..dal import get_db  # Функція для отримання сесії БД
-# from ..models.pss_models import User
-
-# from ..models.parser import parse_test_body
-
 
 # шаблони Jinja2
 templates = Jinja2Templates(directory="app/templates")

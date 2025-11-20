@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+    
+<h2>{{disc.title}}</h2>
+
+<a href="/lecture/new/{{disc.id}}" style="margin-right: 60px;">New lecture</a>
+
+{% if disc.lectures and disc.lectures|length %}
+<table>
+  <tbody>
+    {% for lecture in disc.lectures %}
+    <tr>
+      <td>{{ lecture.title }}</td>
+      <td>
+          <a href="/lecture/edit/{{lecture.id}}">edit</a> | 
+          <a href="/lecture/del/{{lecture.id}}">del</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+  <div>
+    No lectures.
+  </div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+    <h2>New Lecture</h2>
+    <form method="post" >
+      <label>
+        Title
+        <input name="title" value="{{ lecture.title }}" required >
+      </label>
+      <label>
+        Content
+        <input name="content" value="{{ lecture.content }}" required >
+      </label>
+      <label>
+        Is Public
+        {% set checked = "checked" if lecture.is_public else "" %}
+        <input type="checkbox" name="is_public" {{checked}} required >
+      </label>
+
+      <footer class="grid">
+        <button type="submit" >Save</button>
+        <a href="/lecture/list{{lecture.disc_id}}" role="button" class="secondary">Cancel</a>
+      </footer>      
+
+    </form>
+{% endblock %}

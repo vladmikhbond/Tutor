@@ -17,6 +17,7 @@ class Lecture(Base):
     content: Mapped[str] = mapped_column(Text)
     is_public: Mapped[bool] = mapped_column(Boolean)
     modified: Mapped[dt.datetime] = mapped_column(DateTime)
+    # nav
     disc: Mapped["Disc"] = relationship(back_populates="lectures")
 
 
