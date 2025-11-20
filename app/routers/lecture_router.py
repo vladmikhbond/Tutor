@@ -65,81 +65,85 @@ async def post_lecture_new(
         disc_id = disc_id,
         modified = dt.datetime.now()
     )
+    url=f"/lecture/list/{disc_id}"
     try:
         db.add(lecture) 
         db.commit()
     except Exception as e:
         db.rollback()
-        err_mes = f"Error during a new lecture adding: {e}"
+        
         return templates.TemplateResponse("lecture/new.html", {"request": request, "lecture": lecture})
-    return RedirectResponse(url="/lecture/list", status_code=302)
+    return RedirectResponse(url, status_code=302)
 
-# # ------- edit 
+# ------- edit 
 
-# @router.get("/edit/{id}")
-# async def get_lecture_edit(
-#     id: int, 
-#     request: Request, 
-#     db: Session = Depends(get_db),
-#     username: str=Depends(get_current_user)
-# ):
-#     """ 
-#     Редагування дисципліни.
-#     """
-#     lecture = db.get(lecture, id)
-#     if not lecture:
-#         return RedirectResponse(url="/lecture/list", status_code=302)
-#     return templates.TemplateResponse("lecture/edit.html", {"request": request, "lecture": lecture})
+@router.get("/edit/{id}")
+async def get_lecture_edit(
+    id: int, 
+    request: Request, 
+    db: Session = Depends(get_db),
+    username: str=Depends(get_current_user)
+):
+    """ 
+    Редагування лекції.
+    """
+    lecture = db.get(Lecture, id)
+    if not lecture:
+        return RedirectResponse(url=f"/lecture/list/{lecture.disc_id}", status_code=302)
+    return templates.TemplateResponse("lecture/edit.html", {"request": request, "lecture": lecture})
 
 
-# @router.post("/edit/{id}")
-# async def post_lecture_edit(
-#     id: int,
-#     request: Request,
-#     title: str = Form(...),
-#     lang: str = Form(...),
-#     theme: str = Form(...),
-#     db: Session = Depends(get_db),
-#     username: str=Depends(get_current_user)
-# ):
-#     lecture = db.get(lecture, id)
-#     if not lecture:
-#         return RedirectResponse(url="/lecture/list", status_code=302)
-#     lecture.title = title
-#     lecture.lang = lang 
-#     lecture.theme= theme
-#     db.commit()
-#     return RedirectResponse(url="/lecture/list", status_code=302)
+@router.post("/edit/{id}")
+async def post_lecture_edit(
+    id: int,
+    title: str = Form(...),
+    content: str = Form(...),
+    is_public: bool = Form(...),
+    db: Session = Depends(get_db),
+    username: str=Depends(get_current_user)
+):
+    lecture = db.get(Lecture, id)
+    url=f"/lecture/list/{lecture.disc_id}"
+
+    if not lecture:
+        return RedirectResponse(url=url, status_code=302)
+    lecture.title = title
+    lecture.content = content
+    lecture.is_public = is_public
+    lecture.modified = dt.datetime.now()
+    db.commit()
+    return RedirectResponse(url=url, status_code=302)
    
-# # ------- del 
+# ------- del 
 
-# @router.get("/del/{id}")
-# async def get_lecture_del(
-#     id: int, 
-#     request: Request, 
-#     db: Session = Depends(get_db),
-#     username: str=Depends(get_current_user)
-# ):
-#     """ 
-#     Видалення дисципліни.
-#     """
-#     lecture = db.get(lecture, id)
-#     if not lecture:
-#         return RedirectResponse(url="/lecture/list", status_code=302)
-    
-#     return templates.TemplateResponse("lecture/del.html", {"request": request, "lecture": lecture})
+@router.get("/del/{id}")
+async def get_lecture_del(
+    id: int, 
+    request: Request, 
+    db: Session = Depends(get_db),
+    username: str=Depends(get_current_user)
+):
+    """ 
+    Видалення лекції.
+    """
+    lecture = db.get(Lecture, id)
+    if not lecture:
+        return HTTPException(404, f"No lecture with id={id}")
+
+    return templates.TemplateResponse("lecture/del.html", {"request": request, "lecture": lecture})
 
 
-# @router.post("/del/{id}")
-# async def post_lecture_del(
-#     id: int,
-#     request: Request,
-#     db: Session = Depends(get_db),
-#     username: str=Depends(get_current_user)
-# ):
-#     lecture = db.get(lecture, id)
-#     db.delete(lecture)
-#     db.commit()
-#     return RedirectResponse(url="/lecture/list", status_code=302)
+@router.post("/del/{id}")
+async def post_lecture_del(
+    id: int,
+    db: Session = Depends(get_db),
+    username: str=Depends(get_current_user)
+):
+    lecture = db.get(Lecture, id)
+    db.delete(lecture)
+    db.commit()
+
+    url=f"/lecture/list/{lecture.disc_id}"
+    return RedirectResponse(url, status_code=302)
 
 

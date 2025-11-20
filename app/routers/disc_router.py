@@ -127,7 +127,6 @@ async def get_disc_del(
 @router.post("/del/{id}")
 async def post_disc_del(
     id: int,
-    request: Request,
     db: Session = Depends(get_db),
     username: str=Depends(get_current_user)
 ):

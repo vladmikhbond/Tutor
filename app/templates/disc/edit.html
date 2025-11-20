@@ -4,24 +4,25 @@
 
 {% block content %}
 
-    <h2>Change Discipline"</h2>
-    <form method="post" >
-      <label>
-        Title
-        <input name="title" value="{{ disc.title }}" required>
-      </label>
-      <label>
-        Language
-        <input name="lang" value="{{ disc.lang }}" required>
-      </label>
-      <label>
-        Theme
-        <input name="theme" value="{{ disc.theme }}" required>
-      </label>
+<h2>Change Discipline"</h2>
+<form method="post" >
+  <label>
+    Title
+    <input name="title" value="{{ disc.title }}" required>
+  </label>
+  <label>
+    Language
+    <input name="lang" value="{{ disc.lang }}" required>
+  </label>
+  <label>
+    Theme
+    <input name="theme" value="{{ disc.theme }}" required>
+  </label>
 
-      <footer class="grid">
-        <button type="submit" >Save</button>
-        <a href="/disc/list" role="button" class="secondary">Cancel</a>
-      </footer>      
-    </form>
+  <footer class="grid">
+    <button type="submit" >Save</button>
+    <a href="/disc/list" role="button" class="secondary">Cancel</a>
+  </footer>      
+</form>
+
 {% endblock %}

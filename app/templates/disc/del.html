@@ -4,16 +4,17 @@
 
 {% block content %}
 
-    <h1>Delete Discipline</h1>
-    <form method="post" >
-      <label>
-        Title
-        <input name="title" value="{{ disc.title }}" readonly>
-      </label>
+<h1>Delete Discipline</h1>
+<form method="post" >
+  <label>
+    Title
+    <input name="title" value="{{ disc.title }}" readonly>
+  </label>
 
-      <footer class="grid">
-        <button type="submit" >Delete</button>
-        <a href="/disc/list" role="button" class="secondary">Cancel</a>
-      </footer>      
-    </form>
+  <footer class="grid">
+    <button type="submit" >Delete</button>
+    <a href="/disc/list" role="button" class="secondary">Cancel</a>
+  </footer>      
+</form>
+
 {% endblock %}
