@@ -8,7 +8,7 @@
 <form method="post" >
   <label>
     Title
-    <input name="title" value="{{ lecture.title }}" required >
+    <input name="title" value="{{ lecture.title }}">
   </label>
   <label>
     Content
@@ -17,13 +17,17 @@
   <label>
     Is Public
     {% set checked = "checked" if lecture.is_public else "" %}
-    <input type="checkbox" name="is_public" {{checked}} required >
+    <input type="checkbox" name="is_public" {{checked}} >
   </label>
 
   <footer class="grid">
     <button type="submit" >Save</button>
     <a href="/lecture/list/{{lecture.disc_id}}" role="button" class="secondary">Cancel</a>
-    <a href="/static/output/work.html" role="button" class="secondary">HTML</a>
+    {# <a href="/static/output/work.html" role="button" class="secondary">HTML</a> #}
+    {% if lecture.id %}
+    <a href="/lecture/trans/{{lecture.id}}" role="button" class="secondary">Cancel</a>
+    {% endif %}
+
   </footer>      
 </form>
     

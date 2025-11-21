@@ -45,7 +45,7 @@ async def get_lecture_new(
     Створення нової лекції.
     """
     lecture = Lecture(title="", content="") 
-    return templates.TemplateResponse("lecture/new.html", {"request": request, "lecture": lecture})
+    return templates.TemplateResponse("lecture/edit.html", {"request": request, "lecture": lecture})
 
 
 @router.post("/new/{disc_id}")
