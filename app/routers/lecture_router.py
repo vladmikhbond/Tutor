@@ -161,9 +161,9 @@ async def get_lecture_trans(
     if not lecture:
         return HTTPException(404, f"No lecture with id={id}")
     
-    ###### html
+    # temp.html
     work = translate(lecture.content, theme="github", lang="javascript")
-    with open(f"/workspaces/Tutor/app/static/output/temp.html", "w") as f:
+    with open(f"app/static/output/temp.html", "w") as f:
         f.write(work)
 
     url=f"/static/output/temp.html"

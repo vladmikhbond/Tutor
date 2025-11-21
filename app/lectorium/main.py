@@ -80,8 +80,8 @@ a = a + 1
 [[https://google.com | Оце так гугол!]]
 
 """
-    body, fname = translate(source, theme="github", lang="javascript")
+    body = translate(source, theme="github", lang="javascript")
 
-    with open(f"{fname}.html", "w") as f:
+    with open(f"111.html", "w") as f:
         f.write(body)
 
