@@ -1,6 +1,8 @@
 TODO
-crud for disc
-crud for lectures
+disc/new-edit   вібір теми і мови
+lecture/list    кнопки |html|
+
+генерація студ версій лекцій
 
 
 --- dev
