@@ -44,7 +44,7 @@ async def get_lecture_new(
     """ 
     Створення нової лекції.
     """
-    lecture = Lecture(title="", content="") 
+    lecture = Lecture(title="Noname", content="") 
     return templates.TemplateResponse("lecture/edit.html", {"request": request, "lecture": lecture})
 
 
@@ -52,12 +52,16 @@ async def get_lecture_new(
 async def post_lecture_new(
     request: Request,
     disc_id: int,
-    title: str = Form(...),
     content: str = Form(...),
-    is_public: bool = Form(...),
+    is_public: bool = Form(default=False),
     db: Session = Depends(get_db),
     username: str=Depends(get_current_user)
 ):
+    ###### html
+    work, title = trans(content, theme="github", lang="javascript")
+    with open(f"/workspaces/Tutor/app/static/output/work.html", "w") as f:
+        f.write(work)
+
     lecture = Lecture(
         title = title,
         content = content, 
@@ -65,14 +69,16 @@ async def post_lecture_new(
         disc_id = disc_id,
         modified = dt.datetime.now()
     )
+    
+
     url=f"/lecture/list/{disc_id}"
     try:
         db.add(lecture) 
         db.commit()
     except Exception as e:
-        db.rollback()
-        
+        db.rollback()   
         return templates.TemplateResponse("lecture/new.html", {"request": request, "lecture": lecture})
+    
     return RedirectResponse(url, status_code=302)
 
 # ------- edit 
@@ -96,9 +102,8 @@ async def get_lecture_edit(
 @router.post("/edit/{id}")
 async def post_lecture_edit(
     id: int,
-    title: str = Form(...),
     content: str = Form(...),
-    is_public: bool = Form(...),
+    is_public: bool = Form(default=False),
     db: Session = Depends(get_db),
     username: str=Depends(get_current_user)
 ):
@@ -107,18 +112,18 @@ async def post_lecture_edit(
 
     if not lecture:
         return RedirectResponse(url=url, status_code=302)
+    
+    ##### html
+    work, title = trans(content, theme="github", lang="javascript")
+    with open(f"/workspaces/Tutor/app/static/output/work.html", "w") as f:
+        f.write(work)
+
+
     lecture.title = title
     lecture.content = content
     lecture.is_public = is_public
     lecture.modified = dt.datetime.now()
     db.commit()
-
-    # ##########################################################################
-    body, fname = trans(lecture.content, theme="github", lang="javascript")
-    with open(f"/workspaces/Tutor/app/static/output/work.html", "w") as f:
-        f.write(body)
-    # ##########################################################################
-
     return RedirectResponse(url=url, status_code=302)
    
 # ------- del 
@@ -153,4 +158,27 @@ async def post_lecture_del(
     url=f"/lecture/list/{lecture.disc_id}"
     return RedirectResponse(url, status_code=302)
 
+# ----- trans 
 
+@router.get("/trans/{id}")
+async def get_lecture_trans(
+    id: int, 
+    request: Request, 
+    db: Session = Depends(get_db),
+    username: str=Depends(get_current_user)
+):
+    """ 
+    Трансляція лекції.
+    """
+    lecture = db.get(Lecture, id)
+    if not lecture:
+        return HTTPException(404, f"No lecture with id={id}")
+    
+    ###### html
+    work, title = trans(lecture.content, theme="github", lang="javascript")
+    with open(f"/workspaces/Tutor/app/static/output/work.html", "w") as f:
+        f.write(work)
+
+    url=f"/static/output/work.html"
+    return RedirectResponse(url, status_code=302)
+    

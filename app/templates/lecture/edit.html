@@ -4,16 +4,11 @@
 
 {% block content %}
 
-<h2>Change Discipline"</h2>
+<h3>{{lecture.title}}"</h3>
 <form method="post" >
-  <label>
-    Title
-    <input name="title" value="{{ lecture.title }}">
-  </label>
-  <label>
-    Content
-    <textarea name="content" required >{{ lecture.content }}</textarea>
-  </label>
+
+    <textarea name="content" rows="20" >{{ lecture.content }}</textarea>
+
   <label>
     Is Public
     {% set checked = "checked" if lecture.is_public else "" %}
@@ -23,9 +18,9 @@
   <footer class="grid">
     <button type="submit" >Save</button>
     <a href="/lecture/list/{{lecture.disc_id}}" role="button" class="secondary">Cancel</a>
-    {# <a href="/static/output/work.html" role="button" class="secondary">HTML</a> #}
+    {# <a href="/static/output/work.html" role="button" class="secondary"></a> #}
     {% if lecture.id %}
-    <a href="/lecture/trans/{{lecture.id}}" role="button" class="secondary">Cancel</a>
+    <a href="/lecture/trans/{{lecture.id}}" role="button" class="secondary">HTML</a>
     {% endif %}
 
   </footer>      
