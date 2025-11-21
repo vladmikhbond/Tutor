@@ -4,16 +4,16 @@
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>02 Машинна мова</title>
+<title>01 Машинна мова</title>
 <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" rel="stylesheet">
-<link href='github.css' type='text/css' rel='stylesheet' />
+<link href='sys/github.css' type='text/css' rel='stylesheet' />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/ace.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/mode-javascript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/theme-github.min.js"></script>
 </head>
 <body>
 <div class="container">
-<div id="n0" class="alef1">02 Машинна мова</div>
+<div id="n0" class="alef1">01 Машинна мова</div>
 <div id="n1" class="alef2">Машинні команди</div>
 <div id="n2" class="alef6"><table><thead><tr><th>Код</th><th>Адреса</th><th>Команда</th></hr></thead><tbody><tr><td>01</td><td>NNNN</td><td>зчитати: скопіювати до суматора зміст комірки NNNN</td></tr><tr><td>02</td><td>NNNN</td><td>записати: зміст суматора скопіювати в комірку NNNN</td></tr><tr><td>11</td><td>NNNN</td><td>додати до суматора зміст комірки NNNN</td></tr><tr><td>12</td><td>NNNN</td><td>відняти від суматора зміст комірки NNNN</td></tr><tr><td>13</td><td>NNNN</td><td>помножити суматор на зміст комірки NNNN</td></tr><tr><td>20</td><td>NNNN</td><td>перейти до команди з адресом NNNN (занести в лічильник команд число NNNN)</td></tr></tbody></table></div>
 <div id="n3" class="alef3">Програма є послідовністю машинних команд.</div>
@@ -73,13 +73,26 @@ a = a + 1`,
 Пам'ять - зберігає інформацію.
 Процесор - виконує команди.
 Пристрої введення і виведення - підтримують зв'язок із зовнішнім світом.</div>
-<div id="n17" class="alef3"><a href="https://google.com "> Оце так гугол!</a>
+<div id="n17" class="alef3"><a href="https://google.com "> Оце так гугол!</a></div>
 
-"""
-    <i>body,</i> <i>fname</i> = <i>trans</i>(<i>source,</i> <i>theme</i>="<i>github</i>"<i>,</i> <i>lang</i>="<i>javascript</i>")
+<div id="n18" class="alef5">
+    <div id="editor18"></div>
+</div>
 
-    <i>with</i> <i>open</i>(<i>f</i>"{<i>fname</i>}.<i>html</i>"<i>,</i> "<i>w</i>") <i>as</i> <i>f</i>:
-        <i>f</i>.<i>write</i>(<i>body</i>)</div>
+<script>
+    const editor18 = ace.edit("editor18", {
+        theme: "ace/theme/github",
+        mode: "ace/mode/python",
+        value:  `body, fname = trans(source, theme="github", lang="javascript")
+
+    with open(f"{fname}.html", "w") as f:
+        f.write(body)`,    
+        maxLines: 30,
+        wrap: true,
+        autoScrollEditorIntoView: true,
+    });
+</script>
+
 </div>
 </body>
 </html>

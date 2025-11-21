@@ -8,7 +8,7 @@ from ..models.models import Disc, Lecture, User
 
 from .login_router import get_current_user
 from ..dal import get_db  # Функція для отримання сесії БД
-from ..lectorium.main import trans
+from ..lectorium.main import translate, get_title
 
 # шаблони Jinja2
 templates = Jinja2Templates(directory="app/templates")
@@ -38,7 +38,6 @@ async def get_lecture_list(
 @router.get("/new/{disc_id}")
 async def get_lecture_new(
     request: Request,
-    disc_id: int,
     username: str = Depends(get_current_user)
 ):
     """ 
@@ -56,21 +55,15 @@ async def post_lecture_new(
     is_public: bool = Form(default=False),
     db: Session = Depends(get_db),
     username: str=Depends(get_current_user)
-):
-    ###### html
-    work, title = trans(content, theme="github", lang="javascript")
-    with open(f"/workspaces/Tutor/app/static/output/work.html", "w") as f:
-        f.write(work)
-
+):  
     lecture = Lecture(
-        title = title,
+        title = get_title(content),
         content = content, 
         is_public = is_public,
         disc_id = disc_id,
         modified = dt.datetime.now()
     )
     
-
     url=f"/lecture/list/{disc_id}"
     try:
         db.add(lecture) 
@@ -112,14 +105,8 @@ async def post_lecture_edit(
 
     if not lecture:
         return RedirectResponse(url=url, status_code=302)
-    
-    ##### html
-    work, title = trans(content, theme="github", lang="javascript")
-    with open(f"/workspaces/Tutor/app/static/output/work.html", "w") as f:
-        f.write(work)
 
-
-    lecture.title = title
+    lecture.title = get_title(content)
     lecture.content = content
     lecture.is_public = is_public
     lecture.modified = dt.datetime.now()
@@ -175,10 +162,10 @@ async def get_lecture_trans(
         return HTTPException(404, f"No lecture with id={id}")
     
     ###### html
-    work, title = trans(lecture.content, theme="github", lang="javascript")
-    with open(f"/workspaces/Tutor/app/static/output/work.html", "w") as f:
+    work = translate(lecture.content, theme="github", lang="javascript")
+    with open(f"/workspaces/Tutor/app/static/output/temp.html", "w") as f:
         f.write(work)
 
-    url=f"/static/output/work.html"
+    url=f"/static/output/temp.html"
     return RedirectResponse(url, status_code=302)
     

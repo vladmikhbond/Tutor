@@ -26,7 +26,7 @@ class RenderHtml:
         body = '\n'.join(lst)
         title = self.slides[0].text
 
-        return (self.html_doc(title, body), title)
+        return self.html_doc(title, body)
 
     def html_doc(self, title, body):
         return f"""
@@ -37,7 +37,7 @@ class RenderHtml:
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <title>{title}</title>
 <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" rel="stylesheet">
-<link href='{self.theme}.css' type='text/css' rel='stylesheet' />
+<link href='sys/{self.theme}.css' type='text/css' rel='stylesheet' />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/ace.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/mode-{self.lang}.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/theme-{self.theme}.min.js"></script>

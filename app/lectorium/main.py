@@ -1,11 +1,16 @@
 from .parser import Parser
 from .render_h import RenderHtml 
 
-def trans(source: str, theme: str, lang: str) -> tuple[str, str]:
+def translate(source: str, theme: str, lang: str) -> tuple[str, str]:
     slides = Parser(source).parse()
     return RenderHtml(slides, theme, lang).render()
 
-
+def get_title(source: str):
+    slides = Parser(source).parse()
+    if slides and len(slides):
+        return slides[0].text
+    else:
+        return "notitle"
 
 # тестування
 if __name__ == "__main__":
@@ -75,7 +80,7 @@ a = a + 1
 [[https://google.com | Оце так гугол!]]
 
 """
-    body, fname = trans(source, theme="github", lang="javascript")
+    body, fname = translate(source, theme="github", lang="javascript")
 
     with open(f"{fname}.html", "w") as f:
         f.write(body)

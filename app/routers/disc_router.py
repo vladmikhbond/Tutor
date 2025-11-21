@@ -41,7 +41,7 @@ async def get_disc_new(
     Створення нової дисципліни.
     """
     disc = Disc(title="", lang="", theme="") 
-    return templates.TemplateResponse("disc/new.html", {"request": request, "disc": disc})
+    return templates.TemplateResponse("disc/edit.html", {"request": request, "disc": disc})
 
 
 @router.post("/new")
@@ -65,7 +65,7 @@ async def post_disc_new(
     except Exception as e:
         db.rollback()
         err_mes = f"Error during a new disc adding: {e}"
-        return templates.TemplateResponse("disc/new.html", {"request": request, "disc": disc})
+        return templates.TemplateResponse("disc/edit.html", {"request": request, "disc": disc})
     return RedirectResponse(url="/disc/list", status_code=302)
 
 # ------- edit 

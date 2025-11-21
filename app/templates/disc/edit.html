@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<h2>Change Discipline"</h2>
+<h2>{{ disc.title }}</h2>
 <form method="post" >
   <label>
     Title
@@ -12,11 +12,18 @@
   </label>
   <label>
     Language
-    <input name="lang" value="{{ disc.lang }}" required>
+    <select name="lang" required="">
+      <option value="csharp" {{ 'selected' if disc.lang == 'csharp' else '' }}>C#</option>
+      <option value="javascript" {{ 'selected' if disc.lang == 'javascript' else '' }}>Javascript</option>
+      <option value="python" {{ 'selected' if disc.lang == 'python' else '' }}>Python</option>
+    </select>
   </label>
   <label>
     Theme
-    <input name="theme" value="{{ disc.theme }}" required>
+    <select name="theme" required="">
+      <option value="github" {{ 'selected' if disc.theme == 'github' else '' }}>github</option>
+      <option value="github1" {{ 'selected' if disc.theme == 'github1' else '' }}>github1</option>
+    </select>
   </label>
 
   <footer class="grid">
