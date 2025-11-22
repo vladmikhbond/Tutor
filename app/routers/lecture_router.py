@@ -1,10 +1,10 @@
 import datetime as dt
-from fastapi import APIRouter, Depends, HTTPException, Request, Form, Response, Security
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi import APIRouter, Depends, HTTPException, Request, Form, File, UploadFile
+from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 
 from sqlalchemy.orm import Session
-from ..models.models import Disc, Lecture, User
+from ..models.models import Disc, Lecture, Picture
 
 from .login_router import get_current_user
 from ..dal import get_db  # Функція для отримання сесії БД
@@ -38,13 +38,15 @@ async def get_lecture_list(
 @router.get("/new/{disc_id}")
 async def get_lecture_new(
     request: Request,
+    disc_id: int,
     username: str = Depends(get_current_user)
 ):
     """ 
     Створення нової лекції.
     """
     lecture = Lecture(title="Noname", content="") 
-    return templates.TemplateResponse("lecture/edit.html", {"request": request, "lecture": lecture})
+    return templates.TemplateResponse("lecture/edit.html", 
+            {"request": request, "lecture": lecture, "disc_id": disc_id})
 
 
 @router.post("/new/{disc_id}")
@@ -89,7 +91,9 @@ async def get_lecture_edit(
     lecture = db.get(Lecture, id)
     if not lecture:
         return RedirectResponse(url=f"/lecture/list/{lecture.disc_id}", status_code=302)
-    return templates.TemplateResponse("lecture/edit.html", {"request": request, "lecture": lecture})
+    return templates.TemplateResponse("lecture/edit.html", 
+            {"request": request, "lecture": lecture, "disc_id": lecture.disc_id})
+
 
 
 @router.post("/edit/{id}")
@@ -169,3 +173,33 @@ async def get_lecture_trans(
     url=f"/static/output/temp.html"
     return RedirectResponse(url, status_code=302)
     
+# --------------------- picture 
+
+@router.post("/picture")
+async def post_lecture_picture(
+    file: UploadFile = File(...),
+    disc_id: int = Form(...),
+    db: Session = Depends(get_db),
+    username: str = Depends(get_current_user)
+):
+    """
+    Завантажити зображення для дисципліни.
+    """
+    if not file:
+        return {"error": "No file provided"}
+    image = await file.read()    
+    disc = db.get(Disc, disc_id)
+    if not disc:
+        return {"error": f"Disc with id={disc_id} not found"}    
+    try:
+        picture = Picture(
+            title=file.filename,
+            disc_id=disc_id,
+            image=image
+        )
+        db.add(picture)
+        db.commit()       
+        return {"status": "success", "filename": file.filename, "disc_id": disc_id}
+    except Exception as e:
+        db.rollback()
+        return {"error": str(e)}

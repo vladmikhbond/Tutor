@@ -7,7 +7,7 @@
 <h3>{{lecture.title}}</h3>
 <form method="post" >
 
-    <textarea name="content" rows="20" >{{ lecture.content }}</textarea>
+    <textarea name="content" id="content" rows="20" >{{ lecture.content }}</textarea>
 
   <label>
     Is Public
@@ -24,5 +24,23 @@
 
   </footer>      
 </form>
-    
+
+{# for picture uploading only #}
+<input type="hidden" id="disc_id" value="{{disc_id}}" 
+
+<!-- ----------------- context menu ---------------------------- -->
+<div id="context-menu" >
+  <a href="#" onclick="alert('Перша дія')">Перша дія</a>
+  <a href="#" onclick="alert('Друга дія')">Друга дія</a>
+  <hr>
+      <form id="upload_form" enctype="multipart/form-data" style="margin:0px 5px 0px 5px">
+          <input type="file" name="file" id="file" accept="image" style="display: inline" data-buttonText="Your label here" . />
+          <input type="submit" value="Upload" />
+      </form>    
+</div>
+<script src="/static/js/lecture_edit.js"></script>
+<script>
+
+
+</script>
 {% endblock %}
