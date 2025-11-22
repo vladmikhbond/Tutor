@@ -38,7 +38,6 @@ class Parser:
         return "\n".join(lines) 
 
 
-
     def parse(self) -> List[Slide]:
         MARK = r"^@[1-6]\s?"
         source = self.remove_comments()
@@ -49,6 +48,7 @@ class Parser:
         slides = [Slide(m, self.line_to_splines(c)) 
                        for m, c in zip(marks, conts)] 
         return slides
+
 
     @staticmethod
     def line_to_splines(line: str):

@@ -1,16 +1,35 @@
-from .parser import Parser
+from typing import List
+from .parser import Parser, SpottedLine
 from .render_h import RenderHtml 
 
 def translate(source: str, theme: str, lang: str) -> tuple[str, str]:
+    """
+    Транслює лекцію в HTML
+    """
     slides = Parser(source).parse()
     return RenderHtml(slides, theme, lang).render()
 
 def get_title(source: str):
+    """
+    Повертає назву лекції 
+    """
     slides = Parser(source).parse()
     if slides and len(slides):
         return slides[0].text
     else:
         return "notitle"
+    
+def get_sqare_brackets_content(source: str) -> List[str]:
+    """
+    Повертає список рядків, які в лекції стоять в кв. дужках. 
+    """
+    slides = Parser(source).parse()
+    splines: List[SpottedLine] = []
+    for slide in slides:    
+        splines.append(*slide.splines)
+    lines = [l for (m, l) in splines if m == 2]
+    return lines
+    
 
 # тестування
 if __name__ == "__main__":

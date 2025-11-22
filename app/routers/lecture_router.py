@@ -166,7 +166,7 @@ async def get_lecture_trans(
         return HTTPException(404, f"No lecture with id={id}")
     
     # temp.html
-    work = translate(lecture.content, theme="github", lang="javascript")
+    work = translate(lecture.content, lecture.disc.theme, lecture.disc.lang)
     with open(f"app/static/output/temp.html", "w") as f:
         f.write(work)
 
@@ -190,16 +190,20 @@ async def post_lecture_picture(
     image = await file.read()    
     disc = db.get(Disc, disc_id)
     if not disc:
-        return {"error": f"Disc with id={disc_id} not found"}    
-    try:
-        picture = Picture(
-            title=file.filename,
-            disc_id=disc_id,
-            image=image
-        )
-        db.add(picture)
+        return {"error": f"Disc with id={disc_id} not found"}
+    try:   
+        existing_pictures = list(filter(lambda p: p.title == file.filename,  disc.pictures))
+        if len(existing_pictures):
+            existing_pictures[0].image = image
+        else:
+            picture = Picture (
+                title=file.filename,
+                disc_id=disc_id,
+                image=image
+            )
+            db.add(picture)
         db.commit()       
-        return {"status": "success", "filename": file.filename, "disc_id": disc_id}
+        return {"filename": file.filename}
     except Exception as e:
         db.rollback()
         return {"error": str(e)}

@@ -25,10 +25,10 @@
   </footer>      
 </form>
 
-{# for picture uploading only #}
-<input type="hidden" id="disc_id" value="{{disc_id}}" 
 
-<!-- ----------------- context menu ---------------------------- -->
+
+ <!-- --------------------------- context menu ----------------------------  -->
+
 <div id="context-menu" >
   <a href="#" onclick="alert('Перша дія')">Перша дія</a>
   <a href="#" onclick="alert('Друга дія')">Друга дія</a>
@@ -36,11 +36,10 @@
       <form id="upload_form" enctype="multipart/form-data" style="margin:0px 5px 0px 5px">
           <input type="file" name="file" id="file" accept="image" style="display: inline" data-buttonText="Your label here" . />
           <input type="submit" value="Upload" />
+        
+          <input type="hidden" id="disc_id" value="{{disc_id}}" 
       </form>    
 </div>
 <script src="/static/js/lecture_edit.js"></script>
-<script>
 
-
-</script>
 {% endblock %}
