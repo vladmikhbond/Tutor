@@ -1,4 +1,6 @@
+
 import datetime as dt
+from typing import List
 from fastapi import APIRouter, Depends, HTTPException, Request, Form, File, UploadFile
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
@@ -8,7 +10,7 @@ from ..models.models import Disc, Lecture, Picture
 
 from .login_router import get_current_user
 from ..dal import get_db  # Функція для отримання сесії БД
-from ..lectorium.main import translate, get_title
+from ..lectorium.main import translate, get_title, get_style
 
 # шаблони Jinja2
 templates = Jinja2Templates(directory="app/templates")
@@ -65,16 +67,15 @@ async def post_lecture_new(
         disc_id = disc_id,
         modified = dt.datetime.now()
     )
-    
-    url=f"/lecture/list/{disc_id}"
+    db.add(lecture) 
+
     try:
-        db.add(lecture) 
         db.commit()
     except Exception as e:
         db.rollback()   
-        return templates.TemplateResponse("lecture/new.html", {"request": request, "lecture": lecture})
+        return templates.TemplateResponse("lecture/edit.html", {"request": request, "lecture": lecture})
     
-    return RedirectResponse(url, status_code=302)
+    return RedirectResponse(url=f"/lecture/list/{disc_id}", status_code=302)
 
 # ------- edit 
 
@@ -98,6 +99,7 @@ async def get_lecture_edit(
 
 @router.post("/edit/{id}")
 async def post_lecture_edit(
+    request: Request,
     id: int,
     content: str = Form(...),
     is_public: bool = Form(default=False),
@@ -105,17 +107,25 @@ async def post_lecture_edit(
     username: str=Depends(get_current_user)
 ):
     lecture = db.get(Lecture, id)
-    url=f"/lecture/list/{lecture.disc_id}"
+    disc_id = lecture.disc_id
 
     if not lecture:
-        return RedirectResponse(url=url, status_code=302)
+        return HTTPException(404)
 
     lecture.title = get_title(content)
     lecture.content = content
     lecture.is_public = is_public
     lecture.modified = dt.datetime.now()
-    db.commit()
-    return RedirectResponse(url=url, status_code=302)
+
+
+    try:
+        db.commit()
+    except Exception as e:
+        db.rollback()   
+        return templates.TemplateResponse("lecture/edit.html", {"request": request, "lecture": lecture})
+  
+  
+    return RedirectResponse(url=f"/lecture/list/{disc_id}", status_code=302)
    
 # ------- del 
 
@@ -149,29 +159,6 @@ async def post_lecture_del(
     url=f"/lecture/list/{lecture.disc_id}"
     return RedirectResponse(url, status_code=302)
 
-# ----- trans 
-
-@router.get("/trans/{id}")
-async def get_lecture_trans(
-    id: int, 
-    request: Request, 
-    db: Session = Depends(get_db),
-    username: str=Depends(get_current_user)
-):
-    """ 
-    Трансляція лекції.
-    """
-    lecture = db.get(Lecture, id)
-    if not lecture:
-        return HTTPException(404, f"No lecture with id={id}")
-    
-    # temp.html
-    work = translate(lecture.content, lecture.disc.theme, lecture.disc.lang)
-    with open(f"app/static/output/temp.html", "w") as f:
-        f.write(work)
-
-    url=f"/static/output/temp.html"
-    return RedirectResponse(url, status_code=302)
     
 # --------------------- picture 
 
@@ -207,3 +194,34 @@ async def post_lecture_picture(
     except Exception as e:
         db.rollback()
         return {"error": str(e)}
+
+# ----- trans 
+
+@router.get("/trans/{id}")
+async def get_lecture_trans(
+    id: int, 
+    request: Request, 
+    db: Session = Depends(get_db),
+    username: str=Depends(get_current_user)
+):
+    """ 
+    Трансляція лекції.
+    """
+    lecture = db.get(Lecture, id)
+    if not lecture:
+        return HTTPException(404, f"No lecture with id={id}")
+    
+    # file temp.html
+    work = translate(lecture.content, lecture.disc.theme, lecture.disc.lang)
+    with open(f"app/static/output/temp.html", "w") as f:
+        f.write(work)
+    # folder pic
+    lines = get_style(lecture.content, 2)
+    pictures: List[Picture] = db.query(Picture).filter(
+            Picture.disc_id == lecture.disc_id and Picture.title in lines).all()
+    for picture in pictures:
+        with open(f"app/static/output/pic/{picture.title}", "bw") as f:
+            f.write(picture.image)
+
+    url=f"/static/output/temp.html"
+    return RedirectResponse(url, status_code=302)

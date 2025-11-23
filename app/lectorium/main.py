@@ -9,6 +9,7 @@ def translate(source: str, theme: str, lang: str) -> tuple[str, str]:
     slides = Parser(source).parse()
     return RenderHtml(slides, theme, lang).render()
 
+
 def get_title(source: str):
     """
     Повертає назву лекції 
@@ -19,15 +20,15 @@ def get_title(source: str):
     else:
         return "notitle"
     
-def get_sqare_brackets_content(source: str) -> List[str]:
+def get_style(source: str, mark=2) -> List[str]:
     """
-    Повертає список рядків, які в лекції стоять в кв. дужках. 
+    Повертає список рядків, які в лекції стоять в подвійних дужках. 
     """
     slides = Parser(source).parse()
     splines: List[SpottedLine] = []
     for slide in slides:    
-        splines.append(*slide.splines)
-    lines = [l for (m, l) in splines if m == 2]
+        splines.extend(slide.splines)
+    lines = [l for (m, l) in splines if m == mark]
     return lines
     
 
