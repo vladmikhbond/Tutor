@@ -7,6 +7,9 @@ footer.grid a[role="button"] {
     justify-content: center;
 }
 
+.inline {
+  display: inline;
+}
 /* ----------------- Контекстне меню ------------------ */
 #context-menu {
   position: fixed;

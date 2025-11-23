@@ -37,13 +37,22 @@ class Parser:
         lines = filter(lambda l: not l.startswith("@@"), lines)
         return "\n".join(lines) 
 
+    def replace_emoji(self):
+        MARKS = ['🔴','🔴','📔','❗','📗','📘']
+        lines = self.source.splitlines()
+        for i, l in enumerate(lines):
+            if len(l) > 0 and l[0] in MARKS:
+                lines[i] = "@" + l[1:]
+        return "\n".join(lines) 
+
 
     def parse(self) -> List[Slide]:
         MARK = r"^@[1-6]\s?"
-        source = self.remove_comments()
-        marks = re.findall(MARK, source, flags=re.MULTILINE)
+        self.source = self.remove_comments()
+        self.source = self.replace_emoji()
+        marks = re.findall(MARK, self.source, flags=re.MULTILINE)
         marks = [m.strip() for m in marks]        
-        conts = re.split(MARK, source, flags=re.MULTILINE)[1:]
+        conts = re.split(MARK, self.source, flags=re.MULTILINE)[1:]
         conts = [c.strip() for c in conts]
         slides = [Slide(m, self.line_to_splines(c)) 
                        for m, c in zip(marks, conts)] 

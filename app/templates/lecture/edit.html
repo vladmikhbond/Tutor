@@ -3,26 +3,24 @@
 {% block title %}{% endblock %}
 
 {% block content %}
-
-<h3>{{lecture.title}}</h3>
-
 <form method="post" >
+  <header style="margin-bottom: 5px;">
+    <h3 class="inline">{{lecture.title}}</h3>
+    <label class="inline" style="margin-left: 20px;">
+      <input type="checkbox" name="is_public" {{"checked" if lecture.is_public else ""}} >
+      Is Public
+    </label>
+          
+    {% if lecture.id %}
+      <a href="/lecture/trans/{{lecture.id}}" style="margin-left: 50px;">HTML</a>
+    {% endif %}
+  </header>
 
-    <textarea name="content" id="content" rows="20" >{{ lecture.content }}</textarea>
-
-  <label>
-    Is Public
-    <input type="checkbox" name="is_public" {{"checked" if lecture.is_public else ""}} >
-  </label>
-
+  <textarea name="content" id="content" rows="20" >{{ lecture.content }}</textarea>
+  
   <footer class="grid">
     <button type="submit" >Save</button>
     <a href="/lecture/list/{{lecture.disc_id}}" role="button" class="secondary">Cancel</a>
-  
-    {% if lecture.id %}
-    <a href="/lecture/trans/{{lecture.id}}" role="button" class="secondary">HTML</a>
-    {% endif %}
-
   </footer>      
 </form>
 
@@ -41,6 +39,9 @@
           <input type="hidden" id="disc_id" value="{{disc_id}}" 
       </form>    
 </div>
-<script src="/static/js/lecture_edit.js"></script>
 
+{% endblock %}
+
+{% block script %}
+  <script src="/static/js/lecture_edit.js"></script>
 {% endblock %}

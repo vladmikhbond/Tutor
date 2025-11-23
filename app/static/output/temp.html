@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>11111111111111111111111111</title>
+<title>01 Машинна мова</title>
 <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" rel="stylesheet">
 <link href='sys/github.css' type='text/css' rel='stylesheet' />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/ace.min.js"></script>
@@ -13,7 +13,87 @@
 </head>
 <body>
 <div class="container">
-<div id="n0" class="alef1">11111111111111111111111111</div>
+<div id="n0" class="alef1">01 Машинна мова</div>
+<div id="n1" class="alef2">Машинні команди</div>
+<div id="n2" class="alef6"><table><thead><tr><th>Код</th><th>Адреса</th><th>Команда</th></hr></thead><tbody><tr><td>01</td><td>NNNN</td><td>зчитати: скопіювати до суматора зміст комірки NNNN</td></tr><tr><td>02</td><td>NNNN</td><td>записати: зміст суматора скопіювати в комірку NNNN</td></tr><tr><td>11</td><td>NNNN</td><td>додати до суматора зміст комірки NNNN</td></tr><tr><td>12</td><td>NNNN</td><td>відняти від суматора зміст комірки NNNN</td></tr><tr><td>13</td><td>NNNN</td><td>помножити суматор на зміст комірки NNNN</td></tr><tr><td>20</td><td>NNNN</td><td>перейти до команди з адресом NNNN (занести в лічильник команд число NNNN)</td></tr></tbody></table></div>
+<div id="n3" class="alef3">Програма є послідовністю машинних команд.
+<img src="pic/ts_type_system.png" alt="ts_type_system.png" /></div>
+
+<div id="n4" class="alef5">
+    <div id="editor4"></div>
+</div>
+
+<script>
+    const editor4 = ace.edit("editor4", {
+        theme: "ace/theme/github",
+        mode: "ace/mode/python",
+        value:  `oooo. 01 1010
+ooo1. 03 1011
+ooo2. 02 1010
+ooo3. ...`,    
+        maxLines: 30,
+        wrap: true,
+        autoScrollEditorIntoView: true,
+    });
+</script>
+
+<div id="n5" class="alef3">Один крок роботи процесора:
+- виконати команду<i>,</i> адреса якої знаходиться в лічильнику команд
+- якщо команда не є переходом<i>,</i> лічильник команд збільшити на 1 
+<a href="https://tss.co.ua/ML/">https://tss.co.ua/ML/</a></div>
+<div id="n6" class="alef1">Програмування</div>
+<div id="n7" class="alef3">Задача 1. Скласти числа<i>,</i> що знаходяться в комірках 11 і 12. Суму зберегти в комірці 13</div>
+<div id="n8" class="alef3">Задача 2. Обміняти місцями зміст двох комірок.</div>
+<div id="n9" class="alef1">@1 Команда присвоєння</div>
+<div id="n10" class="alef3">@3 Коли нам потрібно надати змінній нове значення<i>,</i>  
+ми пишемо команду присвоєння  <span>x = 5</span></div>
+<div id="n11" class="alef3">@3 Загальний вигляд команди присвоєння:</div>
+<div id="n12" class="alef4">@4 ім'я = вираз</div>
+<div id="n13" class="alef3">Виконується команда у два кроки:
+   1) обчислюється вираз справа від знаку "=";
+   2) результат обчислення надається змінній зліва від знаку "=".</div>
+
+<div id="n14" class="alef5">
+    <div id="editor14"></div>
+</div>
+
+<script>
+    const editor14 = ace.edit("editor14", {
+        theme: "ace/theme/github",
+        mode: "ace/mode/python",
+        value:  `a = 2 + 3
+a = a + 1`,    
+        maxLines: 30,
+        wrap: true,
+        autoScrollEditorIntoView: true,
+    });
+</script>
+
+<div id="n15" class="alef2">Устрій комп'ютера</div>
+<div id="n16" class="alef3">Пам'ять - зберігає інформацію.
+Процесор - виконує команди.
+Пристрої введення і виведення - підтримують зв'язок із зовнішнім світом.
+<img src="pic/ts_type_system.png" alt="ts_type_system.png" /></div>
+<div id="n17" class="alef3"><a href="https://google.com "> Оце так гугол!</a></div>
+
+<div id="n18" class="alef5">
+    <div id="editor18"></div>
+</div>
+
+<script>
+    const editor18 = ace.edit("editor18", {
+        theme: "ace/theme/github",
+        mode: "ace/mode/python",
+        value:  `body, fname = trans(source, theme="github", lang="javascript")
+
+    with open(f"{fname}.html", "w") as f:
+        f.write(body)`,    
+        maxLines: 30,
+        wrap: true,
+        autoScrollEditorIntoView: true,
+    });
+</script>
+
 </div>
 </body>
 </html>

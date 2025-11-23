@@ -95,12 +95,10 @@ async def get_lecture_edit(
     return templates.TemplateResponse("lecture/edit.html", 
             {"request": request, "lecture": lecture, "disc_id": lecture.disc_id})
 
-
-
 @router.post("/edit/{id}")
 async def post_lecture_edit(
-    request: Request,
     id: int,
+    request: Request,
     content: str = Form(...),
     is_public: bool = Form(default=False),
     db: Session = Depends(get_db),
@@ -195,7 +193,7 @@ async def post_lecture_picture(
         db.rollback()
         return {"error": str(e)}
 
-# ----- trans 
+# ----------------------- trans 
 
 @router.get("/trans/{id}")
 async def get_lecture_trans(
@@ -206,6 +204,7 @@ async def get_lecture_trans(
 ):
     """ 
     Трансляція лекції.
+    Отримує лекцію з БД і створює файл temp.html і папку pic в папці app/static/output
     """
     lecture = db.get(Lecture, id)
     if not lecture:
