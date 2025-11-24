@@ -1,7 +1,7 @@
 const content = document.getElementById("content");
 const menu = document.getElementById("context-menu");
 
-// ----------------- for confext menu ---------------------
+//#region --------------------- for confext menu ---------------------
 
 // Показати меню
 content.addEventListener("contextmenu", e => {
@@ -17,6 +17,7 @@ content.addEventListener("contextmenu", e => {
 content.addEventListener("click", () => {
   menu.style.display = "none";
 });
+//#endregion
 
 //#region --------------------- for uploading picture --------------------
 
@@ -94,7 +95,7 @@ function replaceString(ta, replaceStr, start, end) {
 
 //#endregion
 
-//#region --------------------- for setting caret after searching -------------------
+//#region --------------------- for scroll after search -------------------
 
 
 window.addEventListener('load', function (e) {

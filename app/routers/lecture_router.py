@@ -243,12 +243,12 @@ async def post_lecture_picture(
     for lec in lectures:
         text = lec.content.replace('\r', '')
         positions = [m.start() for m in re.finditer(sample, text)]
-        W = 100
+        DELTA = 60
         for pos in positions:
             end = pos + len(sample)
             finded.append({
-                "before": text[pos - W : pos],
-                "after": text[end : end + W],
+                "before": text[pos - DELTA : pos],
+                "after": text[end : end + DELTA],
                 "pos": pos,
                 "end": end,
                 "lec_id": lec.id
