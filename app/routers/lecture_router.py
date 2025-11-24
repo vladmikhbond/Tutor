@@ -1,4 +1,4 @@
-
+import re
 import datetime as dt
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, Request, Form, File, UploadFile
@@ -224,3 +224,33 @@ async def get_lecture_trans(
 
     url=f"/static/output/temp.html"
     return RedirectResponse(url, status_code=302)
+
+# ----------------------- search
+
+@router.post("/search/{disc_id}")
+async def post_lecture_picture(
+    disc_id: str,
+    request: Request,
+    sample: str = Form(...),
+    db: Session = Depends(get_db),
+    username: str = Depends(get_current_user)
+):
+    """
+    Пошук зразка в чернетках лекцій.
+    """
+    lectures = db.query(Lecture).filter(Lecture.disc_id == disc_id).all()
+    finded = []
+    for lec in lectures:
+        text = lec.content.replace('\r', '')
+        positions = [m.start() for m in re.finditer(sample, text)]
+        W = 100
+        for pos in positions:
+            end = pos + len(sample)
+            finded.append({
+                "before": text[pos - W : pos],
+                "after": text[end : end + W],
+                "pos": pos,
+                "end": end,
+                "lec_id": lec.id
+            })
+    return templates.TemplateResponse("lecture/search.html", {"request": request, "finded": finded, "sample": sample})

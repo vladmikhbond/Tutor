@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+ 
+
+{% if finded and finded|length %}
+<table>
+  <tbody>
+    {% for f in finded %}
+    <pre>
+      {{f.before}}<a href="/lecture/edit/{{f.lec_id}}#{{f.pos}}#{{f.end}}">{{sample}}</a>{{f.after}}
+    </pre>
+    <hr/>
+
+
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+  <div>
+    No results.
+  </div>
+{% endif %}
+
+{% endblock %}

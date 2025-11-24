@@ -3,9 +3,14 @@
 {% block title %}{% endblock %}
 
 {% block content %}
-    
-<h2>{{disc.title}}</h2>
-
+ 
+<div>
+  <h2 class="inline">{{disc.title}}</h2>
+  <form class="inline" method="post" action="/lecture/search/{{disc.id}}">
+    <input name="sample" style="width: 200px;"/>
+    <button style="font-size: large;">🔦</button>
+  </form>
+</div>
 <a href="/lecture/new/{{disc.id}}" style="margin-right: 60px;">New lecture</a>
 
 {% if disc.lectures and disc.lectures|length %}
@@ -15,9 +20,9 @@
     <tr>
       <td>{{ lecture.title }}</td>
       <td>
-          <a href="/lecture/trans/{{lecture.id}}">html</a> | 
-          <a href="/lecture/edit/{{lecture.id}}">edit</a> | 
-          <a href="/lecture/del/{{lecture.id}}">del</a>
+        <a href="/lecture/edit/{{lecture.id}}">edit</a> | 
+        <a href="/lecture/trans/{{lecture.id}}">html</a> | 
+        <a href="/lecture/del/{{lecture.id}}">del</a>
       </td>
     </tr>
     {% endfor %}

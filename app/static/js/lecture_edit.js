@@ -1,7 +1,7 @@
 const content = document.getElementById("content");
 const menu = document.getElementById("context-menu");
 
-// ----------------- confext menu ---------------------
+// ----------------- for confext menu ---------------------
 
 // Показати меню
 content.addEventListener("contextmenu", e => {
@@ -18,7 +18,7 @@ content.addEventListener("click", () => {
   menu.style.display = "none";
 });
 
-// --------------------- upload picture --------------------
+// --------------------- for uploading picture --------------------
 
 const upload_form = document.getElementById("upload_form")
 
@@ -57,7 +57,7 @@ upload_form.addEventListener("submit", async (e) => {
   }
 });
 
-// ---------------------  --------------------
+// --------------------- for replase '@' with emoji  --------------------
 
 let ctrl_pressed = false;
 //               1    2    3     4    5     6
@@ -89,3 +89,57 @@ function replaceString(ta, replaceStr, start, end) {
       ta.dispatchEvent(new Event("input", { bubbles: true })); 
     }
 }
+
+
+//#region ------------- For setting caret after searching -------------------
+
+
+window.addEventListener('load', function (e) {
+    let [_, start, end] = location.href.split("#");
+    content.selectionStart = start;
+    content.selectionEnd = end;
+    content.focus();
+    scrollTextareaToSelection(content)
+});
+
+// utility
+//
+function scrollTextareaToSelection(textarea) {
+    const { selectionStart } = textarea;
+
+    // Створюємо прихований елемент-дублер
+    const div = document.createElement("div");
+    const style = getComputedStyle(textarea);
+
+    // Копіюємо стилі textarea → div
+    for (const prop of style) {
+        div.style[prop] = style[prop];
+    }
+
+    div.style.position = "absolute";
+    div.style.visibility = "hidden";
+    div.style.whiteSpace = "pre-wrap";
+    div.style.overflow = "auto";
+    div.style.height = "auto";
+
+    // Текст до курсора + маркер
+    const before = textarea.value.substring(0, selectionStart);
+    const marker = document.createElement("span");
+    marker.textContent = "█"; // маркер позиції
+    marker.style.background = "yellow";
+
+    div.textContent = before;
+    div.appendChild(marker);
+
+    document.body.appendChild(div);
+
+    // Отримуємо позицію маркера
+    const markerTop = marker.offsetTop;
+
+    // Прокручуємо textarea так, щоб маркер був у видимій зоні
+    textarea.scrollTop = markerTop - textarea.clientHeight / 2;
+
+    document.body.removeChild(div);
+}
+
+//#endregion
