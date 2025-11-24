@@ -18,7 +18,7 @@ content.addEventListener("click", () => {
   menu.style.display = "none";
 });
 
-// --------------------- for uploading picture --------------------
+//#region --------------------- for uploading picture --------------------
 
 const upload_form = document.getElementById("upload_form")
 
@@ -57,7 +57,9 @@ upload_form.addEventListener("submit", async (e) => {
   }
 });
 
-// --------------------- for replase '@' with emoji  --------------------
+//#endregion
+
+//#region --------------------- for replase '@' with emoji  --------------------
 
 let ctrl_pressed = false;
 //               1    2    3     4    5     6
@@ -90,8 +92,9 @@ function replaceString(ta, replaceStr, start, end) {
     }
 }
 
+//#endregion
 
-//#region ------------- For setting caret after searching -------------------
+//#region --------------------- for setting caret after searching -------------------
 
 
 window.addEventListener('load', function (e) {
