@@ -67,15 +67,25 @@ content.addEventListener("keydown", (e) => {
     
     if (ctrl_pressed) {
       e.preventDefault();
+      const index = content.selectionStart;
       if (1 <= e.key && e.key <= 6) {
-        let i = content.selectionStart;
-        if (content.value[i - 1] === '\n' || i == 0) {
-            let mark = MARKS[e.key - 1] + e.key + " ";
-            content.value = content.value.substr(0, i) + mark + content.value.substr(i);
-            content.selectionStart = content.selectionEnd = i + mark.length;
+        if (content.value[index - 1] === '\n' || index == 0) {
+          let mark = MARKS[e.key - 1] + e.key + " ";
+          replaceString(content, mark, index)
         }
       }
     }
     ctrl_pressed = e.key == "Control";
 })
 
+function replaceString(ta, replaceStr, start, end) {
+    if (end == undefined) 
+      start = end;
+    if (document.queryCommandSupported && document.queryCommandSupported('insertText')) {
+      document.execCommand('insertText', false, replaceStr);
+    } else {
+      ta.setSelectionRange(start, end);
+      ta.setRangeText(replaceStr, start, end, "select");
+      ta.dispatchEvent(new Event("input", { bubbles: true })); 
+    }
+}
