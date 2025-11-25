@@ -68,6 +68,7 @@ content.addEventListener("keydown", (e) => {
   
   if (e.ctrlKey && 1 <= e.key && e.key <= 6) 
   {
+    e.preventDefault();
     const index = content.selectionStart;
     if (content.value[index - 1] === '\n' || index == 0) {
       let mark = MARKS[e.key - 1] + e.key + " ";
@@ -142,33 +143,38 @@ function scrollTextareaToSelection(textarea) {
 
 //#endregion
 
-// ---------------------- For Save Lection -----------------------------------------
+//#region ---------------------- For Save Lection -----------------------------------------
 
-// The value of $btnSave.prop('disabled') indices if the text changed.
+// The value buttonSave.disabled indices if the content.value changed.
 
-    
+buttonSave = document.getElementById("buttonSave");
 
-    $textarea.on('keydown', function (e) {
-        // Ctrl-S
-        if (e.keyCode === 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
-            e.preventDefault();
-            saveLectureSource();
-        }
-    });
+content.addEventListener("keydown", (e) => {
+  if (e.ctrlKey && (e.key == "s" || e.key == "S")) {
+    e.preventDefault();
+    document.getElementById("edit_form").submit();
+    buttonSave.disabled = true;
+  }
+})
 
-    $textarea.on('input', function () {
-        $btnSave.prop('disabled', false);
-        $message.text("");
-    });
+content.addEventListener('input', function () {
+  buttonSave.disabled = false;
+});  
 
-    window.onbeforeunload = function () {
-        if (!$btnSave.prop('disabled'))
-            return "You are about to lost unsaved data.";
-    };
+window.onbeforeunload = function (e) {
+    if (! buttonSave.disabled) {
+        e.preventDefault();               
+        e.returnValue = true;               // for legaci
+        return true;                        // for legaci
+    }
+};
 
-    // Autosave in 3 min if text changed
-    setInterval(function () {
-        if (! $btnSave.prop("disabled"))
-            saveLectureSource();
-    }, 3 * 60000);
+// Autosave in 3 min if text changed (IS OFF NOW)
 
+// setInterval(function () {
+//     if (! buttonSave.disabled)
+//       document.getElementById("edit_form").submit();
+//       buttonSave.disabled = true;
+// }, 3 * 60000);
+
+//#endregion
