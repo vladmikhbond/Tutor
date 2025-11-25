@@ -8,8 +8,9 @@
     <h3 class="inline">{{lecture.title}}</h3>
     <label class="inline" style="margin-left: 20px;">
       <input type="checkbox" name="is_public" {{"checked" if lecture.is_public else ""}} >
-      Is Public
+      Public
     </label>
+    
           
     {% if lecture.id %}
       <a href="/lecture/trans/{{lecture.id}}" style="margin-left: 50px;">HTML</a>
@@ -19,7 +20,7 @@
   <textarea name="content" id="content" rows="20" >{{ lecture.content }}</textarea>
   
   <footer class="grid">
-    <button type="submit" >Save</button>
+    <button type="submit" id="buttonSave" title="Ctrl-S" disabled >Save</button>
     <a href="/lecture/list/{{disc_id}}" role="button" class="secondary">Cancel</a>
   </footer>      
 </form>

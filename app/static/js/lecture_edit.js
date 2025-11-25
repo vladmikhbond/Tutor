@@ -26,7 +26,6 @@ const upload_form = document.getElementById("upload_form")
 upload_form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  
   // Create a formdata object and add the files
   let data = new FormData();
   let files = document.getElementById('file').files;
@@ -62,23 +61,19 @@ upload_form.addEventListener("submit", async (e) => {
 
 //#region --------------------- for replase '@' with emoji  --------------------
 
-let ctrl_pressed = false;
 //               1    2    3     4    5     6
 const MARKS = ['🔴','🔴','📔','❗','📗','📘']
 
 content.addEventListener("keydown", (e) => {
-    
-    if (ctrl_pressed) {
-      e.preventDefault();
-      const index = content.selectionStart;
-      if (1 <= e.key && e.key <= 6) {
-        if (content.value[index - 1] === '\n' || index == 0) {
-          let mark = MARKS[e.key - 1] + e.key + " ";
-          replaceString(content, mark, index)
-        }
-      }
+  
+  if (e.ctrlKey && 1 <= e.key && e.key <= 6) 
+  {
+    const index = content.selectionStart;
+    if (content.value[index - 1] === '\n' || index == 0) {
+      let mark = MARKS[e.key - 1] + e.key + " ";
+      replaceString(content, mark, index)
     }
-    ctrl_pressed = e.key == "Control";
+  }
 })
 
 function replaceString(ta, replaceStr, start, end) {
@@ -96,7 +91,6 @@ function replaceString(ta, replaceStr, start, end) {
 //#endregion
 
 //#region --------------------- for scroll after search -------------------
-
 
 window.addEventListener('load', function (e) {
     let [_, start, end] = location.href.split("#");
@@ -147,3 +141,34 @@ function scrollTextareaToSelection(textarea) {
 }
 
 //#endregion
+
+// ---------------------- For Save Lection -----------------------------------------
+
+// The value of $btnSave.prop('disabled') indices if the text changed.
+
+    
+
+    $textarea.on('keydown', function (e) {
+        // Ctrl-S
+        if (e.keyCode === 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+            e.preventDefault();
+            saveLectureSource();
+        }
+    });
+
+    $textarea.on('input', function () {
+        $btnSave.prop('disabled', false);
+        $message.text("");
+    });
+
+    window.onbeforeunload = function () {
+        if (!$btnSave.prop('disabled'))
+            return "You are about to lost unsaved data.";
+    };
+
+    // Autosave in 3 min if text changed
+    setInterval(function () {
+        if (! $btnSave.prop("disabled"))
+            saveLectureSource();
+    }, 3 * 60000);
+
