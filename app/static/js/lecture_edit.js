@@ -1,7 +1,63 @@
-const content = document.getElementById("content");
-const menu = document.getElementById("context-menu");
+//#region  ----------------------- utilities -------------------------
+
+
+function replaceString(textArea, replaceStr, start, end) {
+    if (end == undefined) 
+      start = end;
+    if (document.queryCommandSupported && document.queryCommandSupported('insertText')) {
+      document.execCommand('insertText', false, replaceStr);
+    } else {
+      textArea.setSelectionRange(start, end);
+      textArea.setRangeText(replaceStr, start, end, "select");
+      textArea.dispatchEvent(new Event("input", { bubbles: true })); 
+    }
+}
+
+
+function scrollTextareaToSelection(textArea) {
+    const { selectionStart } = textArea;
+
+    // Створюємо прихований елемент-дублер
+    const div = document.createElement("div");
+    const style = getComputedStyle(textArea);
+
+    // Копіюємо стилі textarea → div
+    for (const prop of style) {
+        div.style[prop] = style[prop];
+    }
+
+    div.style.position = "absolute";
+    div.style.visibility = "hidden";
+    div.style.whiteSpace = "pre-wrap";
+    div.style.overflow = "auto";
+    div.style.height = "auto";
+
+    // Текст до курсора + маркер
+    const before = textArea.value.substring(0, selectionStart);
+    const marker = document.createElement("span");
+    marker.textContent = "█"; // маркер позиції
+    marker.style.background = "yellow";
+
+    div.textContent = before;
+    div.appendChild(marker);
+
+    document.body.appendChild(div);
+
+    // Отримуємо позицію маркера
+    const markerTop = marker.offsetTop;
+
+    // Прокручуємо textarea так, щоб маркер був у видимій зоні
+    textArea.scrollTop = markerTop - textArea.clientHeight / 2;
+
+    document.body.removeChild(div);
+}
+
+//#endregion
 
 //#region --------------------- for confext menu ---------------------
+
+const content = document.getElementById("content");
+const menu = document.getElementById("context-menu");
 
 // Показати меню
 content.addEventListener("contextmenu", e => {
@@ -59,7 +115,7 @@ upload_form.addEventListener("submit", async (e) => {
 
 //#endregion
 
-//#region --------------------- for replase '@' with emoji  --------------------
+//#region --------------------- for insert emoji with ctrl key ------------
 
 //               1    2    3     4    5     6
 const MARKS = ['🔴','🔴','📔','❗','📗','📘']
@@ -77,18 +133,6 @@ content.addEventListener("keydown", (e) => {
   }
 })
 
-function replaceString(ta, replaceStr, start, end) {
-    if (end == undefined) 
-      start = end;
-    if (document.queryCommandSupported && document.queryCommandSupported('insertText')) {
-      document.execCommand('insertText', false, replaceStr);
-    } else {
-      ta.setSelectionRange(start, end);
-      ta.setRangeText(replaceStr, start, end, "select");
-      ta.dispatchEvent(new Event("input", { bubbles: true })); 
-    }
-}
-
 //#endregion
 
 //#region --------------------- for scroll after search -------------------
@@ -101,49 +145,9 @@ window.addEventListener('load', function (e) {
     scrollTextareaToSelection(content)
 });
 
-// utility
-//
-function scrollTextareaToSelection(textarea) {
-    const { selectionStart } = textarea;
-
-    // Створюємо прихований елемент-дублер
-    const div = document.createElement("div");
-    const style = getComputedStyle(textarea);
-
-    // Копіюємо стилі textarea → div
-    for (const prop of style) {
-        div.style[prop] = style[prop];
-    }
-
-    div.style.position = "absolute";
-    div.style.visibility = "hidden";
-    div.style.whiteSpace = "pre-wrap";
-    div.style.overflow = "auto";
-    div.style.height = "auto";
-
-    // Текст до курсора + маркер
-    const before = textarea.value.substring(0, selectionStart);
-    const marker = document.createElement("span");
-    marker.textContent = "█"; // маркер позиції
-    marker.style.background = "yellow";
-
-    div.textContent = before;
-    div.appendChild(marker);
-
-    document.body.appendChild(div);
-
-    // Отримуємо позицію маркера
-    const markerTop = marker.offsetTop;
-
-    // Прокручуємо textarea так, щоб маркер був у видимій зоні
-    textarea.scrollTop = markerTop - textarea.clientHeight / 2;
-
-    document.body.removeChild(div);
-}
-
 //#endregion
 
-//#region ---------------------- For Save Lection -----------------------------------------
+//#region --------------------- for save lection ---------------------------
 
 // The '*' indices if the content.value changed.
 
@@ -197,7 +201,21 @@ async function saveLecture() {
 
 //#endregion
 
-// Autosave in 3 min if text changed (IS OFF NOW)
+//#region --------------------- toggle monospacing -------------------------
+
+monoButton = document.getElementById("monoButton");
+
+monoButton.addEventListener("click", () => {
+  if (content.style.fontFamily !== "monospace") {
+    content.style.fontFamily = "monospace";
+  } else {
+      content.style.fontFamily = "inherit";
+  }       
+});
+
+//#endregion
+
+// ----------------------- Autosave in 3 min if text changed (IS OFF NOW)
 
 // setInterval(function () {
 //     if (! buttonSave.disabled)
