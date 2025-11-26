@@ -58,6 +58,7 @@ function scrollTextareaToSelection(textArea) {
 
 const content = document.getElementById("content");
 const menu = document.getElementById("context-menu");
+const comment = document.getElementById("comment");
 
 // Показати меню
 content.addEventListener("contextmenu", e => {
@@ -73,6 +74,23 @@ content.addEventListener("contextmenu", e => {
 content.addEventListener("click", () => {
   menu.style.display = "none";
 });
+
+comment.addEventListener("click", ()=> {
+   const AA = "@@";
+
+   let start = content.selectionStart, end = content.selectionEnd;
+   let selected = content.value.slice(start, end);
+   let lines = selected.split("\n");
+   for (let i = 0; i < lines.length; i++) {
+      if (lines[i].slice(0, AA.length) === AA)
+          lines[i] = lines[i].slice(AA.length);
+      else
+          lines[i] = AA + lines[i];
+   }
+   let newSelected = lines.join("\n");
+   replaceString(content, newSelected, start, end)
+})
+
 //#endregion
 
 //#region --------------------- for uploading picture --------------------
