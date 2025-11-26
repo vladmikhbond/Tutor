@@ -210,7 +210,7 @@ async def get_lecture_trans(
         raise HTTPException(404, f"No lecture with id={id}")
     
     # file temp.html
-    work = translate(lecture.content, lecture.disc.theme, lecture.disc.lang)
+    work = translate(lecture.content, lecture.disc.lang, lecture.disc.theme, "github")
     with open(f"app/static/output/temp.html", "w") as f:
         f.write(work)
     # folder pic

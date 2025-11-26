@@ -2,128 +2,29 @@
 /* цей файл має знаходитися у папці із html доками лекцій */
 
 
-/* -------------- variables ---------------- */
-
-/* Light mode */
-:root {
-    --pico-table-header-background-color: #f0f0f0;
-    --block-bg-color: #F7F4EC;
-    --block-br-color: #F7F4EC;
-    --text-link-color: rgb(23, 203, 216);
-    --text-accent-color: #EDA02D;
-    --block-accent-color: rgb(23, 203, 216);
-
-    --page-dg-color: #FFFFFF;
-    --page-text-color: #370909;
-
-    --focus-hadow-color: #FFE9AE;
-    --focus-block-br-color: #FFEBC7;
-    --focus-block-bg-color: #FFFFFF;
-}
-
-/* Dark theme */
-/* 
-:root {
-    --block-bg-color: #232322;
-    --block-br-color: #0C0D0D;
-    --text-link-color: rgb(23, 203, 216);
-    --block-accent-color: #ff9a48;
-    --text-accent-color: #C46B3A;
-
-    --page-dg-color: #161716;
-    --page-text-color: #C7C9C9;   
-
-    --table-border-color: #0C0D0D;
-    --table-header-background-color: #161716;
-    --table-row-stripe-background-color: #0C0D0D;
-    --table-background-color: #232322;
-
-    --focus-hadow-color: #DE4436;
-    --focus-block-br-color: #774935;
-    --focus-block-bg-color: #232322;
-}
- */
-.alef6 table * {
-    background: var(--table-background-color) !important;
-    color: var(--page-text-color) !important;
-    border-color: var(--table-border-color) !important;
-}
-
-.alef6 table thead,
-.alef6 table thead tr,
-.alef6 table thead th {
-    background-color: var(--table-header-background-color) !important;
-    color: var(--page-text-color) !important;
-}
-
-body {
-    background-color: var(--page-dg-color);
-    margin-top: none;
-    padding: 20px;
-    color: var(--page-text-color);
-} 
-
-
-
 /* -------------- slides ---------------- */
-.alef1.foc,
-.alef2.foc,
-.alef3.foc,
-.alef4.foc,
-.alef5.foc,
-.alef6.foc {
-    box-shadow: 0px 0px 7px var(--focus-hadow-color);
-    border-color: var(--focus-block-br-color);
-    border-style: solid;
-    border-width: 3px;
-    background-color: var(--focus-block-bg-color);
-    margin-top: 10px;
-    margin-bottom: 10px;
-    border-radius: 8px;
-    padding: 4px;
-}
-
-.alef1.foc,
-.alef2.foc{
-    padding: 8px;
-}
-
-
 .alef1  {
-    font-size: 26px;
-    color: var(--text-accent-color);
-    font-family: "Open Sans", sans-serif;
-    font-weight: 600;
-    margin: 20px 0px 4px 0px; 
-    
+    font-size: 24px;
+    color: darkred;
+    font-family: Arial;
+    margin: 10px 0px 4px 0px; 
 }
 
 .alef2 {
-    font-size: 20px;
-    color: var(--text-accent-color);
-    font-family: "Open Sans", sans-serif;
-    font-weight: 600;
-    margin: 20px 0px 4px 0px; 
+    font-size: 18px;
+    color: darkred;
+    font-family: Arial;
+    margin: 30px 0px 4px 0px; 
 }
 
 .ace_editor, .alef3, .alef4, .alef6 { 
-    color: var(--page-text-color);
-    font-size: 16px;
-    font-weight: 400;
-    border-radius: 8px;
-    /* border: 3px solid Gainsboro; */
-    /* border: 3px solid var(--block-br-color); */
-
-    margin: 12px 0px 4px 0px;    
-}
-
-.alef3, .alef4, .alef6 { 
-    background-color: var(--block-bg-color);
-    border: 3px solid var(--block-br-color);
+   border-radius: 4px;
+   border: 1px solid lightgray;
+   margin: 8px 0px 4px 0px; 
 }
 
 .alef3 { 
-   padding: 8px;
+   padding:4px;
    white-space: pre-wrap;
 }
 
@@ -132,8 +33,7 @@ body {
 } 
 
 .alef3 > a { 
-    font-weight: 500;
-    color: var(--text-link-color);
+    color: blue;
 }
 
 .alef3 > span { 
@@ -145,9 +45,9 @@ body {
     font-size: 16px;
     font-weight: bold;
     white-space: pre;
-    color: var(--block-accent-color);
-    border: solid 3px;
-    padding: 8px;
+    color: #FF6600;
+    border:solid 2px;
+    padding:8px;
 }
 
 /* .alef6 { 

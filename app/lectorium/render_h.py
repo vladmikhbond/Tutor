@@ -4,22 +4,24 @@ from .parser import Slide
 
 class RenderHtml:
 
-    def __init__(self, slides: List[Slide], theme: str, lang:str):
+    def __init__(self, slides: List[Slide], lang:str, theme: str, ace_theme: str):
         self.slides = slides
-        self.theme = theme
         self.lang = lang
+        self.theme = theme
+        self.ace_theme = ace_theme
+
         
 
     def render(self) -> tuple[str, str]:
         lst: List[str] = [] 
         
         for i, slide in enumerate(self.slides):
-            if   slide.mark == "@1": x = RenderHtml.render1(slide, i)
-            elif slide.mark == "@2": x = RenderHtml.render2(slide, i)
-            elif slide.mark == "@3": x = RenderHtml.render3(slide, i)
-            elif slide.mark == "@4": x = RenderHtml.render4(slide, i)
-            elif slide.mark == "@5": x = RenderHtml.render5(slide, i)
-            elif slide.mark == "@6": x = RenderHtml.render6(slide, i)
+            if   slide.mark == "@1": x = self.render1(slide, i)
+            elif slide.mark == "@2": x = self.render2(slide, i)
+            elif slide.mark == "@3": x = self.render3(slide, i)
+            elif slide.mark == "@4": x = self.render4(slide, i)
+            elif slide.mark == "@5": x = self.render5(slide, i)
+            elif slide.mark == "@6": x = self.render6(slide, i)
 
             lst.append(x)
 
@@ -50,17 +52,13 @@ class RenderHtml:
 </html>
 """
     
-
-    @staticmethod
-    def render1(slide: Slide, ord_no: int):
+    def render1(self, slide: Slide, ord_no: int):
         return f'<div id="n{ord_no}" class="alef1">{slide.text}</div>'
     
-    @staticmethod
-    def render2(slide: Slide, ord_no: int):
+    def render2(self, slide: Slide, ord_no: int):
         return f'<div id="n{ord_no}" class="alef2">{slide.text}</div>'
     
-    @staticmethod
-    def render3(slide: Slide, ord_no: int):
+    def render3(self, slide: Slide, ord_no: int):
         EN = r"([A-Z,a-z]+)"
         content = ""
         for spot, line in slide.splines:
@@ -88,14 +86,13 @@ class RenderHtml:
 
         return f'<div id="n{ord_no}" class="alef3">{content}</div>'
 
-    @staticmethod
-    def render4(slide: Slide, ord_no: int):
+
+    def render4(self, slide: Slide, ord_no: int):
         return f'<div id="n{ord_no}" class="alef4">{slide.text}</div>'
 
-    @staticmethod
-    def render5(slide: Slide, ord_no: int):
+
+    def render5(self, slide: Slide, ord_no: int):
         content = slide.text
-        LANG = "python"
         return f'''
 <div id="n{ord_no}" class="alef5">
     <div id="editor{ord_no}"></div>
@@ -103,8 +100,8 @@ class RenderHtml:
 
 <script>
     const editor{ord_no} = ace.edit("editor{ord_no}", {{
-        theme: "ace/theme/github",
-        mode: "ace/mode/{LANG}",
+        theme: "ace/theme/{self.ace_theme}",
+        mode: "ace/mode/{self.lang}",
         value:  `{content}`,    
         maxLines: 30,
         wrap: true,
@@ -113,8 +110,7 @@ class RenderHtml:
 </script>
 '''
 
-    @staticmethod
-    def render6(slide: Slide, ord_no: int):
+    def render6(self, slide: Slide, ord_no: int):
         content = '<table><thead>'
         lines = slide.text.strip().splitlines()
         # table header 
@@ -143,16 +139,3 @@ class RenderHtml:
 
 
 
-#### тестування рендеру ######
-        
-# test3([(0, "Hello "), (1, "World"), (0, " !")])
-# test3([(0, "Hello "), (2, "https://chatgpt.com/|Чат GPT"), (0, " !")])
-# test3([(0, "Я сказав Hello и махнув with foot"),  (0, " !")])
-
-# s = '''
-# def test5(t):
-#     s = RenderHtml.render5(Slide("@5", t), 42)
-#     with open("111.html", "w") as f:
-#         f.write(s)
-# '''
-# test5([(0, s),  (0, " !")])
