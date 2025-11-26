@@ -5,27 +5,23 @@
 {% block content %}
 <form id="edit_form" method="post" >
   <header style="margin-bottom: 5px;">
-    <h3 class="inline">{{lecture.title}}</h3>
+    <h3 class="inline"> {{lecture.title}} 
+      <span id="asterisk" style="color: red;"></span>
+    </h3>
     <label class="inline" style="margin-left: 20px;">
-      <input type="checkbox" name="is_public" {{"checked" if lecture.is_public else ""}} >
-      Public
+      <input type="checkbox" name="is_public" {{"checked" if lecture.is_public else ""}} > Public
     </label>
-    
-          
-    {% if lecture.id %}
-      <a href="/lecture/trans/{{lecture.id}}" style="margin-left: 50px;">HTML</a>
-    {% endif %}
+    <a href="/lecture/trans/{{lecture.id}}" style="margin-left: 50px;">HTML</a>
   </header>
 
   <textarea name="content" id="content" rows="20" >{{ lecture.content }}</textarea>
   
   <footer class="grid">
-    <button type="submit" id="buttonSave" title="Ctrl-S" disabled >Save</button>
+    <button type="button" id="buttonSave" title="Ctrl-S" >Save</button>
     <a href="/lecture/list/{{disc_id}}" role="button" class="secondary">Cancel</a>
   </footer>      
 </form>
-
-
+<input type="hidden" id="lecture_id" value="{{lecture.id}}" 
 
  <!-- --------------------------- context menu ----------------------------  -->
 

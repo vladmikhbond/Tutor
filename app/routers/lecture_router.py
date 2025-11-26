@@ -47,7 +47,7 @@ async def get_lecture_new(
     Створення нової лекції.
     """
     lecture = Lecture(title="Noname", content="") 
-    return templates.TemplateResponse("lecture/edit.html", 
+    return templates.TemplateResponse("lecture/new.html", 
             {"request": request, "lecture": lecture, "disc_id": disc_id})
 
 
@@ -55,27 +55,27 @@ async def get_lecture_new(
 async def post_lecture_new(
     request: Request,
     disc_id: int,
-    content: str = Form(...),
-    is_public: bool = Form(default=False),
+    title: str = Form(...),
     db: Session = Depends(get_db),
     username: str=Depends(get_current_user)
 ):  
+    
     lecture = Lecture(
-        title = get_title(content),
-        content = content, 
-        is_public = is_public,
+        title = title,
+        content = "@1 " + title, 
+        is_public = False,
         disc_id = disc_id,
         modified = dt.datetime.now()
     )
     db.add(lecture) 
-
+    
     try:
         db.commit()
     except Exception as e:
         db.rollback()   
-        return templates.TemplateResponse("lecture/edit.html", {"request": request, "lecture": lecture})
+        raise HTTPException(500, "Fail to create a new lecture.")
     
-    return RedirectResponse(url=f"/lecture/list/{disc_id}", status_code=302)
+    return RedirectResponse(url=f"/lecture/edit/{lecture.id}", status_code=302)
 
 # ------- edit 
 
@@ -95,7 +95,7 @@ async def get_lecture_edit(
     return templates.TemplateResponse("lecture/edit.html", 
             {"request": request, "lecture": lecture, "disc_id": lecture.disc_id})
 
-@router.post("/edit/{id}")
+@router.post("/edit/{id}")      # ajax
 async def post_lecture_edit(
     id: int,
     request: Request,
@@ -105,25 +105,24 @@ async def post_lecture_edit(
     username: str=Depends(get_current_user)
 ):
     lecture = db.get(Lecture, id)
-    disc_id = lecture.disc_id
+
 
     if not lecture:
-        return HTTPException(404)
-
+        raise HTTPException(404)
+    
     lecture.title = get_title(content)
     lecture.content = content
     lecture.is_public = is_public
     lecture.modified = dt.datetime.now()
 
-
     try:
         db.commit()
     except Exception as e:
         db.rollback()   
-        return templates.TemplateResponse("lecture/edit.html", {"request": request, "lecture": lecture})
+        raise HTTPException(500, "Fail to change the lecture.")
   
-  
-    return RedirectResponse(url=f"/lecture/list/{disc_id}", status_code=302)
+    return {"status": "OK"}
+
    
 # ------- del 
 
@@ -139,7 +138,7 @@ async def get_lecture_del(
     """
     lecture = db.get(Lecture, id)
     if not lecture:
-        return HTTPException(404, f"No lecture with id={id}")
+        raise HTTPException(404, f"No lecture with id={id}")
 
     return templates.TemplateResponse("lecture/del.html", {"request": request, "lecture": lecture})
 
@@ -208,7 +207,7 @@ async def get_lecture_trans(
     """
     lecture = db.get(Lecture, id)
     if not lecture:
-        return HTTPException(404, f"No lecture with id={id}")
+        raise HTTPException(404, f"No lecture with id={id}")
     
     # file temp.html
     work = translate(lecture.content, lecture.disc.theme, lecture.disc.lang)

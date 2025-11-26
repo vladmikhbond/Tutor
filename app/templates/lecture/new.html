@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+<form method="post" >
+  <header style="margin-bottom: 5px;">
+    <h3 class="inline">New lecture</h3>
+  </header>
+
+  <label>
+    Title
+    <input name="title" />
+  </label>
+
+  <footer class="grid">
+    <button type="submit" id="buttonSave">Save</button>
+    <a href="/lecture/list/{{disc_id}}" role="button" class="secondary">Cancel</a>
+  </footer>      
+</form>
+{% endblock %}

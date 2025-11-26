@@ -145,29 +145,57 @@ function scrollTextareaToSelection(textarea) {
 
 //#region ---------------------- For Save Lection -----------------------------------------
 
-// The value buttonSave.disabled indices if the content.value changed.
+// The '*' indices if the content.value changed.
 
 buttonSave = document.getElementById("buttonSave");
+asterisk = document.getElementById("asterisk");
+edit_form = document.getElementById("edit_form");
+lecture_id = document.getElementById("lecture_id");
 
 content.addEventListener("keydown", (e) => {
   if (e.ctrlKey && (e.key == "s" || e.key == "S")) {
     e.preventDefault();
-    document.getElementById("edit_form").submit();
-    buttonSave.disabled = true;
+    saveLecture();
   }
 })
 
-content.addEventListener('input', function () {
-  buttonSave.disabled = false;
+buttonSave.addEventListener("click", e => {
+    saveLecture();
+})
+
+content.addEventListener("input", function () {
+  asterisk.innerHTML = "*";
 });  
 
 window.onbeforeunload = function (e) {
-    if (! buttonSave.disabled) {
+    if (asterisk.innerHTML == "*") {
         e.preventDefault();               
-        e.returnValue = true;               // for legaci
-        return true;                        // for legaci
     }
 };
+
+async function saveLecture() {
+
+  const data = new FormData(edit_form); 
+  try 
+  {
+    const response = await fetch('/lecture/edit/' + lecture_id.value, {
+      method: 'POST',
+      body: data,
+      credentials: 'include' // якщо потрібні кукі
+    });
+    if (!response.ok) {
+      throw new Error(`Saving failed: ${response.status}`);
+    }
+  } 
+  catch (err) 
+  {
+    alert(`Saving lecture error: ${err.message}`);
+  }
+
+  asterisk.innerHTML = "";
+}
+
+//#endregion
 
 // Autosave in 3 min if text changed (IS OFF NOW)
 
@@ -176,5 +204,3 @@ window.onbeforeunload = function (e) {
 //       document.getElementById("edit_form").submit();
 //       buttonSave.disabled = true;
 // }, 3 * 60000);
-
-//#endregion
