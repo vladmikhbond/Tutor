@@ -112,6 +112,7 @@ class RenderHtml:
         wrap: true,
         autoScrollEditorIntoView: true,
     }});
+    editor{ord_no}.session.setUseWorker(false);
 </script>
 '''
 
