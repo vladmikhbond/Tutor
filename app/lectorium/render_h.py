@@ -4,13 +4,11 @@ from .parser import Slide
 
 class RenderHtml:
 
-    def __init__(self, slides: List[Slide], lang:str, theme: str, ace_theme: str):
+    def __init__(self, slides: List[Slide], lang:str, theme: str):
         self.slides = slides
         self.lang = lang
-        self.theme = theme
-        self.ace_theme = ace_theme
-
-        
+        self.theme = theme     
+        self.ace_theme = "github" if theme.endswith("_dark") else "github" ##########################  
 
     def render(self) -> tuple[str, str]:
         lst: List[str] = [] 
@@ -25,12 +23,19 @@ class RenderHtml:
 
             lst.append(x)
 
-        body = '\n'.join(lst)
+        content = '\n'.join(lst)
         title = self.slides[0].text
 
-        return self.html_doc(title, body)
+        return title, self.html_doc(title, content)
+    
 
     def html_doc(self, title, body):
+        """
+           Кінцева html сторінка.
+           Обирає світлу або темну тему редактора ace9.
+        """
+        
+         
         return f"""
 <!DOCTYPE html>
 <html lang="en">
@@ -42,7 +47,7 @@ class RenderHtml:
 <link href='sys/{self.theme}.css' type='text/css' rel='stylesheet' />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/ace.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/mode-{self.lang}.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/theme-{self.theme}.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/theme-{self.ace_theme}.min.js"></script>
 </head>
 <body>
 <div class="container">

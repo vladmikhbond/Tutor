@@ -21,9 +21,10 @@
   <label>
     Theme
     <select name="theme" required="">
-      <option value="github" {{ 'selected' if disc.theme == 'github' else '' }}>github</option>
-      <option value="github-p" {{ 'selected' if disc.theme == 'github-p' else '' }}>github-p</option>
-      <option value="github-j" {{ 'selected' if disc.theme == 'github-j' else '' }}>github-j</option>
+      {% for theme in ["theme1_dark", "theme1_light", "theme2_dark", "theme2_light"] %}
+        {% set selected = 'selected' if disc.theme == theme else '' %}
+        <option value="{{theme}}" {{selected}}>{{theme}}</option>
+      {% endfor %}
     </select>
   </label>
 

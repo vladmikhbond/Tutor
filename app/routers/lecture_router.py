@@ -209,10 +209,14 @@ async def get_lecture_trans(
     if not lecture:
         raise HTTPException(404, f"No lecture with id={id}")
     
-    # file temp.html
-    work = translate(lecture.content, lecture.disc.lang, lecture.disc.theme, "github")
-    with open(f"app/static/output/temp.html", "w") as f:
-        f.write(work)
+    # file {title}.html
+    
+    # TODO: ace_theme parameter
+    title, content = translate(lecture.content, lecture.disc.lang, lecture.disc.theme)
+    title = tune(title)
+    with open(f"app/static/output/{title}.html", "w") as f:
+        f.write(content)
+    
     # folder pic
     lines = get_style(lecture.content, 2)
     pictures: List[Picture] = db.query(Picture).filter(
@@ -221,8 +225,18 @@ async def get_lecture_trans(
         with open(f"app/static/output/pic/{picture.title}", "bw") as f:
             f.write(picture.image)
 
-    url=f"/static/output/temp.html"
+    url=f"/static/output/{title}.html"
     return RedirectResponse(url, status_code=302)
+
+def tune(line: str) -> str:
+    """
+    Прибирає з рядка символои, не бажані в URL
+    """
+    forbiddens = " <>\"{}|\\^`[]':/?#[]@!$&'()*+,;="
+    lst = ['_' if c in forbiddens else c  for c in line]
+    return ''.join(lst);
+     
+
 
 # ----------------------- search
 
