@@ -44,14 +44,33 @@ class RenderHtml:
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <title>{title}</title>
 <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" rel="stylesheet">
-<link href='sys/{self.theme}.css' type='text/css' rel='stylesheet' />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/ace.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/mode-{self.lang}.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/theme-{self.ace_theme}.min.js"></script>
+<link href='sys/engine.css' type='text/css' rel='stylesheet' />
+<link id="theme_link" href='sys/themes/{self.theme}.css' type='text/css' rel='stylesheet' />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/ace.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/mode-{self.lang}.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/theme-{self.ace_theme}.min.js"></script>
+
+<script>
+    START_SLIDE_NO={0}; 
+    VERSION = "tutor";
+    MARKER_COLOR = "red"
+    IMG_HEIGHT_FACTOR = {0.33}
+</script>
+
+
 </head>
 <body>
 <div class="container">
+<div id="dash" >
+   
+    <a href="#" id="theme_toggle"> ◐ </a>
+    <a href="#" > ✏ </a>
+
+</div>
+
 {body}
+<script src='sys/engine.js'></script>
 </div>
 </body>
 </html>
