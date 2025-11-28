@@ -8,7 +8,7 @@ class RenderHtml:
         self.slides = slides
         self.lang = lang
         self.theme = theme     
-        self.ace_theme = "github" if theme.endswith("_dark") else "github" ##########################  
+        self.ace_theme = "github" if theme.endswith("_dark") else "github" #TODO:  коли бу схеми ace9, поставити їх 
 
     def render(self) -> tuple[str, str]:
         lst: List[str] = [] 
@@ -54,24 +54,22 @@ class RenderHtml:
 <script>
     START_SLIDE_NO={0}; 
     VERSION = "tutor";
-    MARKER_COLOR = "red"
     IMG_HEIGHT_FACTOR = {0.33}
 </script>
 
 
 </head>
 <body>
-<div class="container">
-<div id="dash" >
-   
-    <a href="#" id="theme_toggle"> ◐ </a>
-    <a href="#" > ✏ </a>
-
-</div>
-
-{body}
-<script src='sys/engine.js'></script>
-</div>
+    <div class="container">
+        <div id="dash" > 
+            <a href="#" id="theme_toggle"> ◐ </a>
+            <a href="#" id="pensil"> ✏ </a>
+        </div>
+        <div id="lecture">
+            {body}
+        </div>
+        <script src='sys/engine.js'></script>
+    </div>
 </body>
 </html>
 """
