@@ -1,4 +1,6 @@
-output/
+app/static/output/*.html
+app/static/output/pic
+
 
 # Python
 __pycache__/

@@ -1,0 +1,13 @@
+#dash {
+    position: fixed;
+    /* opacity: 0.5; */
+
+    right: 5px;
+    top: 5px;
+    width: 50%;
+    z-index: 1;
+}
+
+#dash>a {
+    text-decoration: none;
+}
