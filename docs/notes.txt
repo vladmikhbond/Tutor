@@ -27,6 +27,7 @@ docker image rm tutor_img
 docker load -i tutor.tar
 docker run -p 7002:7002  -v ./:/data  --name tutor_cont  tutor_img 
 
+Студентський додаток - аутентиф, вирішення задач, прох тестів, спостер власних  результатів.
 
 
 ---

@@ -131,18 +131,59 @@ function canvasPainter() {
     canvas.onmouseup = function (e) {
         if (drawing) {
             let curve = curves[curves.length - 1]
-            smooth(curve);
-            smooth(curve);
+            transform(curve);
             drawing = false;
             draw();
         }
     };
 
-    function smooth(curve) {
-        for (let i = 1; i < curve.length - 1; i++) {
-            curve[i].x = (curve[i-1].x + curve[i+1].x) / 2;
-            curve[i].y = (curve[i-1].y + curve[i+1].y) / 2;     
+    function transform(curve) {
+        let first = curve[0], last = curve[curve.length - 1];
+        
+        if (Math.hypot(first.x - last.x, first.y - last.y) < 5) {
+            // крива замкнена
+            rect(curve);
+        } else if (avg_disnance(curve) < 5) {
+            // відрізок прямої
+            curve.splice(1, curve.length - 2);
+            if (Math.abs(first.x - last.x) < 3) first.x = last.x;
+            if (Math.abs(first.y - last.y) < 3) first.y = last.y;
+        } else {
+            smooth(curve);
         }
+    }
+
+    function avg_disnance(curve) {
+        let first = curve[0], last = curve[curve.length - 1];
+        let lenX = last.x - first.x, lenY = last.y - first.y;
+        
+        let sum = 0;
+        for (const p of curve) {
+            let d = Math.abs(lenX * (first.y - p.y) - lenY * (first.x - p.x))
+            sum += d;
+        }
+        let len = Math.hypot(first.x - last.x, first.y - last.y);
+        return sum / (curve.length - 2) / len;
+    }
+
+
+    function rect(curve) { 
+        let xs = curve.map(p => p.x);
+        let ys = curve.map(p => p.y);
+        let maxX = Math.max(...xs), minX = Math.min(...xs);
+        let maxY = Math.max(...ys), minY = Math.min(...ys);
+        curve.length = 0;
+        curve.push({"x":minX, "y":minY}, {"x":minX, "y":maxY}, 
+                {"x":maxX, "y":maxY}, {"x":maxX, "y":minY}, {"x":minX, "y":minY});
+    }
+        
+    function smooth(curve) {   
+        for (let k = 1; k < 2; k++) {
+            for (let i = 1; i < curve.length - 1; i++) {
+                curve[i].x = (curve[i-1].x + curve[i+1].x) / 2;
+                curve[i].y = (curve[i-1].y + curve[i+1].y) / 2;     
+            }
+        } 
     }
 
     function draw() {
