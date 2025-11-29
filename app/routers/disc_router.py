@@ -13,7 +13,7 @@ from ..routers.login_router import get_current_user
 from ..dal import get_db  # Функція для отримання сесії БД
 
 from ..lectorium.main import translate, get_style
-from ..routers.lecture_router import tune
+from ..routers.lecture_router import export_lecture
 
 # шаблони Jinja2
 templates = Jinja2Templates(directory="app/templates")
@@ -158,13 +158,15 @@ async def get_export_del(
     disc = db.get(Disc, id)
     if not disc:
         raise HTTPException(404, f"Export of disc id={id} is failed.")
-    export(disc, db)    
+    lec_titles = export_disc(disc, db) 
+    export_index(lec_titles)   
+
     return "ok"
 
 
 def clear_output_folder():
     """
-    Видаляє усе, крім папки sys
+    Видаляє усе, крім папки sys. Папку pic спустошуємо. 
     """
     folder = "app/static/output"
     exclude = "sys"
@@ -177,12 +179,13 @@ def clear_output_folder():
             shutil.rmtree(path)
         else:
             os.remove(path)
+    os.mkdir(folder + "/pic")
 
-def export(disc: Disc, db: Session):
 
-    disc_title = tune(disc.title)
+def export_disc(disc: Disc, db: Session):
+
     src = "app/static/output"
-    dst = f"app/export/{disc_title}"
+    dst = f"app/export/{disc.title}"
 
     # Якщо папка {disc.title} вже існує — видалити 
     if os.path.exists(dst):
@@ -191,18 +194,11 @@ def export(disc: Disc, db: Session):
     os.mkdir(dst)
     shutil.copytree(f"{src}/sys", f"{dst}/sys")
     os.mkdir(dst + "/pic")
-
+    lec_titles = []
     for lecture in disc.lectures:
-        # TODO: ace_theme parameter
-        title, content = translate(lecture.content, lecture.disc.lang, lecture.disc.theme)
-        title = tune(title)
-        with open(f"{dst}/{title}.html", "w") as f:
-            f.write(content)
-        
-        # folder pic
-        lines = get_style(lecture.content, 2)
-        pictures: List[Picture] = db.query(Picture).filter(
-                Picture.disc_id == lecture.disc_id and Picture.title in lines).all()
-        for picture in pictures:
-            with open(f"{dst}/pic/{picture.title}", "bw") as f:
-                f.write(picture.image)
+        title = export_lecture(lecture, dst, db)
+        lec_titles.append(title)
+    return lec_titles
+
+def export_index(lec_titles):
+    pass

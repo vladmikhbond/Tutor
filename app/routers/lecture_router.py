@@ -209,24 +209,27 @@ async def get_lecture_trans(
     if not lecture:
         raise HTTPException(404, f"No lecture with id={id}")
     
-    # file {title}.html
-    
+    title = export_lecture(lecture, "app/static/output", db)
+
+    url=f"/static/output/{title}.html"
+    return RedirectResponse(url, status_code=302)
+
+def export_lecture(lecture: Lecture, dst:str, db:Session):
+    # create file {lect_title}.html
     # TODO: ace_theme parameter
     title, content = translate(lecture.content, lecture.disc.lang, lecture.disc.theme)
     title = tune(title)
-    with open(f"app/static/output/{title}.html", "w") as f:
+    with open(f"{dst}/{title}.html", "w") as f:
         f.write(content)
     
-    # folder pic
+    # create folder pic
     lines = get_style(lecture.content, 2)
     pictures: List[Picture] = db.query(Picture).filter(
             Picture.disc_id == lecture.disc_id and Picture.title in lines).all()
     for picture in pictures:
-        with open(f"app/static/output/pic/{picture.title}", "bw") as f:
+        with open(f"{dst}/pic/{picture.title}", "bw") as f:
             f.write(picture.image)
-
-    url=f"/static/output/{title}.html"
-    return RedirectResponse(url, status_code=302)
+    return title
 
 def tune(line: str) -> str:
     """
