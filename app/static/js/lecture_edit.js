@@ -67,6 +67,17 @@ content.addEventListener("contextmenu", e => {
     menu.style.display = "block";
     menu.style.left = e.pageX + "px";
     menu.style.top = e.pageY + "px";
+
+    // Коригуємо позицію, якщо меню виходить за межі екрану
+    const menuRect = menu.getBoundingClientRect();
+    // Перевірка праворуч
+    if (menuRect.right > window.innerWidth) {
+      menu.style.left = (e.pageX - menuRect.width) + "px";
+    }
+    // Перевірка знизу
+    if (menuRect.bottom > window.innerHeight) {
+      menu.style.top = (e.pageY - menuRect.height) + "px";
+    }
   }
 });
 

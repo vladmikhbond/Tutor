@@ -3,6 +3,7 @@
 {% block title %}{% endblock %}
 
 {% block content %}
+<div>
 <form id="edit_form" method="post" >
   <header style="margin-bottom: 5px;">
     <h3 class="inline"> {{lecture.title}} 
@@ -28,18 +29,21 @@
 
  <!-- --------------------------- context menu ----------------------------  -->
 
-<div id="context-menu" >
+<menu id="context-menu" >
+  <li>
   <a href="#" id="comment">Comment</a>
-  
-  <hr>
+  </li>
+  <li>
       <form id="upload_form" enctype="multipart/form-data" style="margin:0px 5px 0px 5px">
           <input type="file" name="file" id="file" accept="image" style="display: inline" data-buttonText="Your label here" . />
           <input type="submit" value="Upload" />
         
           <input type="hidden" id="disc_id" value="{{disc_id}}" 
-      </form>    
-</div>
+      </form>
+  </li>
+</menu>
 
+</div>
 {% endblock %}
 
 {% block script %}

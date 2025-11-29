@@ -12,7 +12,7 @@ footer.grid a[role="button"] {
 }
 /* ----------------- Контекстне меню ------------------ */
 #context-menu {
-  position: fixed;
+  position: absolute;
   display: none;
   min-width: 180px;
   z-index: 9999;
