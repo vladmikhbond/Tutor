@@ -139,21 +139,25 @@ function canvasPainter() {
 
     function transform(curve) {
         let first = curve[0], last = curve[curve.length - 1];
-        
-        if (Math.hypot(first.x - last.x, first.y - last.y) < 5) {
+        let len = Math.hypot(first.x - last.x, first.y - last.y)
+        if (len < 5) {
             // крива замкнена
-            rect(curve);
-        } else if (avg_disnance(curve) < 5) {
-            // відрізок прямої
+            rectangle(curve);
+        } else if (is_straight_line(curve)) {
+            // крива - відрізок прямої
             curve.splice(1, curve.length - 2);
-            if (Math.abs(first.x - last.x) < 3) first.x = last.x;
-            if (Math.abs(first.y - last.y) < 3) first.y = last.y;
+            // ver
+            if (Math.abs(first.x - last.x) / len < 0.03) 
+                first.x = last.x;
+            // hor
+            if (Math.abs(first.y - last.y) / len < 0.03) 
+                first.y = last.y;
         } else {
             smooth(curve);
         }
     }
 
-    function avg_disnance(curve) {
+    function is_straight_line(curve) {
         let first = curve[0], last = curve[curve.length - 1];
         let lenX = last.x - first.x, lenY = last.y - first.y;
         
@@ -163,11 +167,12 @@ function canvasPainter() {
             sum += d;
         }
         let len = Math.hypot(first.x - last.x, first.y - last.y);
-        return sum / (curve.length - 2) / len;
+        let avg_distance = sum / (curve.length - 2) / len;
+        return avg_distance < 4;
     }
 
 
-    function rect(curve) { 
+    function rectangle(curve) { 
         let xs = curve.map(p => p.x);
         let ys = curve.map(p => p.y);
         let maxX = Math.max(...xs), minX = Math.min(...xs);
