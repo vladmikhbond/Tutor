@@ -203,7 +203,7 @@ async def get_lecture_trans(
 ):
     """ 
     Трансляція лекції.
-    Отримує лекцію з БД і створює файл temp.html і папку pic в папці app/static/output
+    Отримує лекцію з БД і створює файл {disc.title}.html і папку pic в папці app/static/output
     """
     lecture = db.get(Lecture, id)
     if not lecture:

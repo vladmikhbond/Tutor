@@ -1,5 +1,6 @@
 app/static/output/*.html
 app/static/output/pic
+app/export
 
 
 # Python
