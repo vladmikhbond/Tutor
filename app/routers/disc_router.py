@@ -158,12 +158,40 @@ async def get_export_del(
     disc = db.get(Disc, id)
     if not disc:
         raise HTTPException(404, f"Export of disc id={id} is failed.")
-    lec_titles = export_disc(disc, db) 
-    export_index(lec_titles)   
-
-    return "ok"
+    
+    return export_disc(disc, db) 
 
 
+def export_disc(disc: Disc, db: Session):
+
+    sys = "app/static/output/sys"
+    dst = f"app/export/{disc.title}"
+
+    # Якщо папка {disc.title} вже існує — видалити 
+    if os.path.exists(dst):
+        shutil.rmtree(dst)
+    
+    # Створити папку з підпапками sys і pic
+    os.mkdir(dst)
+    shutil.copytree(sys, f"{dst}/sys")
+    os.mkdir(dst + "/pic")
+    
+    # Зберігти лекції 
+    index_content = f"@2 {disc.title}\n"
+    for lecture in disc.lectures:
+        tuned_title = export_lecture(lecture, dst, db)
+        index_content += f"@3 [[http://{tuned_title}.html|{lecture.title}]]\n"
+    
+    # Зберігти індекс
+    _ , html = translate(index_content, disc.lang, disc.theme)
+
+    html = html.replace("http://", "")  
+    fname = f"{dst}/index.html"
+    with open(fname, "w") as f:
+        f.write(html)
+    return fname
+# ----------------------------------------------------------------
+# not used yet
 def clear_output_folder():
     """
     Видаляє усе, крім папки sys. Папку pic спустошуємо. 
@@ -181,24 +209,3 @@ def clear_output_folder():
             os.remove(path)
     os.mkdir(folder + "/pic")
 
-
-def export_disc(disc: Disc, db: Session):
-
-    src = "app/static/output"
-    dst = f"app/export/{disc.title}"
-
-    # Якщо папка {disc.title} вже існує — видалити 
-    if os.path.exists(dst):
-        shutil.rmtree(dst)
-    # Створити папку з підпапками sys і pic
-    os.mkdir(dst)
-    shutil.copytree(f"{src}/sys", f"{dst}/sys")
-    os.mkdir(dst + "/pic")
-    lec_titles = []
-    for lecture in disc.lectures:
-        title = export_lecture(lecture, dst, db)
-        lec_titles.append(title)
-    return lec_titles
-
-def export_index(lec_titles):
-    pass

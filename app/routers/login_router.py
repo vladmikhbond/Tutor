@@ -46,7 +46,6 @@ async def login(
     claims = {"sub": user.username, "exp": datetime.now() + expires_delta}
     access_token = jwt.encode(claims, SECRET_KEY, algorithm=ALGORITHM)    
     
-    # TODO 
     url = "/disc/list"
     redirect = RedirectResponse(url, status_code=302)
 

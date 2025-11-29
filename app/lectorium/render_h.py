@@ -7,8 +7,9 @@ class RenderHtml:
     def __init__(self, slides: List[Slide], lang:str, theme: str):
         self.slides = slides
         self.lang = lang
-        self.theme = theme     
-        self.ace_theme = "github" if theme.endswith("_dark") else "github" #TODO:  коли бу схеми ace9, поставити їх 
+        self.theme = theme
+        #TODO:  коли бу схеми ace9, поставити їх 
+        self.ace_theme = "github" if theme.endswith("_dark") else "github" 
 
     def render(self) -> tuple[str, str]:
         lst: List[str] = [] 
@@ -52,9 +53,8 @@ class RenderHtml:
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/theme-{self.ace_theme}.min.js"></script>
 
 <script>
-    START_SLIDE_NO={0}; 
-    VERSION = "tutor";
-    IMG_HEIGHT_FACTOR = {0.33}
+    const START_SLIDE_NO={0}; 
+    const VERSION = "tutor";
 </script>
 
 

@@ -215,12 +215,12 @@ async def get_lecture_trans(
     return RedirectResponse(url, status_code=302)
 
 def export_lecture(lecture: Lecture, dst:str, db:Session):
+
     # create file {lect_title}.html
-    # TODO: ace_theme parameter
-    title, content = translate(lecture.content, lecture.disc.lang, lecture.disc.theme)
-    title = tune(title)
-    with open(f"{dst}/{title}.html", "w") as f:
-        f.write(content)
+    title, html = translate(lecture.content, lecture.disc.lang, lecture.disc.theme)
+    title_url = tune(title)
+    with open(f"{dst}/{title_url}.html", "w") as f:
+        f.write(html)
     
     # create folder pic
     lines = get_style(lecture.content, 2)
@@ -229,7 +229,7 @@ def export_lecture(lecture: Lecture, dst:str, db:Session):
     for picture in pictures:
         with open(f"{dst}/pic/{picture.title}", "bw") as f:
             f.write(picture.image)
-    return title
+    return title_url
 
 def tune(line: str) -> str:
     """
@@ -241,7 +241,7 @@ def tune(line: str) -> str:
      
 
 
-# ----------------------- search
+# ----------------------- search in 
 
 @router.post("/search/{disc_id}")
 async def post_lecture_picture(
@@ -254,7 +254,7 @@ async def post_lecture_picture(
     """
     Пошук зразка в чернетках лекцій.
     """
-    lectures = db.query(Lecture).filter(Lecture.disc_id == disc_id).all()
+    lectures = db.get(Disc, disc_id).lectures 
     finded = []
     for lec in lectures:
         text = lec.content.replace('\r', '')
