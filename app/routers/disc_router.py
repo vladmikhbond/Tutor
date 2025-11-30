@@ -183,7 +183,7 @@ def export_disc(disc: Disc, db: Session):
         index_content += f"@3 [[http://{tuned_title}.html|{lecture.title}]]\n"
     
     # Зберігти індекс
-    _ , html = translate(index_content, disc.lang, disc.theme)
+    html = translate(index_content, disc.lang, disc.theme)
 
     html = html.replace("http://", "")  
     fname = f"{dst}/index.html"

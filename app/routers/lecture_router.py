@@ -10,7 +10,7 @@ from ..models.models import Disc, Lecture, Picture
 
 from .login_router import get_current_user
 from ..dal import get_db  # Функція для отримання сесії БД
-from ..lectorium.main import translate, get_style
+from ..lectorium.main import translate, get_style, tune
 
 # шаблони Jinja2
 templates = Jinja2Templates(directory="app/templates")
@@ -46,9 +46,8 @@ async def get_lecture_new(
     """ 
     Створення нової лекції.
     """
-    lecture = Lecture(content="🔴1 Noname") 
     return templates.TemplateResponse("lecture/new.html", 
-            {"request": request, "lecture": lecture, "disc_id": disc_id})
+            {"request": request, "disc_id": disc_id})
 
 
 @router.post("/new/{disc_id}")
@@ -207,17 +206,17 @@ async def get_lecture_trans(
     if not lecture:
         raise HTTPException(404, f"No lecture with id={id}")
     
-    title = export_lecture(lecture, "app/static/output", db)
+    lec_url = export_lecture(lecture, "app/static/output", db)
 
-    url=f"/static/output/{title}.html"
+    url=f"/static/output/{lec_url}.html"
     return RedirectResponse(url, status_code=302)
 
 def export_lecture(lecture: Lecture, dst:str, db:Session):
 
     # create file {lect_title}.html
-    title, html = translate(lecture.content, lecture.disc.lang, lecture.disc.theme)
-    title_url = tune(title)
-    with open(f"{dst}/{title_url}.html", "w") as f:
+    html = translate(lecture.content, lecture.disc.lang, lecture.disc.theme)
+    tuned_title = tune(lecture.title)
+    with open(f"{dst}/{tuned_title}.html", "w") as f:
         f.write(html)
     
     # create folder pic
@@ -227,17 +226,8 @@ def export_lecture(lecture: Lecture, dst:str, db:Session):
     for picture in pictures:
         with open(f"{dst}/pic/{picture.title}", "bw") as f:
             f.write(picture.image)
-    return title_url
-
-def tune(line: str) -> str:
-    """
-    Прибирає з рядка символои, не бажані в URL
-    """
-    forbiddens = " <>\"{}|\\^`[]':/?#[]@!$&'()*+,;="
-    lst = ['_' if c in forbiddens else c  for c in line]
-    return ''.join(lst);
+    return tuned_title
      
-
 
 # ----------------------- search in 
 

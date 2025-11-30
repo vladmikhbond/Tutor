@@ -9,7 +9,7 @@ class RenderHtml:
         self.lang = lang
         self.theme = theme
         #TODO:  коли бу схеми ace9, поставити їх 
-        self.ace_theme = "github" if theme.endswith("_dark") else "github" 
+        self.ace_theme = "monokai" if theme.endswith("_dark") else "github" 
 
     def render(self) -> tuple[str, str]:
         lst: List[str] = [] 
@@ -27,15 +27,15 @@ class RenderHtml:
         content = '\n'.join(lst)
         title = self.slides[0].text
 
-        return title, self.html_doc(title, content)
+        return self.html_doc(content)
     
 
-    def html_doc(self, title, body):
+    def html_doc(self, content):
         """
            Кінцева html сторінка.
            Обирає світлу або темну тему редактора ace9.
         """
-        
+        title = self.slides[0].text
          
         return f"""
 <!DOCTYPE html>
@@ -66,7 +66,7 @@ class RenderHtml:
             <a href="#" id="pensil"> ✏ </a>
         </div>
         <div id="lecture">
-            {body}
+            {content}
         </div>
         <script src='sys/engine.js'></script>
     </div>

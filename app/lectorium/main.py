@@ -21,3 +21,10 @@ def get_style(source: str, mark=2) -> List[str]:
     lines = [l for (m, l) in splines if m == mark]
     return lines
     
+def tune(line: str) -> str:
+    """
+    Прибирає з рядка символои, не бажані в URL
+    """
+    forbiddens = " <>\"{}|\\^`[]':/?#[]@!$&'()*+,;="
+    lst = ['_' if c in forbiddens else c  for c in line]
+    return ''.join(lst);
