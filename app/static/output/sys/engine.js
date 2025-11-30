@@ -3,7 +3,12 @@
 // VERSION = "tutor";
 // IMG_HEIGHT_FACTOR = {0.33}
 
-// ----------------------- перемикач тем --------------------------
+// ------------------------------- init ------------------------------------------
+let current_slide_no = START_SLIDE_NO; // номер сфокусованого слйду
+let slides = document.querySelectorAll("#lecture > div");
+go(0);
+
+// ----------------------- перемикач світлої і темної тем --------------------------
 
 document.getElementById("theme_toggle").addEventListener("click", () => 
 {
@@ -18,10 +23,6 @@ document.getElementById("theme_toggle").addEventListener("click", () =>
     link.setAttribute("href", `sys/${theme}.css`);   
 });
 
-// ------------------------------- init ------------------------------------------
-let current_slide_no = START_SLIDE_NO; // номер сфокусованого слйду
-let slides = document.querySelectorAll("#lecture > div");
-go(0);
 
 // ---------------------------------- навігація -----------------------------
 
@@ -67,7 +68,7 @@ function go(delta) {
 
  }
 
-// ------------------------- Painting on the canvas --------------------------------
+// ------------------------- Малювання олівцем --------------------------------
 
 let canvas = null;
 
@@ -141,10 +142,10 @@ function canvasPainter() {
         let first = curve[0], last = curve[curve.length - 1];
         let len = Math.hypot(first.x - last.x, first.y - last.y)
         if (len < 5) {
-            // крива замкнена
+            // замкнена крива перетворюється у прямокутник
             rectangle(curve);
         } else if (is_straight_line(curve)) {
-            // крива - відрізок прямої
+            // крива перетворюється у відрізок прямої
             curve.splice(1, curve.length - 2);
             // ver
             if (Math.abs(first.x - last.x) / len < 0.03) 
@@ -205,7 +206,7 @@ function canvasPainter() {
         }
     }
 
-    // Перевірка на Ctrl+Z
+    // Ctrl+Z видаляє останню криву
     canvas.onkeydown = function (e) {
         if (e.ctrlKey && e.key === "z") { 
             if (curves.length > 0) {
