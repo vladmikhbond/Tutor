@@ -1,18 +1,18 @@
 import os
 import shutil
+import io
+import zipfile
 from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Form, Response, Security
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
-
 from sqlalchemy.orm import Session
-from ..models.models import Disc, Picture
 
+from ..models.models import Disc, Picture
 from ..routers.login_router import get_current_user
 from ..dal import get_db  # Функція для отримання сесії БД
-
-from ..lectorium.main import translate, get_style
+from ..lectorium.main import translate, tune
 from ..routers.lecture_router import export_lecture
 
 # шаблони Jinja2
@@ -159,8 +159,63 @@ async def get_export_del(
     if not disc:
         raise HTTPException(404, f"Export of disc id={id} is failed.")
     
-    return export_disc(disc, db) 
+    return export_n_archive_disc(disc, db) 
 
+
+def export_n_archive_disc(disc: Disc, db: Session):
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, 'w', zipfile.ZIP_DEFLATED) as zf:
+
+        # Запакувати лекції         
+        for lecture in disc.lectures:
+            html = translate(lecture.content, lecture.disc.lang, lecture.disc.theme)
+            tuned_title = tune(lecture.title)
+            zf.writestr(tuned_title + ".html", html)
+
+        # Створити і запакувати індекс
+        FAKE_HTTP = "http://"
+        index_content = f"@2 {disc.title}\n"
+        for lecture in disc.lectures:
+            index_content += f"@3 [[{FAKE_HTTP}{tune(lecture.title)}.html|{lecture.title}]]\n"
+        index_html = translate(index_content, disc.lang, disc.theme)
+        index_html = index_html.replace(FAKE_HTTP, "")
+        zf.writestr("index.html", index_html)
+        
+        # Запакувати малюнки
+        pictures: List[Picture] = db.query(Picture).filter(Picture.disc_id == lecture.disc_id ).all()
+        for picture in pictures:
+            zf.writestr(f"pic/{picture.title}", picture.image)
+        
+        # Допакувти папку sys
+        archive_sys(zf)
+        
+    # Повернути ZIP із назвою дисципліни
+    buffer.seek(0)
+    return StreamingResponse(
+            buffer,
+            media_type="application/zip",
+            headers={"Content-Disposition": f"attachment; filename={tune(disc.title)}.zip"}
+        )
+
+def archive_sys(zf):
+
+    def arc(name):
+        with open(f"app/static/output/sys/{name}", "r", encoding="utf-8") as f:
+            text = f.read()
+        zf.writestr(f"sys/{name}", text)
+
+    arc("engine.css")
+    arc("engine.js")
+    arc("themes/theme1_dark.css")
+    arc("themes/theme1_light.css")
+    arc("themes/theme2_dark.css")
+    arc("themes/theme2_light.css")
+    zf.write("app/static/output/sys/pic/pensil.png", "sys/pic/pensil.png")
+    
+    
+# =================================================================================================================
+
+# експортує на диск - мабуть зайве
 
 def export_disc(disc: Disc, db: Session):
 
@@ -190,11 +245,14 @@ def export_disc(disc: Disc, db: Session):
     with open(fname, "w") as f:
         f.write(html)
     return fname
-# ----------------------------------------------------------------
+
+
+
+
 # not used yet
 def clear_output_folder():
     """
-    Видаляє усе, крім папки sys. Папку pic спустошуємо. 
+    Видаляє усе, крім папки sys. Папку pic спустошує. 
     """
     folder = "app/static/output"
     exclude = "sys"
