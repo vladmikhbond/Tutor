@@ -10,7 +10,7 @@ from ..models.models import Disc, Lecture, Picture
 
 from .login_router import get_current_user
 from ..dal import get_db  # Функція для отримання сесії БД
-from ..lectorium.main import translate, get_title, get_style
+from ..lectorium.main import translate, get_style
 
 # шаблони Jinja2
 templates = Jinja2Templates(directory="app/templates")
@@ -46,7 +46,7 @@ async def get_lecture_new(
     """ 
     Створення нової лекції.
     """
-    lecture = Lecture(title="Noname", content="") 
+    lecture = Lecture(content="🔴1 Noname") 
     return templates.TemplateResponse("lecture/new.html", 
             {"request": request, "lecture": lecture, "disc_id": disc_id})
 
@@ -55,14 +55,13 @@ async def get_lecture_new(
 async def post_lecture_new(
     request: Request,
     disc_id: int,
-    title: str = Form(...),
+    content: str = Form(...),
     db: Session = Depends(get_db),
     username: str=Depends(get_current_user)
 ):  
     
     lecture = Lecture(
-        title = title,
-        content = "@1 " + title, 
+        content = content, 
         is_public = False,
         disc_id = disc_id,
         modified = dt.datetime.now()
@@ -110,7 +109,6 @@ async def post_lecture_edit(
     if not lecture:
         raise HTTPException(404)
     
-    lecture.title = get_title(content)
     lecture.content = content
     lecture.is_public = is_public
     lecture.modified = dt.datetime.now()

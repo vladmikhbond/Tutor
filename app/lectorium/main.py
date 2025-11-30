@@ -9,16 +9,6 @@ def translate(source: str, lang: str, theme: str) -> tuple[str, str]:
     slides = Parser(source).parse()
     return RenderHtml(slides, lang, theme).render()
 
-
-def get_title(source: str):
-    """
-    Повертає назву лекції 
-    """
-    slides = Parser(source).parse()
-    if slides and len(slides):
-        return slides[0].text
-    else:
-        return "notitle"
     
 def get_style(source: str, mark=2) -> List[str]:
     """

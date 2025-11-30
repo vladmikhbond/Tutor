@@ -2,7 +2,7 @@
 import datetime as dt
 from sqlalchemy import ForeignKey, String, DateTime, Integer, Text, LargeBinary, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship, DeclarativeBase
-
+from ..lectorium.parser import Parser
 
 class Base(DeclarativeBase):
     pass
@@ -13,12 +13,25 @@ class Lecture(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     disc_id: Mapped[int] = mapped_column(Integer, ForeignKey("discs.id", ondelete="CASCADE"))
-    title: Mapped[str] = mapped_column(String)
     content: Mapped[str] = mapped_column(Text)
     is_public: Mapped[bool] = mapped_column(Boolean)
     modified: Mapped[dt.datetime] = mapped_column(DateTime)
     # nav
     disc: Mapped["Disc"] = relationship(back_populates="lectures")
+
+    
+    @property
+    def title(self):
+        """
+        Повертає назву лекції 
+        """
+        slides = Parser(self.content).parse()
+        if slides and len(slides):
+            return slides[0].text
+        else:
+            return "notitle"
+
+
 
 
 class Picture(Base):
