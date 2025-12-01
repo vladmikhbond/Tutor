@@ -9,8 +9,11 @@ class RenderHtml:
         self.lang = lang
         self.theme = theme
         #TODO:  коли бу схеми ace9, поставити їх 
-        self.ace_theme = "monokai" if theme.endswith("_dark") else "github" 
-
+        if '1' in theme:         
+            self.ace_theme = "nord_dark" if theme.endswith("_dark") else "textmate" 
+        else:
+            self.ace_theme = "twilight" if theme.endswith("_dark") else "github" 
+        
     def render(self) -> tuple[str, str]:
         lst: List[str] = [] 
         
@@ -46,11 +49,16 @@ class RenderHtml:
 <title>{title}</title>
 <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" rel="stylesheet">
 <link href='sys/engine.css' type='text/css' rel='stylesheet' />
-<link id="theme_link" href='sys/themes/{self.theme}.css' type='text/css' rel='stylesheet' />
+<link href='sys/themes/{self.theme}.css' type='text/css' rel='stylesheet' id="theme_link" />
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/ace.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/mode-{self.lang}.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/theme-{self.ace_theme}.min.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/theme-github.min.js" id="ace_theme_link" ></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/theme-twilight.min.js" id="ace_theme_link" ></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/theme-textmate.min.js" id="ace_theme_link" ></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/theme-nord_dark.min.js" id="ace_theme_link" ></script>
 
 <script>
     const START_SLIDE_NO={0}; 

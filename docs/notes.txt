@@ -10,7 +10,13 @@ TODO
 виконання коду
 
 
+Python:
+Тёмная тема: nord_dark
+Светлая тема: textmate
 
+Js:
+Тёмная тема: twilight
+Светлая тема: github
 
 
 --- dev

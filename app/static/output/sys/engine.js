@@ -6,21 +6,48 @@
 // ------------------------------- init ------------------------------------------
 let current_slide_no = START_SLIDE_NO; // номер сфокусованого слйду
 let slides = document.querySelectorAll("#lecture > div");
+let ace_theme = "twilight";
 go(0);
 
 // ----------------------- перемикач світлої і темної тем --------------------------
 
 document.getElementById("theme_toggle").addEventListener("click", () => 
-{
-    const link = document.getElementById("theme_link");
-    let theme = link.getAttribute("href").slice(4,-4);   // 'sys/{THEME}.css'
+{   
+    function changeCssLink(link_id, a, b) {
+        let link = document.getElementById(link_id);
+        let href = link.getAttribute("href");
+        let index = href.indexOf(a);
+        if (index !== -1) {
+            const newHref = href.slice(0, index) + b + href.slice(index + a.length);
+            link.setAttribute("href", newHref);
+            return b;
+        }
+        index = href.indexOf(b);
+        if (index !== -1) {
+            const newHref = href.slice(0, index) + a + href.slice(index + b.length);
+            link.setAttribute("href", newHref);
+            return a;
+        }
+        return null; 
+    }   
+    // changeCssLink("theme_link", "dark", "light");
+    
 
-    if (theme.endsWith("dark")) {
-        theme = theme.slice(0, -4) + "light";
-    } else {
-        theme = theme.slice(0, -5) + "dark";
+    // let x = changeCssLink("ace_theme_link", "twilight", "github");
+    // let y = changeCssLink("ace_theme_link", "nord_dark", "textmate");
+    if (ace_theme == "github")
+        ace_theme == "twilight";
+    else
+        ace_theme == "github";
+
+    for (let n = 0; n < slides.length; n++) {
+        const id = "editor" + n;
+        const el = document.getElementById(id);
+        if (el) {
+            const editor = ace.edit(id);
+            editor.setTheme("ace/theme/" + ace_theme) ;
+        }
     }
-    link.setAttribute("href", `sys/${theme}.css`);   
 });
 
 
