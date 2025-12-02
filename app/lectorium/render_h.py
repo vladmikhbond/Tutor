@@ -53,12 +53,8 @@ class RenderHtml:
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/ace.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/mode-{self.lang}.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/theme-{self.ace_theme}.min.js" id="ace_theme_link" ></script>
 
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/theme-github.min.js" id="ace_theme_link" ></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/theme-twilight.min.js" id="ace_theme_link" ></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/theme-textmate.min.js" id="ace_theme_link" ></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/theme-nord_dark.min.js" id="ace_theme_link" ></script>
 
 <script>
     const START_SLIDE_NO={0}; 

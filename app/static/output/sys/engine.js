@@ -13,32 +13,27 @@ go(0);
 
 document.getElementById("theme_toggle").addEventListener("click", () => 
 {   
-    function changeCssLink(link_id, a, b) {
-        let link = document.getElementById(link_id);
-        let href = link.getAttribute("href");
-        let index = href.indexOf(a);
+    function changeCssLink(attr, link_id, a, b) {
+        let elem = document.getElementById(link_id);
+        let val = elem.getAttribute(attr);
+        let index = val.indexOf(a);
         if (index !== -1) {
-            const newHref = href.slice(0, index) + b + href.slice(index + a.length);
-            link.setAttribute("href", newHref);
+            const newHref = val.slice(0, index) + b + val.slice(index + a.length);
+            elem.setAttribute(attr, newHref);
             return b;
         }
-        index = href.indexOf(b);
+        index = val.indexOf(b);
         if (index !== -1) {
-            const newHref = href.slice(0, index) + a + href.slice(index + b.length);
-            link.setAttribute("href", newHref);
+            const newHref = val.slice(0, index) + a + val.slice(index + b.length);
+            elem.setAttribute(attr, newHref);
             return a;
         }
         return null; 
     }   
-    // changeCssLink("theme_link", "dark", "light");
-    
-
-    // let x = changeCssLink("ace_theme_link", "twilight", "github");
-    // let y = changeCssLink("ace_theme_link", "nord_dark", "textmate");
-    if (ace_theme == "github")
-        ace_theme == "twilight";
-    else
-        ace_theme == "github";
+    changeCssLink("href", "theme_link", "dark", "light");
+    let x = changeCssLink("src", "ace_theme_link", "twilight", "github");
+    let y = changeCssLink("src", "ace_theme_link", "nord_dark", "textmate");
+    ace_theme = x || y;
 
     for (let n = 0; n < slides.length; n++) {
         const id = "editor" + n;
