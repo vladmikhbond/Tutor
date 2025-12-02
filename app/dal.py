@@ -33,27 +33,22 @@ def get_db():
     finally:
         db.close()
 
-# # ================================================================
-# TSS_DB = "sqlite:////data/PSS.db"
 
-# engine_pss = create_engine(
-#     TSS_DB,
-#     echo=True,
-#     connect_args={"check_same_thread": False}  # потрібно для SQLite + багатопоточного доступу
-# )
+# --------------------------- Users.db ------------------------
+engine_users = create_engine(
+    "sqlite:////data/Users.db",
+    echo=True,
+    connect_args={"check_same_thread": False}  # потрібно для SQLite + багатопоточного доступу
+)
 
-# SessionLocalPss = sessionmaker(autocommit=False, autoflush=False, bind=engine_pss)
+# Створюємо фабрику сесій
+SessionLocalUsers = sessionmaker(autocommit=False, autoflush=False, bind=engine_users)
 
-# def get_db_pss():
-#     db: Session = SessionLocalPss()
-#     try:
-#         yield db
-#     finally:
-#         db.close()
-
-# ================================================================
-
-# from models.models import Base
-# if __name__ == "__main__":
-#     Base.metadata.create_all(engine)
+# Dependency для роутерів
+def get_users_db():
+    db: Session = SessionLocalUsers()
+    try:
+        yield db
+    finally:
+        db.close()
 

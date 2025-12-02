@@ -2,17 +2,22 @@ import re
 from typing import List, Tuple
 from .parser import Slide
 
+ace_themes = {
+    "theme1_light": "textmate",
+    "theme1_dark": "nord_dark",
+    "theme2_light": "github",
+    "theme2_dark": "twilight"
+}
+
 class RenderHtml:
 
     def __init__(self, slides: List[Slide], lang:str, theme: str):
         self.slides = slides
         self.lang = lang
         self.theme = theme
-        #TODO:  коли бу схеми ace9, поставити їх 
-        if '1' in theme:         
-            self.ace_theme = "nord_dark" if theme.endswith("_dark") else "textmate" 
-        else:
-            self.ace_theme = "twilight" if theme.endswith("_dark") else "github" 
+
+        # схеми ace9
+        self.ace_theme = ace_themes[theme]        
         
     def render(self) -> tuple[str, str]:
         lst: List[str] = [] 
