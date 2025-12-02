@@ -13,8 +13,8 @@ go(0);
 
 document.getElementById("theme_toggle").addEventListener("click", () => 
 {   
-    function changeCssLink(attr, link_id, a, b) {
-        let elem = document.getElementById(link_id);
+    function changeAttribute(attr, id, a, b) {
+        let elem = document.getElementById(id);
         let val = elem.getAttribute(attr);
         let index = val.indexOf(a);
         if (index !== -1) {
@@ -29,11 +29,12 @@ document.getElementById("theme_toggle").addEventListener("click", () =>
             return a;
         }
         return null; 
-    }   
-    changeCssLink("href", "theme_link", "dark", "light");
-    let x = changeCssLink("src", "ace_theme_link", "twilight", "github");
-    let y = changeCssLink("src", "ace_theme_link", "nord_dark", "textmate");
-    ace_theme = x || y;
+    }
+    
+    changeAttribute("href", "theme_link", "dark", "light");
+    let a = changeAttribute("src", "ace_theme_link", "twilight", "github");
+    let b = changeAttribute("src", "ace_theme_link", "nord_dark", "textmate");
+    ace_theme = a || b;
 
     for (let n = 0; n < slides.length; n++) {
         const id = "editor" + n;
