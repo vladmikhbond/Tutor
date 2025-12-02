@@ -11,7 +11,7 @@ from jose import jwt
 from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 from ..dal import get_db  # Функція для отримання сесії БД
-from ..models.models import User
+from ..models.models import Tutor
 import bcrypt
 
 SECRET_KEY = "super-secret-key"
@@ -37,7 +37,7 @@ async def login(
     form_data: OAuth2PasswordRequestForm = Depends(), 
     db: Session = Depends(get_db),
 ):
-    user = get_authenticated_user(form_data.username, form_data.password, db)
+    user = get_authenticated_tutor(form_data.username, form_data.password, db)
     if not user:
         raise HTTPException(status_code=400, detail="Invalid credentials")
 
@@ -71,11 +71,11 @@ def logout(response: Response):
 # --------------------------------
 
 
-def get_authenticated_user(username: str, password: str, db: Session):
+def get_authenticated_tutor(username: str, password: str, db: Session):
     """
     Перевірка користувача
     """
-    user = db.get(User, username)
+    user = db.get(Tutor, username)
     if user is None:
         return None
 
@@ -98,7 +98,7 @@ def get_authenticated_user(username: str, password: str, db: Session):
 # описуємо джерело токена - це cookie
 cookie_scheme = APIKeyCookie(name="access_token")
 
-def get_current_user(token: str = Security(cookie_scheme)) -> str:
+def get_current_tutor(token: str = Security(cookie_scheme)) -> str:
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         return payload.get("sub")

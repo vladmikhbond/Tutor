@@ -52,12 +52,12 @@ class Disc(Base):
     lang: Mapped[str] = mapped_column(String)
     theme: Mapped[str] = mapped_column(String)
     #  nav
-    user: Mapped["User"] = relationship(back_populates="discs")
+    user: Mapped["Tutor"] = relationship(back_populates="discs")
     lectures: Mapped[list["Lecture"]] = relationship(back_populates="disc", cascade="all, delete-orphan")
     pictures: Mapped[list["Picture"]] = relationship(back_populates="disc", cascade="all, delete-orphan")
 
 
-class User(Base):
+class Tutor(Base):
     __tablename__ = "users"
 
     username: Mapped[str] = mapped_column(String, primary_key=True)

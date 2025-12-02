@@ -10,7 +10,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
 from ..models.models import Disc, Picture
-from ..routers.login_router import get_current_user
+from ..routers.login_router import get_current_tutor
 from ..dal import get_db  # Функція для отримання сесії БД
 from ..lectorium.main import translate, tune
 from ..routers.lecture_router import export_lecture
@@ -26,7 +26,7 @@ router = APIRouter()
 async def get_disc_list(
     request: Request, 
     db: Session = Depends(get_db),
-    username: str = Depends(get_current_user)
+    username: str = Depends(get_current_tutor)
 ):
     """ 
     Усі дисципліни користувача.
@@ -42,7 +42,7 @@ async def get_disc_list(
 @router.get("/new")
 async def get_disc_new(
     request: Request,
-    username: str = Depends(get_current_user)
+    username: str = Depends(get_current_tutor)
 ):
     """ 
     Створення нової дисципліни.
@@ -58,7 +58,7 @@ async def post_disc_new(
     lang: str = Form(...),
     theme: str = Form(...),
     db: Session = Depends(get_db),
-    username: str=Depends(get_current_user)
+    username: str=Depends(get_current_tutor)
 ):
     disc = Disc(
         title = title,
@@ -82,7 +82,7 @@ async def get_disc_edit(
     id: int, 
     request: Request, 
     db: Session = Depends(get_db),
-    username: str=Depends(get_current_user)
+    username: str=Depends(get_current_tutor)
 ):
     """ 
     Редагування дисципліни.
@@ -101,7 +101,7 @@ async def post_disc_edit(
     lang: str = Form(...),
     theme: str = Form(...),
     db: Session = Depends(get_db),
-    username: str=Depends(get_current_user)
+    username: str=Depends(get_current_tutor)
 ):
     disc = db.get(Disc, id)
     if not disc:
@@ -119,7 +119,7 @@ async def get_disc_del(
     id: int, 
     request: Request, 
     db: Session = Depends(get_db),
-    username: str=Depends(get_current_user)
+    username: str=Depends(get_current_tutor)
 ):
     """ 
     Видалення дисципліни.
@@ -135,7 +135,7 @@ async def get_disc_del(
 async def post_disc_del(
     id: int,
     db: Session = Depends(get_db),
-    username: str=Depends(get_current_user)
+    username: str=Depends(get_current_tutor)
 ):
     disc = db.get(Disc, id)
     db.delete(disc)
@@ -150,7 +150,7 @@ async def get_export_del(
     id: int, 
     request: Request, 
     db: Session = Depends(get_db),
-    username: str=Depends(get_current_user)
+    username: str=Depends(get_current_tutor)
 ):
     """ 
     Експорт дисципліни.
