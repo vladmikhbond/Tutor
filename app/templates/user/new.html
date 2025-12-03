@@ -6,6 +6,8 @@
 <form method="post" >
   <header style="margin-bottom: 5px;">
     <h3 class="inline">New Users</h3>
+    <input type="text" class="inline" id="groupLetter" style="width: 100px;" />
+    <button  class="inline" id="mailButton">@</button>
   </header>
 
   <label>
@@ -17,7 +19,7 @@
   </label>
   <label>
     User Names
-    <textarea name="names">{{names}}</textarea>
+    <textarea name="names" id="namesArea">{{names}}</textarea>
   </label>
 
   <footer class="grid">
@@ -25,4 +27,8 @@
     <a href="/user/list" role="button" class="secondary">Cancel</a>
   </footer>      
 </form>
+{% endblock %}
+{% block script %}
+  <script src="/static/js/utils.js"></script>
+  <script src="/static/js/user_new.js"></script>
 {% endblock %}
