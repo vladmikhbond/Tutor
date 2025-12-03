@@ -4,6 +4,7 @@ import io
 import zipfile
 from typing import List
 
+import bcrypt
 from fastapi import APIRouter, Depends, HTTPException, Request, Form, Response, Security
 from fastapi.responses import RedirectResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
@@ -36,6 +37,38 @@ async def get_user_list(
     return templates.TemplateResponse("user/list.html", 
             {"request": request, "users": users})
 
+# ----------------------- reset
+
+@router.get("/reset/{name}")
+async def get_user_reset(
+    name: str, 
+    request: Request, 
+    db: Session = Depends(get_users_db),
+    username: str=Depends(get_current_tutor)
+):
+    """ 
+    Скидання паролю.
+    """
+    user = db.get(User, name)
+    if not user:
+        return RedirectResponse(url="/user/list", status_code=302)
+    
+    return templates.TemplateResponse("user/reset.html", {"request": request, "user": user})
+
+
+@router.post("/reset/{name}")
+async def post_user_reset(
+    name: str, 
+    db: Session = Depends(get_users_db),
+    username: str=Depends(get_current_tutor)
+):
+    user = db.get(User, name)
+    if user.role == "student":
+        user.hashed_password = bcrypt.hashpw(b"123456", bcrypt.gensalt()) 
+    else:
+        user.hashed_password = bcrypt.hashpw(b"12345678", bcrypt.gensalt())
+    db.commit()
+    return RedirectResponse(url="/user/list", status_code=302)
 
 # # ------- new 
 

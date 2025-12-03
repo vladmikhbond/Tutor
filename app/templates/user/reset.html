@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+
+<h1>Reset password to 123456</h1>
+<form method="post" >
+  <label>
+    Username
+    <input name="name" value="{{ user.username }}" readonly>
+  </label>
+  <label>
+    Role
+    <input value="{{ user.role }}" readonly>
+  </label>
+
+  <footer class="grid">
+    <button type="submit" >Reset</button>
+    <a href="/user/list" role="button" class="secondary">Cancel</a>
+  </footer>      
+</form>
+
+{% endblock %}
