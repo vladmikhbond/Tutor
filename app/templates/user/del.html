@@ -4,16 +4,16 @@
 
 {% block content %}
 
-<h1>Delete Discipline</h1>
+<h1>Delete User {{user.username}}</h1>
 <form method="post" >
   <label>
-    Title
-    <input name="title" value="{{ disc.title }}" readonly>
+    Role
+    <input value="{{ user.role }}" readonly>
   </label>
 
   <footer class="grid">
     <button type="submit" >Delete</button>
-    <a href="/disc/list" role="button" class="secondary">Cancel</a>
+    <a href="/user/list" role="button" class="secondary">Cancel</a>
   </footer>      
 </form>
 

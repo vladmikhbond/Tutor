@@ -1,3 +1,4 @@
+// ---------------------- перетворює поштові адреси на логіни
 
 const namesArea = document.getElementById("namesArea");
 
@@ -17,7 +18,6 @@ document.getElementById("mailButton").addEventListener("click", (e) => {
       }
   }
   let loginsStr = logins.join("\n");
-  // namesArea.value = loginsStr;
   replaceString(namesArea, loginsStr, 0, namesArea.value.length) 
 });
 
