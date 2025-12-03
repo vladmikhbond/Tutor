@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+    
+<h2>Users</h2>
+
+<a href="/user/new" style="margin-right: 60px;">New Users</a>
+
+{% if users and users|length %}
+<table>
+  <tbody>
+    {% for user in users %}
+    <tr>
+      <td><a href="/stat/{{user.username}}">{{ user.username }}</a></td>
+      <td>
+          <a href="/user/reset/{{user.username}}">12..6</a> | 
+          <a href="/user/del/{{user.username}}">del</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+  <div>
+    No users.
+  </div>
+{% endif %}
+
+{% endblock %}
