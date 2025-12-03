@@ -70,43 +70,42 @@ async def post_user_reset(
     db.commit()
     return RedirectResponse(url="/user/list", status_code=302)
 
-# # ------- new 
+# ------- new 
 
-# @router.get("/new")
-# async def get_disc_new(
-#     request: Request,
-#     username: str = Depends(get_current_tutor)
-# ):
-#     """ 
-#     Створення нової дисципліни.
-#     """
-#     disc = Disc(title="", lang="", theme="") 
-#     return templates.TemplateResponse("disc/edit.html", {"request": request, "disc": disc})
+@router.get("/new")
+async def get_user_new(
+    request: Request,
+    username: str = Depends(get_current_tutor)
+):
+    """ 
+    Додавання нових користувачів.
+    """
+    return templates.TemplateResponse("user/new.html", {"request": request, "names": ""})
 
 
-# @router.post("/new")
-# async def post_disc_new(
-#     request: Request,
-#     title: str = Form(...),
-#     lang: str = Form(...),
-#     theme: str = Form(...),
-#     db: Session = Depends(get_db),
-#     username: str=Depends(get_current_tutor)
-# ):
-#     disc = Disc(
-#         title = title,
-#         theme = theme, 
-#         lang = lang,
-#         username = username,
-#     )
-#     try:
-#         db.add(disc) 
-#         db.commit()
-#     except Exception as e:
-#         db.rollback()
-#         err_mes = f"Error during a new disc adding: {e}"
-#         return templates.TemplateResponse("disc/edit.html", {"request": request, "disc": disc})
-#     return RedirectResponse(url="/disc/list", status_code=302)
+@router.post("/new")
+async def post_user_new(
+    request: Request,
+    role: str = Form(...),
+    names: str = Form(...),
+    db: Session = Depends(get_users_db),
+    username: str=Depends(get_current_tutor)
+):
+    arr_names = names.splitlines()
+    if role == "student":
+        hp = bcrypt.hashpw(b"123456", bcrypt.gensalt()) 
+    else:
+        hp = bcrypt.hashpw(b"12345678", bcrypt.gensalt())
+    for name in arr_names:
+        user = User(username=name.strip(), hashed_password=hp, role=role)
+        db.add(user)
+    try:
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        err_mes = f"Error during a new disc adding: {e}"
+        return templates.TemplateResponse("user/new.html", {"request": request, "names": names})
+    return RedirectResponse(url="/user/list", status_code=302)
 
 # # ------- edit 
 

@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+<form method="post" >
+  <header style="margin-bottom: 5px;">
+    <h3 class="inline">New Users</h3>
+  </header>
+
+  <label>
+    Role
+    <select name="role">
+      <option value="student" selected>student</option>
+      <option value="tutor">tutor</option>
+    </select>
+  </label>
+  <label>
+    User Names
+    <textarea name="names">{{names}}</textarea>
+  </label>
+
+  <footer class="grid">
+    <button type="submit" id="buttonSave">Save</button>
+    <a href="/user/list" role="button" class="secondary">Cancel</a>
+  </footer>      
+</form>
+{% endblock %}
