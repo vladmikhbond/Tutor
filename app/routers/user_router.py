@@ -10,6 +10,8 @@ from fastapi.responses import RedirectResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
+from app.routers.filter_router import get_filtered_users
+
 from ..models.user_models import User
 from .login_router import get_current_tutor
 from ..dal import get_users_db  # Функція для отримання сесії БД
@@ -30,11 +32,11 @@ async def get_user_list(
     username: str = Depends(get_current_tutor)
 ):
     """ 
-    Усі користувачи.
+    Усі відфільтровані користувачи.
     """   
-    # сортування на рівні БД
-    users = db.query(User).order_by(User.username).all()
-
+    users = get_filtered_users(db, request)
+    users.sort(key=lambda u: u.username)
+      
     return templates.TemplateResponse("user/list.html", 
             {"request": request, "users": users})
 
