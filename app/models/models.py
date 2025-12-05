@@ -30,10 +30,16 @@ class Lecture(Base):
             return slides[0].text
         else:
             return "notitle"
-
-
-
-
+    
+    @property
+    def volume(self):
+        """
+        Повертає об'єм лекції в символах (коменти не рахуються)
+        """
+        lines = self.content.splitlines()
+        lines = filter(lambda l: not l.startswith("@@"), lines)
+        return len("\n".join(lines))
+        
 class Picture(Base):
     __tablename__ = "pictures"
     title: Mapped[str] = mapped_column(String, primary_key=True)

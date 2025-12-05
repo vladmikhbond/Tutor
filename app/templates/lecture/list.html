@@ -7,8 +7,8 @@
 <div>
   <h2 class="inline">{{disc.title}}</h2>
   <form class="inline" method="post" action="/lecture/search/{{disc.id}}">
-    <input name="sample" style="width: 200px;"/>
-    <button style="font-size: large;">🔦</button>
+    <input name="sample" style="width: 200px; margin-left: 30px;"/>
+    <button class="outline" style="font-size: large;">🔍</button>
   </form>
 </div>
 <a href="/lecture/new/{{disc.id}}" style="margin-right: 60px;">New lecture</a>
@@ -18,9 +18,12 @@
   <tbody>
     {% for lecture in disc.lectures %}
     <tr>
-      <td>{{ lecture.title }}</td>
       <td>
-        <a href="/lecture/edit/{{lecture.id}}">edit</a> | 
+        <a href="/lecture/edit/{{lecture.id}}">{{ lecture.title }}</a>
+        <span style="margin-left: 20px; font-size: small;">{{lecture.volume // 100 / 10}}</span>
+        </td>
+      <td>
+        
         <a href="/lecture/trans/{{lecture.id}}">html</a> | 
         <a href="/lecture/del/{{lecture.id}}">del</a>
       </td>
