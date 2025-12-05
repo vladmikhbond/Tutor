@@ -8,9 +8,11 @@
     z-index: 1;
 }
 
-#dash > a {
-    text-decoration: none;
+#dash > span {
+    cursor: pointer;
 }
+
+
 
 .alef3.foc, .alef4.foc, .alef5.foc, .alef6.foc 
 {

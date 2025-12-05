@@ -7,9 +7,15 @@ footer.grid a[role="button"] {
     justify-content: center;
 }
 
+/* ------------------ Загальні класи ------------------- */
 .inline {
   display: inline;
 }
+
+.danger {
+  background-color: red;
+}
+
 /* ----------------- Контекстне меню ------------------ */
 #context-menu {
   position: absolute;

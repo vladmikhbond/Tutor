@@ -71,8 +71,8 @@ class RenderHtml:
 <body>
     <div class="container">
         <div id="dash" > 
-            <a href="#" id="theme_toggle"> ◐ </a>
-            <a href="#" id="pensil"> ✏ </a>
+            <span id="theme_toggle"> ◐ </span>
+            <span id="pensil"> ✏ </span>
         </div>
         <div id="lecture">
             {content}

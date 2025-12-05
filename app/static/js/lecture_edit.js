@@ -130,7 +130,7 @@ edit_form = document.getElementById("edit_form");
 lecture_id = document.getElementById("lecture_id");
 
 content.addEventListener("keydown", (e) => {
-  if (e.ctrlKey && (e.key == "s" || e.key == "S")) {
+  if (e.ctrlKey && (e.key == "s" || e.key == "S" || e.key == "і" || e.key == "І")) {
     e.preventDefault();
     saveLecture();
   }
