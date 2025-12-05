@@ -1,6 +1,8 @@
+const content = document.getElementById("content");
+
 //#region --------------------- for confext menu ---------------------
 
-const content = document.getElementById("content");
+
 const menu = document.getElementById("context-menu");
 const comment = document.getElementById("comment");
 
@@ -187,6 +189,20 @@ monoButton.addEventListener("click", () => {
 });
 
 //#endregion
+
+//#region --------------------- legacy converter -------------------------
+
+const legacyButton = document.getElementById("legacуButton");
+
+legacyButton.addEventListener("click", (e) => {
+  e.preventDefault();
+  newValue = content.value.replaceAll("@1", '🔴1').replaceAll("@2", '🔴2').replaceAll("@3", '📔3').replaceAll("@5", '📘5');
+  replaceString(content, newValue, 0, content.value.length)
+});
+
+//#endregion
+
+
 
 // ----------------------- Autosave in 3 min if text changed (IS OFF NOW)
 

@@ -7,17 +7,17 @@
 <h2>Users</h2> 
 
 <fieldset role="group" style="margin-top: 16px;"  class="inline">
-   <a href="/user/new" style="margin-right: 60px;"  class="inline">New Users</a>
+  <a href="/user/new" style="margin-right: 60px;"  class="inline">New Users</a>
+
+  {# ------------ Filter form -------------- #} 
   <form action="/filter/user" method="post" class="inline">
-      <input name="filter_value"  id="u_filter_value" style=" width: 200px;" title="User filter">        
+      <input name="filter_value" style=" width: 200px;" title="User filter" value="{{filter_val}}">        
       <button type="submit"  title="User filter">Filter</button>
 
+      <input type="hidden" name="referer" value="{{request.url.path}}" > 
       <a href="https://regex101.com/" style="color: gray;">regex</a>  
-      <input type="hidden" name="referer" id="u_referer" > 
-  </form> 
+  </form>
 </fieldset>
-
-
 
 {% if users and users|length %}
 <table>
@@ -39,27 +39,4 @@
   </div>
 {% endif %}
 
-{% endblock %}
-{% block script %}
-<script>
-    // Встановлює значення в поле фільтру при завантаженні сторінки
-    const USER_FILTER = "TUTOR_user_filter"
-
-    u_referer.value = document.location.pathname;
-
-    const userFilterValue = getCookieValue(USER_FILTER)
-    if (userFilterValue != undefined){
-        u_filter_value.value = userFilterValue
-    }
-                
-    function getCookieValue(key) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${key}=`);
-        if (parts.length === 2) {
-            let value = parts.pop().split(';').shift();
-            value = decodeURIComponent(value);
-            return value
-        }
-    }
-</script>
 {% endblock %}

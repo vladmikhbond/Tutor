@@ -23,6 +23,7 @@
     <footer class="grid">
       <button type="button" id="buttonSave" title="Ctrl-S" >Save</button>
       <a href="/lecture/list/{{disc_id}}" role="button" class="secondary">Cancel</a>
+      <button type="button" id="legacуButton">Legacy</button>
     </footer>      
   </form>
   <input type="hidden" id="lecture_id" value="{{lecture.id}}" 
@@ -36,8 +37,7 @@
     <li>
         <form id="upload_form" enctype="multipart/form-data" style="margin:0px 5px 0px 5px">
             <input type="file" name="file" id="file" accept="image" style="display: inline" data-buttonText="Your label here" . />
-            <input type="submit" value="Upload" />
-          
+            <input type="submit" value="Upload" />          
             <input type="hidden" id="disc_id" value="{{disc_id}}" 
         </form>
     </li>

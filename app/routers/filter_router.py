@@ -12,39 +12,15 @@ router = APIRouter()
 
 USER_FILTER = "TUTOR_user_filter"
 
-html_sample_for_user_filter ="""
+"""
+  {# ------------ User filter form -------------- #} 
+  <form action="/filter/user" method="post" class="inline">
+      <input name="filter_value" style=" width: 200px;" title="User filter" value="{{filter_val}}">        
+      <button type="submit"  title="User filter">Filter</button>
 
-<form action="/filter/user" method="post" >
-    <fieldset role="group" style="margin-top: 16px;">
-        <input name="filter_value"  id="u_filter_value" style="height: 10px; width: 200px;" >        
-        <input type="hidden" name="referer" id="u_referer">
-        <button type="submit" class="small" title="Users">U</button>&nbsp;
-        <a href="https://regex101.com/" style="color: gray;">re</a>  
-    </fieldset>
-</form> 
-
-<script>
-    // Встановлює значення в поле фільтру при завантаженні сторінки
-
-    const USER_FILTER = "TUTOR_user_filter"
-
-    u_referer.value = document.location.pathname;
-
-    const userFilterValue = getCookieValue(USER_FILTER)
-    if (userFilterValue != undefined){
-        u_filter_value.value = userFilterValue
-    }
-                
-    function getCookieValue(key) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${key}=`);
-        if (parts.length === 2) {
-            let value = parts.pop().split(';').shift();
-            value = decodeURIComponent(value);
-            return value
-        }
-    }
-</script>
+      <input type="hidden" name="referer" value="{{request.url.path}}" > 
+      <a href="https://regex101.com/" style="color: gray;">regex</a>  
+  </form>
 
 """
   
@@ -85,14 +61,3 @@ def get_user_filter(request):
     return get_filter(request, USER_FILTER)
 
 
-def get_filtered_users(db, request):
-    """
-    Повертає відфільтрованих користувачів.
-    """
-    users = db.query(User).all()
-    filter = unquote(request.cookies.get(USER_FILTER, ""))
-     
-    if filter:
-        users = [u for u in users if re.search(filter, u.username, re.RegexFlag.U) is not None] 
-    users.sort(key=lambda u: u.username)
-    return users

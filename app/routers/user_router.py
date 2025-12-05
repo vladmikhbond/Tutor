@@ -1,22 +1,15 @@
-import os
-import shutil
-import io
-import zipfile
-from typing import List
-
+import re
 import bcrypt
 from fastapi import APIRouter, Depends, HTTPException, Request, Form, Response, Security
 from fastapi.responses import RedirectResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
-
-from app.routers.filter_router import get_filtered_users
-
+from app.routers.filter_router import get_user_filter
 from ..models.user_models import User
 from .login_router import get_current_tutor
 from ..dal import get_users_db  # Функція для отримання сесії БД
-from ..lectorium.main import translate, tune
-from .lecture_router import export_lecture
+
+
 
 # шаблони Jinja2
 templates = Jinja2Templates(directory="app/templates")
@@ -33,12 +26,16 @@ async def get_user_list(
 ):
     """ 
     Усі відфільтровані користувачи.
-    """   
-    users = get_filtered_users(db, request)
+    """  
+    users = db.query(User).all()
+    filter = get_user_filter(request) 
+
+    if filter:
+        users = [u for u in users if re.search(filter, u.username, re.RegexFlag.U) is not None] 
     users.sort(key=lambda u: u.username)
-      
+
     return templates.TemplateResponse("user/list.html", 
-            {"request": request, "users": users})
+            {"request": request, "users": users, "filter_val": filter})
 
 # ----------------------- reset password
 
