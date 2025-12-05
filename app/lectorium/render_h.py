@@ -54,8 +54,8 @@ class RenderHtml:
 <title>{title}</title>
 <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" rel="stylesheet">
 <link href='sys/engine.css' type='text/css' rel='stylesheet' />
+<style></style>
 <link href='sys/themes/{self.theme}.css' type='text/css' rel='stylesheet' id="theme_link" />
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/ace.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/mode-{self.lang}.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/theme-{self.ace_theme}.min.js" id="ace_theme_link" ></script>

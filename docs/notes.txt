@@ -2,9 +2,14 @@ TODO
 
 описати теми в doc
 підрахувати об'єм лекцій
-
-
-
+-----------------------------------------
+<style>
+:root {{   
+    --focus-block-br-color: blue;
+ }}
+</style>
+<link href='sys/themes/{self.theme}.css' type='text/css' rel='stylesheet' id="theme_link" />
+------------------------------------------
 --- dev
 cd c:\git\dock\tutor
 docker stop tutor_img
