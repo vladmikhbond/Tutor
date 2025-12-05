@@ -63,7 +63,8 @@ class Parser:
     def line_to_splines(line: str):
         """
         '111[[222]]333{{4444}}555'  ->  
-        [(0, '111'), (2, '222'), (0, '333'), (1, '4444'), (0, '555')]
+             [(0, '111'), (2, '222'), (0, '333'), (1, '4444'), (0, '555')]
+        0 маркує звичайний рядок, 1 маркує {{...}}, 2 маркує [[...]]
         """
         T1 = r"\{\{(.*)\}\}"
         T2 = r"\[\[(.*)\]\]"
@@ -79,6 +80,6 @@ class Parser:
                 res.extend(lev2)
             else:
                 res.append((m, c))
-        # clear empty lines
+        # remove empty lines
         res = [(m, c) for m, c in res if c != ""]
         return res
