@@ -6,15 +6,17 @@
     
 <h2>Users</h2> 
 
-<form action="/filter/user" method="post" class="inline">
-    <fieldset role="group" style="margin-top: 16px;"  class="inline">
-        <a href="/user/new" style="margin-right: 60px;"  class="inline">New Users</a>
-        <input name="filter_value"  id="u_filter_value" style="height: 10px; width: 200px;" >        
-        <input type="hidden" name="referer" id="u_referer" >
-        <button type="submit" class="small" title="Users">U</button>
-        <a href="https://regex101.com/" style="color: gray;">re</a>  
-    </fieldset>
-</form> 
+<fieldset role="group" style="margin-top: 16px;"  class="inline">
+   <a href="/user/new" style="margin-right: 60px;"  class="inline">New Users</a>
+  <form action="/filter/user" method="post" class="inline">
+      <input name="filter_value"  id="u_filter_value" style=" width: 200px;" title="User filter">        
+      <button type="submit"  title="User filter">Filter</button>
+
+      <a href="https://regex101.com/" style="color: gray;">regex</a>  
+      <input type="hidden" name="referer" id="u_referer" > 
+  </form> 
+</fieldset>
+
 
 
 {% if users and users|length %}
