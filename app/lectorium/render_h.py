@@ -2,7 +2,7 @@ import re
 from typing import List, Tuple
 from .parser import Slide
 
-ace_themes = {
+ace_theme_map = {
     "theme1_light": "textmate",
     "theme1_dark": "nord_dark",
     "theme2_light": "github",
@@ -17,7 +17,7 @@ class RenderHtml:
         self.theme = theme
 
         # схеми ace9
-        self.ace_theme = ace_themes[theme]        
+        self.ace_theme = ace_theme_map[theme]        
         
     def render(self) -> tuple[str, str]:
         lst: List[str] = [] 
