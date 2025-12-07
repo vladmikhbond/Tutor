@@ -10,24 +10,18 @@ TODO
 </style>
 <link href='sys/themes/{self.theme}.css' type='text/css' rel='stylesheet' id="theme_link" />
 ------------------------------------------
---- dev
+
+
+
+--- збірка і запуск продуктового контейнеру pss_cont
+
+cd c:\git\dock\psscont
+docker build -t pss_img .
+docker run --env-file .env --network mynet -p 7000:7000 -v C:\Git\PY\DBconverter:/data   --name pss_cont  pss_img
+
+--- збірка і запуск продуктового контейнеру tutor_cont
+
 cd c:\git\dock\tutor
-docker stop tutor_img
-docker rm tutor_img
-docker image rm tutor_img
 docker build -t tutor_img .
-docker save -o tutor.tar tutor_img
-
---- prod
-docker stop tutor_img
-docker rm tutor_img
-docker image rm tutor_img
-docker load -i tutor.tar
-docker run -p 7002:7002  -v ./:/data  --name tutor_cont  tutor_img 
-
-Студентський додаток - аутентиф, вирішення задач, прох тестів, спостер власних  результатів.
-
-
+docker run --env-file .env --network mynet -p 7003:7003 -v C:\Git\PY\DBconverter:/data   --name tutor_cont  tutor_img
 ---
-git config --global user.email "vladmikhbond@gmale.com"
-git config --global user.name "vladmikhbond"

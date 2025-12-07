@@ -3,7 +3,7 @@ from urllib.parse import quote, unquote
 from fastapi import APIRouter, Form, Request
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
-from ..models.user_models import User
+from ..models.pss_models import User
 
 # шаблони Jinja2
 templates = Jinja2Templates(directory="app/templates")

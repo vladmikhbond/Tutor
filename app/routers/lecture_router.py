@@ -7,6 +7,7 @@ from fastapi.templating import Jinja2Templates
 
 from sqlalchemy.orm import Session
 from ..models.models import Disc, Lecture, Picture
+from ..models.pss_models import User
 
 from .login_router import get_current_tutor
 from ..dal import get_db  # Функція для отримання сесії БД
@@ -24,7 +25,7 @@ async def get_lecture_list(
     request: Request, 
     disc_id: int,
     db: Session = Depends(get_db),
-    username: str = Depends(get_current_tutor)
+    user: User = Depends(get_current_tutor)
 ):
     """ 
     Усі лекції із згаданої дисципліни.
@@ -41,7 +42,7 @@ async def get_lecture_list(
 async def get_lecture_new(
     request: Request,
     disc_id: int,
-    username: str = Depends(get_current_tutor)
+    user: User = Depends(get_current_tutor)
 ):
     """ 
     Створення нової лекції.
@@ -56,7 +57,7 @@ async def post_lecture_new(
     disc_id: int,
     content: str = Form(...),
     db: Session = Depends(get_db),
-    username: str=Depends(get_current_tutor)
+    user: User = Depends(get_current_tutor)
 ):  
     
     lecture = Lecture(
@@ -82,7 +83,7 @@ async def get_lecture_edit(
     id: int, 
     request: Request, 
     db: Session = Depends(get_db),
-    username: str=Depends(get_current_tutor)
+    user: User = Depends(get_current_tutor)
 ):
     """ 
     Редагування лекції.
@@ -93,6 +94,7 @@ async def get_lecture_edit(
     return templates.TemplateResponse("lecture/edit.html", 
             {"request": request, "lecture": lecture, "disc_id": lecture.disc_id})
 
+
 @router.post("/edit/{id}")      # ajax
 async def post_lecture_edit(
     id: int,
@@ -100,7 +102,7 @@ async def post_lecture_edit(
     content: str = Form(...),
     is_public: bool = Form(default=False),
     db: Session = Depends(get_db),
-    username: str=Depends(get_current_tutor)
+    user: User = Depends(get_current_tutor)
 ):
     lecture = db.get(Lecture, id)
 
@@ -128,7 +130,7 @@ async def get_lecture_del(
     id: int, 
     request: Request, 
     db: Session = Depends(get_db),
-    username: str=Depends(get_current_tutor)
+    user: User = Depends(get_current_tutor)
 ):
     """ 
     Видалення лекції.
@@ -144,7 +146,7 @@ async def get_lecture_del(
 async def post_lecture_del(
     id: int,
     db: Session = Depends(get_db),
-    username: str=Depends(get_current_tutor)
+    user: User = Depends(get_current_tutor)
 ):
     lecture = db.get(Lecture, id)
     db.delete(lecture)
@@ -161,7 +163,7 @@ async def post_lecture_picture(
     file: UploadFile = File(...),
     disc_id: int = Form(...),
     db: Session = Depends(get_db),
-    username: str = Depends(get_current_tutor)
+    user: User = Depends(get_current_tutor)
 ):
     """
     Завантажити зображення для дисципліни.
@@ -193,10 +195,9 @@ async def post_lecture_picture(
 
 @router.get("/trans/{id}")
 async def get_lecture_trans(
-    id: int, 
-    request: Request, 
+    id: int,  
     db: Session = Depends(get_db),
-    username: str=Depends(get_current_tutor)
+    user: User = Depends(get_current_tutor)
 ):
     """ 
     Трансляція лекції.
@@ -210,6 +211,7 @@ async def get_lecture_trans(
 
     url=f"/static/output/{lec_url}.html"
     return RedirectResponse(url, status_code=302)
+
 
 def export_lecture(lecture: Lecture, dst:str, db:Session):
 
@@ -237,7 +239,7 @@ async def post_lecture_picture(
     request: Request,
     sample: str = Form(...),
     db: Session = Depends(get_db),
-    username: str = Depends(get_current_tutor)
+    user: User = Depends(get_current_tutor)
 ):
     """
     Пошук зразка в чернетках лекцій.

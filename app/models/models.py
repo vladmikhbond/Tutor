@@ -53,20 +53,11 @@ class Disc(Base):
     __tablename__ = "discs"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    username: Mapped[str] = mapped_column(String, ForeignKey("users.username", ondelete="CASCADE"))
+    username: Mapped[str] = mapped_column(String)
     title: Mapped[str] = mapped_column(String)
     lang: Mapped[str] = mapped_column(String)
     theme: Mapped[str] = mapped_column(String)
     #  nav
-    user: Mapped["Tutor"] = relationship(back_populates="discs")
     lectures: Mapped[list["Lecture"]] = relationship(back_populates="disc", cascade="all, delete-orphan")
     pictures: Mapped[list["Picture"]] = relationship(back_populates="disc", cascade="all, delete-orphan")
 
-
-class Tutor(Base):
-    __tablename__ = "users"
-
-    username: Mapped[str] = mapped_column(String, primary_key=True)
-    hashed_password: Mapped[bytes] = mapped_column(LargeBinary)
-    # nav
-    discs: Mapped[list["Disc"]] = relationship(back_populates="user", cascade="all, delete-orphan")

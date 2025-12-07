@@ -5,7 +5,7 @@ from fastapi.responses import RedirectResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from app.routers.filter_router import get_user_filter
-from ..models.user_models import User
+from ..models.pss_models import User
 from .login_router import get_current_tutor
 from ..dal import get_users_db  # Функція для отримання сесії БД
 
@@ -22,7 +22,7 @@ router = APIRouter()
 async def get_user_list(
     request: Request, 
     db: Session = Depends(get_users_db),
-    username: str = Depends(get_current_tutor)
+    user: User = Depends(get_current_tutor)
 ):
     """ 
     Усі відфільтровані користувачи.
@@ -44,7 +44,7 @@ async def get_user_reset(
     name: str, 
     request: Request, 
     db: Session = Depends(get_users_db),
-    username: str=Depends(get_current_tutor)
+    user_: User = Depends(get_current_tutor)
 ):
     """ 
     Скидання паролю.
@@ -60,7 +60,7 @@ async def get_user_reset(
 async def post_user_reset(
     name: str, 
     db: Session = Depends(get_users_db),
-    username: str=Depends(get_current_tutor)
+    user_: User = Depends(get_current_tutor)
 ):
     user = db.get(User, name)
     if user.role == "student":
@@ -75,7 +75,7 @@ async def post_user_reset(
 @router.get("/new")
 async def get_user_new(
     request: Request,
-    username: str = Depends(get_current_tutor)
+    user: User = Depends(get_current_tutor)
 ):
     """ 
     Додавання нових користувачів.
@@ -89,7 +89,7 @@ async def post_user_new(
     role: str = Form(...),
     names: str = Form(...),
     db: Session = Depends(get_users_db),
-    username: str=Depends(get_current_tutor)
+    user_: User = Depends(get_current_tutor)
 ):
     arr_names = names.splitlines()
     if role == "student":
@@ -115,7 +115,7 @@ async def get_user_del(
     name: str, 
     request: Request, 
     db: Session = Depends(get_users_db),
-    username: str=Depends(get_current_tutor)
+    user_: User = Depends(get_current_tutor)
 ):
     """ 
     Видалення користувача.
@@ -131,7 +131,7 @@ async def get_user_del(
 async def post_user_del(
     name: str,
     db: Session = Depends(get_users_db),
-    username: str=Depends(get_current_tutor)
+    user_: User = Depends(get_current_tutor)
 ):
     user = db.get(User, name)
     db.delete(user)

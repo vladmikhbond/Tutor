@@ -9,6 +9,8 @@ from fastapi.responses import RedirectResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
+from app.models.pss_models import User
+
 from ..models.models import Disc, Picture
 from ..routers.login_router import get_current_tutor
 from ..dal import get_db  # Функція для отримання сесії БД
@@ -26,12 +28,12 @@ router = APIRouter()
 async def get_disc_list(
     request: Request, 
     db: Session = Depends(get_db),
-    username: str = Depends(get_current_tutor)
+    user: User = Depends(get_current_tutor)
 ):
     """ 
     Усі дисципліни користувача.
     """   
-    discs = db.query(Disc).filter(Disc.username == username).all()
+    discs = db.query(Disc).filter(Disc.username == user.username).all()
 
     return templates.TemplateResponse("disc/list.html", 
             {"request": request, "discs": discs})
@@ -42,7 +44,7 @@ async def get_disc_list(
 @router.get("/new")
 async def get_disc_new(
     request: Request,
-    username: str = Depends(get_current_tutor)
+    user: User = Depends(get_current_tutor)
 ):
     """ 
     Створення нової дисципліни.
@@ -58,20 +60,19 @@ async def post_disc_new(
     lang: str = Form(...),
     theme: str = Form(...),
     db: Session = Depends(get_db),
-    username: str=Depends(get_current_tutor)
+    user: User = Depends(get_current_tutor)
 ):
     disc = Disc(
         title = title,
         theme = theme, 
         lang = lang,
-        username = username,
+        username = user.username,
     )
     try:
         db.add(disc) 
         db.commit()
     except Exception as e:
         db.rollback()
-        err_mes = f"Error during a new disc adding: {e}"
         return templates.TemplateResponse("disc/edit.html", {"request": request, "disc": disc})
     return RedirectResponse(url="/disc/list", status_code=302)
 
@@ -82,7 +83,7 @@ async def get_disc_edit(
     id: int, 
     request: Request, 
     db: Session = Depends(get_db),
-    username: str=Depends(get_current_tutor)
+    user: User = Depends(get_current_tutor)
 ):
     """ 
     Редагування дисципліни.
@@ -101,7 +102,7 @@ async def post_disc_edit(
     lang: str = Form(...),
     theme: str = Form(...),
     db: Session = Depends(get_db),
-    username: str=Depends(get_current_tutor)
+    user: User = Depends(get_current_tutor)
 ):
     disc = db.get(Disc, id)
     if not disc:
@@ -119,7 +120,7 @@ async def get_disc_del(
     id: int, 
     request: Request, 
     db: Session = Depends(get_db),
-    username: str=Depends(get_current_tutor)
+    user: User = Depends(get_current_tutor)
 ):
     """ 
     Видалення дисципліни.
@@ -135,7 +136,7 @@ async def get_disc_del(
 async def post_disc_del(
     id: int,
     db: Session = Depends(get_db),
-    username: str=Depends(get_current_tutor)
+    user: User = Depends(get_current_tutor)
 ):
     disc = db.get(Disc, id)
     db.delete(disc)
@@ -150,7 +151,7 @@ async def get_export_del(
     id: int, 
     request: Request, 
     db: Session = Depends(get_db),
-    username: str=Depends(get_current_tutor)
+    user: User = Depends(get_current_tutor)
 ):
     """ 
     Експорт дисципліни.
@@ -159,10 +160,10 @@ async def get_export_del(
     if not disc:
         raise HTTPException(404, f"Export of disc id={id} is failed.")
     
-    return export_n_archive_disc(disc, db) 
+    return export_n_zip(disc, db) 
 
 
-def export_n_archive_disc(disc: Disc, db: Session):
+def export_n_zip(disc: Disc, db: Session):
     buffer = io.BytesIO()
     with zipfile.ZipFile(buffer, 'w', zipfile.ZIP_DEFLATED) as zf:
 
@@ -187,7 +188,7 @@ def export_n_archive_disc(disc: Disc, db: Session):
             zf.writestr(f"pic/{picture.title}", picture.image)
         
         # Допакувти папку sys
-        archive_sys(zf)
+        zip_sys(zf)
         
     # Повернути ZIP із назвою дисципліни
     buffer.seek(0)
@@ -197,7 +198,7 @@ def export_n_archive_disc(disc: Disc, db: Session):
             headers={"Content-Disposition": f"attachment; filename={tune(disc.title)}.zip"}
         )
 
-def archive_sys(zf):
+def zip_sys(zf):
 
     def arc(name):
         with open(f"app/static/output/sys/{name}", "r", encoding="utf-8") as f:
