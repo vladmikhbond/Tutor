@@ -4,13 +4,15 @@
 
 {% block content %}
  
-<div>
+<nav>
   <h2 class="inline">{{disc.title}}</h2>
   <form class="inline" method="post" action="/lecture/search/{{disc.id}}">
-    <input name="sample" style="width: 200px; margin-left: 30px;"/>
+    <fieldset role="group" style="margin-left: 30px;">
+    <input name="sample" style="width: 200px; "/>
     <button class="outline" style="font-size: large;">🔍</button>
+    </fieldset>
   </form>
-</div>
+</nav>
 <a href="/lecture/new/{{disc.id}}" style="margin-right: 60px;">New lecture</a>
 
 {% if disc.lectures and disc.lectures|length %}

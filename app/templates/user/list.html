@@ -6,18 +6,19 @@
     
 <h2>Users</h2> 
 
-<fieldset role="group" style="margin-top: 16px;"  class="inline">
-  <a href="/user/new" style="margin-right: 60px;"  class="inline">New Users</a>
-
   {# ------------ Filter form -------------- #} 
   <form action="/filter/user" method="post" class="inline">
+    
+    <fieldset role="group" style="margin-top: 16px;"  class="inline">
+      <a href="/user/new" style="margin-right: 60px;"  class="inline">New Users</a>
       <input name="filter_value" style=" width: 200px;" title="User filter" value="{{filter_val}}">        
       <button type="submit"  title="User filter">Filter</button>
-
-      <input type="hidden" name="referer" value="{{request.url.path}}" > 
       <a href="https://regex101.com/" style="color: gray;">regex</a>  
+    </fieldset>
+      <input type="hidden" name="referer" value="{{request.url.path}}" > 
+      
   </form>
-</fieldset>
+
 
 {% if users and users|length %}
 <table>

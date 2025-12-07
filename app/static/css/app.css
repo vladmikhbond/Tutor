@@ -39,4 +39,13 @@ footer.grid a[role="button"] {
 #context-menu a:hover {
   background: var(--pico-muted-border-color);
 }
-/* ----------------- ------------------ */
+/* ----------------- filters ------------------ */
+.small {
+  padding: 4px 8px;        /* менше вертикального простору */
+  line-height: 1;         /* уникнути зайвої висоти рядка */
+  font-size: 0.9rem;      /* за потреби зменшити розмір шрифту */
+  white-space: nowrap;    /* не переносити текст на новий рядок */
+  display: inline;
+  height: auto;
+  min-height: 0;
+}

@@ -46,8 +46,7 @@ async def login(
     claims = {"sub": user.username, "exp": datetime.now() + expires_delta}
     access_token = jwt.encode(claims, SECRET_KEY, algorithm=ALGORITHM)    
     
-    url = "/disc/list"
-    redirect = RedirectResponse(url, status_code=302)
+    redirect = RedirectResponse("/disc/list", status_code=302)
 
     # Встановлюємо cookie у відповідь
     redirect.set_cookie(
