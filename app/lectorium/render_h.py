@@ -10,11 +10,16 @@ ace_theme_map = {
 }
 
 class RenderHtml:
+    """
+    version = "student" | "tutor"
+    lang = "python" | "javascript" | "csharp"
+    """
 
-    def __init__(self, slides: List[Slide], lang:str, theme: str):
+    def __init__(self, slides: List[Slide], lang:str, theme: str, version: str):
         self.slides = slides
         self.lang = lang
         self.theme = theme
+        self.version = version
 
         # схеми ace9
         self.ace_theme = ace_theme_map[theme]        
@@ -33,8 +38,6 @@ class RenderHtml:
             lst.append(x)
 
         content = '\n'.join(lst)
-        title = self.slides[0].text
-
         return self.html_doc(content)
     
 
@@ -44,6 +47,7 @@ class RenderHtml:
            Обирає світлу або темну тему редактора ace9.
         """
         title = self.slides[0].text
+        slide_no = 0 if self.version == "tutor" else len(self.slides)
          
         return f"""
 <!DOCTYPE html>
@@ -62,8 +66,8 @@ class RenderHtml:
 
 
 <script>
-    const START_SLIDE_NO={0}; 
-    const VERSION = "tutor";
+    const START_SLIDE_NO={slide_no}; 
+    const VERSION = "{self.version}";
 </script>
 
 

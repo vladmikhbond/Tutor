@@ -1,9 +1,8 @@
-// ---------------------- Зовнішні параметри -----------------------
+// ---------------------- Параметри рендерінгу (визначені на сторінці)-----------------------
 // START_SLIDE_NO={0}; 
-// VERSION = "tutor";
-// IMG_HEIGHT_FACTOR = {0.33}
+// VERSION = {"tutor"};  
 
-// ------------------------------- init ------------------------------------------
+// ------------------------------- globals ------------------------------------------
 let current_slide_no = START_SLIDE_NO; // номер сфокусованого слйду
 let slides = document.querySelectorAll("#lecture > div");
 let ace_theme = "twilight";
@@ -13,16 +12,20 @@ go(0);
 
 document.getElementById("theme_toggle").addEventListener("click", () => 
 {   
+    // В значенні атрибуту attr елемента з заданим id замінює підрядок a на підрядок b або навпаки.
+    // Повертає рядок, який прийшов на заміну.
     function changeAttribute(attr, id, a, b) {
         let elem = document.getElementById(id);
         let val = elem.getAttribute(attr);
         let index = val.indexOf(a);
+        // замінює a на b
         if (index !== -1) {
             const newHref = val.slice(0, index) + b + val.slice(index + a.length);
             elem.setAttribute(attr, newHref);
             return b;
         }
         index = val.indexOf(b);
+        // замінює b на a
         if (index !== -1) {
             const newHref = val.slice(0, index) + a + val.slice(index + b.length);
             elem.setAttribute(attr, newHref);

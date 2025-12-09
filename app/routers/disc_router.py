@@ -169,7 +169,7 @@ def export_n_zip(disc: Disc, db: Session):
 
         # Запакувати лекції         
         for lecture in disc.lectures:
-            html = translate(lecture.content, lecture.disc.lang, lecture.disc.theme)
+            html = translate(lecture.content, lecture.disc.lang, lecture.disc.theme, version="student")
             tuned_title = tune(lecture.title)
             zf.writestr(tuned_title + ".html", html)
 
@@ -178,7 +178,7 @@ def export_n_zip(disc: Disc, db: Session):
         index_content = f"@2 {disc.title}\n"
         for lecture in disc.lectures:
             index_content += f"@3 [[{FAKE_HTTP}{tune(lecture.title)}.html|{lecture.title}]]\n"
-        index_html = translate(index_content, disc.lang, disc.theme)
+        index_html = translate(index_content, disc.lang, disc.theme, version="student")
         index_html = index_html.replace(FAKE_HTTP, "")
         zf.writestr("index.html", index_html)
         
@@ -239,7 +239,7 @@ def export_disc(disc: Disc, db: Session):
         index_content += f"@3 [[http://{tuned_title}.html|{lecture.title}]]\n"
     
     # Зберігти індекс
-    html = translate(index_content, disc.lang, disc.theme)
+    html = translate(index_content, disc.lang, disc.theme, version="student")
 
     html = html.replace("http://", "")  
     fname = f"{dst}/index.html"

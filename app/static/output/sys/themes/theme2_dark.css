@@ -21,8 +21,7 @@
     --table-background-color: #1D2630;
 
     --focus-hadow-color: #273546;
-    --focus-block-br-color: #507399;
-    --focus-block-bg-color: #1D2630;
+    --focus-block-br-color: var(--text-accent-color);
 }
 
 .alef6 table * {
@@ -48,11 +47,8 @@ body {
 
 
 /* -------------- slides ---------------- */
-.alef1.foc,
-.alef2.foc,
 .alef3.foc,
 .alef4.foc,
-.alef5.foc,
 .alef6.foc {
     box-shadow: 0px 0px 7px var(--focus-hadow-color);
     border-color: var(--focus-block-br-color);
@@ -61,16 +57,9 @@ body {
     background-color: var(--focus-block-bg-color);
     margin-top: 10px;
     margin-bottom: 10px;
-    border-radius: 8px;
+    border-radius: 4px;
     padding: 4px;
 }
-
-.alef1.foc,
-.alef2.foc{
-    padding: 8px;
-}
-
-
 
 .alef1  {
     font-size: 26px;
@@ -89,18 +78,19 @@ body {
     margin: 20px 0px 4px 0px; 
 }
 
-.ace_editor, .alef3, .alef4, .alef6 { 
+.ace_editor { 
     color: var(--page-text-color);
     font-size: 16px;
-    font-weight: 400;
-    border-radius: 8px;
-    /* border: 3px solid Gainsboro; */
-    /* border: 3px solid var(--block-br-color); */
-
+    border-radius: 4px;
     margin: 12px 0px 4px 0px;    
 }
 
 .alef3, .alef4, .alef6 { 
+    color: var(--page-text-color);
+    font-size: 16px;
+    font-weight: 400;
+    border-radius: 4px;
+    margin: 12px 0px 4px 0px;    
     background-color: var(--block-bg-color);
     border: 3px solid var(--block-br-color);
 }
