@@ -1,100 +1,63 @@
-
 /* цей файл має знаходитися у папці із html доками лекцій */
-
 
 /* -------------- variables ---------------- */
 
 /* Light mode */
 :root {
-    --pico-table-header-background-color: #f0f0f0;
-    --block-bg-color: #EFF2FA;
-    --block-br-color: #EFF2FA;
-    --text-link-color: #d3589b;
-    --text-accent-color: #4b7bea;
-    --block-accent-color: #505ae6;
-
-    --page-dg-color: #FFFFFF;
-    --page-text-color: #341B74;
-
-    --focus-hadow-color: #EFF2FA;
-    --focus-block-br-color: var(--text-accent-color);
-
-}
-
-
-.alef6 table * {
-    background: var(--table-background-color) !important;
-    color: var(--page-text-color) !important;
-    border-color: var(--table-border-color) !important;
-}
-
-.alef6 table thead,
-.alef6 table thead tr,
-.alef6 table thead th {
-    background-color: var(--table-header-background-color) !important;
-    color: var(--page-text-color) !important;
+    --page-bg-color: rgb(240, 243, 246);
+    --header-color: blue;
+    --text-color: navy;
+    --bg-color: rgb(230, 238, 245);
+    --link-color: #d3589b;
 }
 
 body {
-    background-color: var(--page-dg-color);
+    background-color: var(--page-bg-color);
     margin-top: none;
     padding: 20px;
-    color: var(--page-text-color);
 } 
 
 
 /* -------------- slides ---------------- */
 
-.alef3.foc,
-.alef4.foc,
-.alef6.foc {
-    box-shadow: 0px 0px 7px var(--focus-hadow-color);
-    border-color: var(--focus-block-br-color);
+.alef3.foc{
+    border-color: var(--header-color);
     border-style: solid;
     border-width: 3px;
-    background-color: var(--focus-block-bg-color);
-    margin-top: 10px;
-    margin-bottom: 10px;
     border-radius: 4px;
-    padding: 4px;
+    background-color: var(--page-bg-color);
+    margin-top: 4px; 
+    padding: 8px;
+    font-size: 16px;
 }
 
-.alef1  {
+.alef3, 
+.alef4, 
+.alef6 { 
+    color: var(--text-color);
+    font-size: 14px;
+    font-weight: 400;
+    border-radius: 4px;
+    margin-top: 1px; 
+    background-color: var(--bg-color);
+    border: 3px solid var(--bg-color);
+    padding: 8px;
+}
+
+
+.alef1, .alef2  {
     font-size: 26px;
-    color: var(--text-accent-color);
+    color: var(--header-color);
     font-family: "Open Sans", sans-serif;
     font-weight: 600;
     margin: 20px 0px 4px 0px; 
-    
 }
 
 .alef2 {
     font-size: 20px;
-    color: var(--text-accent-color);
-    font-family: "Open Sans", sans-serif;
-    font-weight: 600;
-    margin: 20px 0px 4px 0px; 
-}
-
-.ace_editor { 
-    color: var(--page-text-color);
-    font-size: 14px;
-    border-radius: 4px;
-    margin: 12px 0px 4px 0px;    
-}
-
-.alef3, .alef4, .alef6 { 
-    color: var(--page-text-color);
-    font-size: 16px;
-    font-weight: 400;
-    border-radius: 4px;
-    margin: 12px 0px 4px 0px; 
-    background-color: var(--block-bg-color);
-    border: 3px solid var(--block-br-color);
 }
 
 .alef3 { 
-   padding: 8px;
    white-space: pre-wrap;
 }
 
@@ -104,7 +67,8 @@ body {
 
 .alef3 > a { 
     font-weight: 500;
-    color: var(--text-link-color);
+    text-decoration: none;
+    color: var(--link-color);
 }
 
 .alef3 > span { 
@@ -113,16 +77,37 @@ body {
 }
 
 .alef4 {
-    font-size: 16px;
     font-weight: bold;
     white-space: pre;
-    color: var(--block-accent-color);
+    color: var(--link-color);
     border: solid 3px;
-    padding: 8px;
+}
+
+/* .alef5 */
+.ace_editor { 
+    color: var(--text-color);
+    font-size: 14px;
+    border-radius: 4px;
+    margin-top: 2px; 
+    line-height: 1.6 !important;
+}
+
+.ace-github, 
+.ace-github .ace_scroller {
+    background-color: var(--bg-color) !important;
 }
 
 
+.alef6 
+{
+    border-color: var(--bg-color);
+    border-width: 1px;
+}
+.alef6 table    
+{
+    background-color: var(--bg-color) !important;
+    color: var(--text-color) !important;
+    border-color: var(--header-color);
 
-/* .alef6 { 
-    
-} */
+}
+
