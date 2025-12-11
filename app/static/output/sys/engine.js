@@ -10,7 +10,9 @@ const DARK_COLORS = {"page-bg": "#666", "header": "#aaaaff", "text": "#fff", "bg
 
 let current_slide_no = START_SLIDE_NO; // номер сфокусованого слйду
 let slides = document.querySelectorAll("#lecture > div");
-let ace_theme = "twilight";
+let theme = "light";
+
+setColors(LIGHT_COLORS);
 go(0);
 
 // ----------------------- перемикач світлої і темної тем --------------------------
@@ -24,7 +26,7 @@ function getRootVar(name) {
 }
 
 function setColors(colors){
-    setRootVar('--page-bg-color', colors["page-bg"]);
+    setRootVar('--page-bg-color', colors["page_bg"]);
     setRootVar('--header-color', colors["header"]);
     setRootVar('--text-color', colors["text"]);
     setRootVar('--bg-color', colors["bg"]);
@@ -32,12 +34,16 @@ function setColors(colors){
 }
 
 document.getElementById("theme_toggle").addEventListener("click", () => {
-    if(getRootVar("--page-bg-color") == LIGHT_COLORS["page-bg"])
-        setColors(DARK_COLORS)
-    else 
-        setColors(LIGHT_COLORS)
+    if (theme === "light") {
+        setColors(DARK_COLORS);
+        theme = "dark";
+    } else {
+        setColors(LIGHT_COLORS);
+        theme = "light";
+    }
 });
-setColors(LIGHT_COLORS);
+
+
 
 // ---------------------------------- навігація -----------------------------
 

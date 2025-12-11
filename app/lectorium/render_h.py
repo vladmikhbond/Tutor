@@ -14,7 +14,7 @@ class RenderHtml:
     def __init__(self, slides: List[Slide], lang:str, colors_json: str, version: str):
         self.slides = slides
         self.lang = lang
-        self.colors = '{"page-bg": "#edf2f8", "header": "#0000ff", "text": "#000080", "bg": "#e6eef5", "link": "#d3589b"}'
+        self.colors = colors_json
         self.version = version
        
         
@@ -50,9 +50,8 @@ class RenderHtml:
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <title>{title}</title>
-<link href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" rel="stylesheet" />
 <link href='sys/engine.css' type='text/css' rel='stylesheet' />
-<link href='sys/theme.css' type='text/css' rel='stylesheet'/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/ace.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/mode-{self.lang}.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/theme-github.min.js" id="ace_theme_link" ></script>

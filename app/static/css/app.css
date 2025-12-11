@@ -16,6 +16,12 @@ footer.grid a[role="button"] {
   background-color: red;
 }
 
+/* ------------------ Вибір кольорів ------------------- */
+/* .input-color {
+  width: 120px;
+} */
+
+
 /* ----------------- Контекстне меню ------------------ */
 #context-menu {
   position: absolute;

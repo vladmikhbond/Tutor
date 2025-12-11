@@ -18,15 +18,23 @@
       <option value="python" {{ 'selected' if disc.lang == 'python' else '' }}>Python</option>
     </select>
   </label>
-  <label>
-    Theme
-    <select name="theme" required="">
-      {% for theme in ["theme1_dark", "theme1_light", "theme2_dark", "theme2_light"] %}
-        {% set selected = 'selected' if disc.theme == theme else '' %}
-        <option value="{{theme}}" {{selected}}>{{theme}}</option>
-      {% endfor %}
-    </select>
-  </label>
+  <table>
+    <tr>
+      <td> Фон</td>
+      <td>Загл</td>
+      <td>Текст</td>
+      <td>Блок</td>
+      <td>Лінк</td>
+    </tr>
+    <tr>
+      <td><input type="color" name="page_bg_color" value="{{colors['page_bg']}}"></td>
+      <td><input type="color" name="header_color" value="{{colors['header']}}"></td>
+      <td><input type="color" name="text_color" value="{{colors['text']}}"></td>
+      <td><input type="color" name="bg_color" value="{{colors['bg']}}"></td>
+      <td><input type="color" name="link_color" value="{{colors['link']}}"></td>
+      
+    </tr>
+  </table>
 
   <footer class="grid">
     <button type="submit" >Save</button>

@@ -2,6 +2,7 @@ import os
 import shutil
 import io
 import zipfile
+import json
 from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Form, Response, Security
@@ -40,6 +41,10 @@ async def get_disc_list(
 
 
 # ------- new 
+DEFAULT_LIGHT_COLORS = {
+    "page_bg": "#edf2f8", "header": "#0000ff", "text": "#000080", "bg": "#e6eef5", "link": "#d3589b"
+}
+
 
 @router.get("/new")
 async def get_disc_new(
@@ -50,7 +55,8 @@ async def get_disc_new(
     Створення нової дисципліни.
     """
     disc = Disc(title="", lang="", theme="") 
-    return templates.TemplateResponse("disc/edit.html", {"request": request, "disc": disc})
+    colors = DEFAULT_LIGHT_COLORS
+    return templates.TemplateResponse("disc/edit.html", {"request": request, "disc": disc, "colors": colors})
 
 
 @router.post("/new")
@@ -58,13 +64,22 @@ async def post_disc_new(
     request: Request,
     title: str = Form(...),
     lang: str = Form(...),
-    theme: str = Form(...),
+    page_bg_color: str = Form(...),
+    header_color: str = Form(...),
+    text_color: str = Form(...),
+    bg_color: str = Form(...),
+    link_color: str = Form(...),
     db: Session = Depends(get_db),
     user: User = Depends(get_current_tutor)
 ):
+    colors = {"page_bg": page_bg_color, 
+              "header": header_color,
+              "text": text_color, 
+              "bg": bg_color, 
+              "link": link_color}
     disc = Disc(
         title = title,
-        theme = theme, 
+        theme = json.dumps(colors), 
         lang = lang,
         username = user.username,
     )
@@ -91,7 +106,11 @@ async def get_disc_edit(
     disc = db.get(Disc, id)
     if not disc:
         return RedirectResponse(url="/disc/list", status_code=302)
-    return templates.TemplateResponse("disc/edit.html", {"request": request, "disc": disc})
+    try:
+        colors = json.loads(disc.theme)
+    except: 
+        colors = DEFAULT_LIGHT_COLORS
+    return templates.TemplateResponse("disc/edit.html", {"request": request, "disc": disc, "colors": colors})
 
 
 @router.post("/edit/{id}")
@@ -100,16 +119,25 @@ async def post_disc_edit(
     request: Request,
     title: str = Form(...),
     lang: str = Form(...),
-    theme: str = Form(...),
+    page_bg_color: str = Form(...),
+    header_color: str = Form(...),
+    text_color: str = Form(...),
+    bg_color: str = Form(...),
+    link_color: str = Form(...),
     db: Session = Depends(get_db),
     user: User = Depends(get_current_tutor)
 ):
     disc = db.get(Disc, id)
     if not disc:
         raise HTTPException(404, f"Saving changes of disc id={id} is failed.")
+    colors = {"page_bg": page_bg_color, 
+            "header": header_color,
+            "text": text_color, 
+            "bg": bg_color, 
+            "link": link_color}
     disc.title = title
     disc.lang = lang 
-    disc.theme= theme
+    disc.theme = json.dumps(colors)
     db.commit()
     return RedirectResponse(url="/disc/list", status_code=302)
    
