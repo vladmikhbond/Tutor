@@ -1,8 +1,13 @@
+/* цей файл має знаходитися у папці sys */
+
 // ---------------------- Параметри рендерінгу (визначені на сторінці)-----------------------
-// START_SLIDE_NO={0}; 
-// VERSION = {"tutor"};  
+// const START_SLIDE_NO={slide_no}; 
+// const VERSION = "{self.version}";
+// const LIGHT_COLORS = {"page-bg": "#edf2f8", "header": "#0000ff", "text": "#000080", "bg": "#e6eef5", "link": "#d3589b"}
+const DARK_COLORS = {"page-bg": "#666", "header": "#aaaaff", "text": "#fff", "bg": "#444", "link": "#d3589b"}
 
 // ------------------------------- globals ------------------------------------------
+
 let current_slide_no = START_SLIDE_NO; // номер сфокусованого слйду
 let slides = document.querySelectorAll("#lecture > div");
 let ace_theme = "twilight";
@@ -10,45 +15,29 @@ go(0);
 
 // ----------------------- перемикач світлої і темної тем --------------------------
 
-document.getElementById("theme_toggle").addEventListener("click", () => 
-{   
-    // В значенні атрибуту attr елемента з заданим id замінює підрядок a на підрядок b або навпаки.
-    // Повертає рядок, який прийшов на заміну.
-    function changeAttribute(attr, id, a, b) {
-        let elem = document.getElementById(id);
-        let val = elem.getAttribute(attr);
-        let index = val.indexOf(a);
-        // замінює a на b
-        if (index !== -1) {
-            const newHref = val.slice(0, index) + b + val.slice(index + a.length);
-            elem.setAttribute(attr, newHref);
-            return b;
-        }
-        index = val.indexOf(b);
-        // замінює b на a
-        if (index !== -1) {
-            const newHref = val.slice(0, index) + a + val.slice(index + b.length);
-            elem.setAttribute(attr, newHref);
-            return a;
-        }
-        return null; 
-    }
-    
-    changeAttribute("href", "theme_link", "dark", "light");
-    let a = changeAttribute("src", "ace_theme_link", "twilight", "github");
-    let b = changeAttribute("src", "ace_theme_link", "nord_dark", "textmate");
-    ace_theme = a || b;
+function setRootVar(name, value) {
+    document.documentElement.style.setProperty(name, value);
+}
 
-    for (let n = 0; n < slides.length; n++) {
-        const id = "editor" + n;
-        const el = document.getElementById(id);
-        if (el) {
-            const editor = ace.edit(id);
-            editor.setTheme("ace/theme/" + ace_theme) ;
-        }
-    }
+function getRootVar(name) {
+    return document.documentElement.style.getPropertyValue(name);
+}
+
+function setColors(colors){
+    setRootVar('--page-bg-color', colors["page-bg"]);
+    setRootVar('--header-color', colors["header"]);
+    setRootVar('--text-color', colors["text"]);
+    setRootVar('--bg-color', colors["bg"]);
+    setRootVar('--link-color', colors["link"]);
+}
+
+document.getElementById("theme_toggle").addEventListener("click", () => {
+    if(getRootVar("--page-bg-color") == LIGHT_COLORS["page-bg"])
+        setColors(DARK_COLORS)
+    else 
+        setColors(LIGHT_COLORS)
 });
-
+setColors(LIGHT_COLORS);
 
 // ---------------------------------- навігація -----------------------------
 

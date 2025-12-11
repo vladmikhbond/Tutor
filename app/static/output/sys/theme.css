@@ -1,14 +1,13 @@
-/* цей файл має знаходитися у папці із html доками лекцій */
+/* цей файл має знаходитися у папці sys */
 
-/* -------------- variables ---------------- */
-
-/* Light mode */
+/* -------------- змінні ---------------- */
 :root {
-    --page-bg-color: rgb(240, 243, 246);
-    --header-color: blue;
-    --text-color: navy;
-    --bg-color: rgb(230, 238, 245);
-    --link-color: #d3589b;
+    /* --page-bg-color: #edf2f8;
+    --header-color: #0000ff;
+    --text-color: #000080;
+    --bg-color: #e6eef5;
+    --link-color: #d3589b; */
+    --border-radius: 4px;
 }
 
 body {
@@ -24,7 +23,7 @@ body {
     border-color: var(--header-color);
     border-style: solid;
     border-width: 3px;
-    border-radius: 4px;
+    border-radius: var(--border-radius);
     background-color: var(--page-bg-color);
     margin-top: 4px; 
     padding: 8px;
@@ -37,7 +36,7 @@ body {
     color: var(--text-color);
     font-size: 14px;
     font-weight: 400;
-    border-radius: 4px;
+    border-radius: var(--border-radius);;
     margin-top: 1px; 
     background-color: var(--bg-color);
     border: 3px solid var(--bg-color);
@@ -87,7 +86,7 @@ body {
 .ace_editor { 
     color: var(--text-color);
     font-size: 14px;
-    border-radius: 4px;
+    border-radius: var(--border-radius);
     margin-top: 2px; 
     line-height: 1.6 !important;
 }

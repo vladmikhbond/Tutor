@@ -1,10 +1,10 @@
 #dash {
     position: fixed;
-    /* opacity: 0.5; */
+    opacity: 0.5;
 
     right: 5px;
     top: 5px;
-    width: 50%;
+    width: 10%;
     z-index: 1;
 }
 
@@ -12,9 +12,3 @@
     cursor: pointer;
 }
 
-
-
-.alef3.foc, .alef4.foc, .alef5.foc, .alef6.foc 
-{
-    margin-bottom: 100px;
-}

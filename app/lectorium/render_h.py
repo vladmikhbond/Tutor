@@ -2,27 +2,21 @@ import re
 from typing import List, Tuple
 from .parser import Slide
 
-ace_theme_map = {
-    "theme1_light": "textmate",
-    "theme1_dark": "nord_dark",
-    "theme2_light": "github",
-    "theme2_dark": "twilight"
-}
+
 
 class RenderHtml:
     """
     version = "student" | "tutor"
     lang = "python" | "javascript" | "csharp"
+    colors = {"page-bg": "#edf2f8", "header": "#0000ff", "text": "#000080", "bg": "#e6eef5", "link": "#d3589b"}
     """
 
-    def __init__(self, slides: List[Slide], lang:str, theme: str, version: str):
+    def __init__(self, slides: List[Slide], lang:str, colors_json: str, version: str):
         self.slides = slides
         self.lang = lang
-        self.theme = theme
+        self.colors = '{"page-bg": "#edf2f8", "header": "#0000ff", "text": "#000080", "bg": "#e6eef5", "link": "#d3589b"}'
         self.version = version
-
-        # схеми ace9
-        self.ace_theme = ace_theme_map[theme]        
+       
         
     def render(self) -> tuple[str, str]:
         lst: List[str] = [] 
@@ -58,18 +52,18 @@ class RenderHtml:
 <title>{title}</title>
 <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" rel="stylesheet">
 <link href='sys/engine.css' type='text/css' rel='stylesheet' />
-<style></style>
-<link href='sys/themes/{self.theme}.css' type='text/css' rel='stylesheet' id="theme_link" />
+<link href='sys/theme.css' type='text/css' rel='stylesheet'/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/ace.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/mode-{self.lang}.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/theme-{self.ace_theme}.min.js" id="ace_theme_link" ></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/theme-github.min.js" id="ace_theme_link" ></script>
 
 
 <script>
     const START_SLIDE_NO={slide_no}; 
     const VERSION = "{self.version}";
+    const LIGHT_COLORS = {self.colors};
 </script>
-
+    
 
 </head>
 <body>
@@ -135,7 +129,7 @@ class RenderHtml:
 
 <script>
     const editor{ord_no} = ace.edit("editor{ord_no}", {{
-        theme: "ace/theme/{self.ace_theme}",
+        theme: "ace/theme/github",
         mode: "ace/mode/{self.lang}",
         value:  `{content}`,    
         maxLines: 30,
