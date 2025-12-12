@@ -21,12 +21,13 @@
     {% for lecture in disc.lectures %}
     <tr>
       <td>
-        <a href="/lecture/edit/{{lecture.id}}">{{ lecture.title }}</a>
+        {{ lecture.title }}
         <span style="margin-left: 20px; font-size: small;">{{lecture.volume // 100 / 10}}</span>
         </td>
       <td>
         
-        <a href="/lecture/trans/{{lecture.id}}">html</a> | 
+        <a href="/lecture/edit/{{lecture.id}}">edit</a> | 
+        <a href="/lecture/trans/{{lecture.id}}">play</a> | 
         <a href="/lecture/del/{{lecture.id}}">del</a>
       </td>
     </tr>

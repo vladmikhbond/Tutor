@@ -15,7 +15,7 @@ from app.models.pss_models import User
 from ..models.models import Disc, Picture
 from ..routers.login_router import get_current_tutor
 from ..dal import get_db  # Функція для отримання сесії БД
-from ..lectorium.main import translate, tune
+from ..lectorium.converter import convert, tune
 from ..routers.lecture_router import export_lecture
 
 # шаблони Jinja2
@@ -197,7 +197,7 @@ def export_n_zip(disc: Disc, db: Session):
 
         # Запакувати лекції         
         for lecture in disc.lectures:
-            html = translate(lecture.content, lecture.disc.lang, lecture.disc.theme, version="student")
+            html = convert(lecture.content, lecture.disc.lang, lecture.disc.theme, version="student")
             tuned_title = tune(lecture.title)
             zf.writestr(tuned_title + ".html", html)
 
@@ -206,7 +206,7 @@ def export_n_zip(disc: Disc, db: Session):
         index_content = f"@2 {disc.title}\n"
         for lecture in disc.lectures:
             index_content += f"@3 [[{FAKE_HTTP}{tune(lecture.title)}.html|{lecture.title}]]\n"
-        index_html = translate(index_content, disc.lang, disc.theme, version="student")
+        index_html = convert(index_content, disc.lang, disc.theme, version="student")
         index_html = index_html.replace(FAKE_HTTP, "")
         zf.writestr("index.html", index_html)
         
@@ -263,11 +263,11 @@ def export_disc(disc: Disc, db: Session):
     # Зберігти лекції 
     index_content = f"@2 {disc.title}\n"
     for lecture in disc.lectures:
-        tuned_title = export_lecture(lecture, dst, db)
+        tuned_title = export_lecture(lecture, dst, db, version="student", slide_no=100500)
         index_content += f"@3 [[http://{tuned_title}.html|{lecture.title}]]\n"
     
     # Зберігти індекс
-    html = translate(index_content, disc.lang, disc.theme, version="student")
+    html = convert(index_content, disc.lang, disc.theme, version="student")
 
     html = html.replace("http://", "")  
     fname = f"{dst}/index.html"

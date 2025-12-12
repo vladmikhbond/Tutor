@@ -11,13 +11,14 @@ class RenderHtml:
     colors = {"page-bg": "#edf2f8", "header": "#0000ff", "text": "#000080", "bg": "#e6eef5", "link": "#d3589b"}
     """
 
-    def __init__(self, slides: List[Slide], lang:str, colors_json: str, version: str):
+    def __init__(self, slides: List[Slide], lang:str, colors_json: str, version: str, slide_no: int):
         self.slides = slides
         self.lang = lang
         self.colors = colors_json
         self.version = version
-       
-        
+        self.slide_no = len(self.slides) if self.version == "student" else slide_no 
+    
+    
     def render(self) -> tuple[str, str]:
         lst: List[str] = [] 
         
@@ -41,7 +42,7 @@ class RenderHtml:
            Обирає світлу або темну тему редактора ace9.
         """
         title = self.slides[0].text
-        slide_no = 0 if self.version == "tutor" else len(self.slides)
+        
          
         return f"""
 <!DOCTYPE html>
@@ -58,7 +59,7 @@ class RenderHtml:
 
 
 <script>
-    const START_SLIDE_NO={slide_no}; 
+    const START_SLIDE_NO={self.slide_no}; 
     const VERSION = "{self.version}";
     const LIGHT_COLORS = {self.colors};
 </script>

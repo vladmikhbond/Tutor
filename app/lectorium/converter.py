@@ -2,12 +2,12 @@ from typing import List
 from .parser import Parser, SpottedLine
 from .render_h import RenderHtml 
 
-def translate(source: str, lang: str, colors_json: str, version: str = "tutor") -> tuple[str, str]:
+def convert(source: str, lang: str, colors_json: str, version: str = "tutor", slide_no = 0) -> tuple[str, str]:
     """
     Транслює лекцію в HTML
     """
     slides = Parser(source).parse()
-    return RenderHtml(slides, lang, colors_json, version).render()
+    return RenderHtml(slides, lang, colors_json, version, slide_no).render()
 
     
 def get_style(source: str, mark=2) -> List[str]:

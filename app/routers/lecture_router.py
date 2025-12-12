@@ -11,7 +11,7 @@ from ..models.pss_models import User
 
 from .login_router import get_current_tutor
 from ..dal import get_db  # Функція для отримання сесії БД
-from ..lectorium.main import translate, get_style, tune
+from ..lectorium.converter import convert, get_style, tune
 
 # шаблони Jinja2
 templates = Jinja2Templates(directory="app/templates")
@@ -195,28 +195,29 @@ async def post_lecture_picture(
 
 @router.get("/trans/{id}")
 async def get_lecture_trans(
-    id: int,  
+    id: int,
+    slide_no: int = 0,
     db: Session = Depends(get_db),
     user: User = Depends(get_current_tutor)
 ):
     """ 
-    Трансляція лекції.
+    Трансляція лекції у версії "tutor".
     Отримує лекцію з БД і створює файл {disc.title}.html і папку pic в папці app/static/output
     """
     lecture = db.get(Lecture, id)
     if not lecture:
         raise HTTPException(404, f"No lecture with id={id}")
     
-    lec_url = export_lecture(lecture, "app/static/output", db)
+    lec_title = export_lecture(lecture, "app/static/output", db, "tutor", slide_no)
 
-    url=f"/static/output/{lec_url}.html"
+    url=f"/static/output/{lec_title}.html"
     return RedirectResponse(url, status_code=302)
 
 
-def export_lecture(lecture: Lecture, dst:str, db:Session):
+def export_lecture(lecture: Lecture, dst:str, db:Session, version: str, slide_no: int):
 
     # create file {lect_title}.html
-    html = translate(lecture.content, lecture.disc.lang, lecture.disc.theme)
+    html = convert(lecture.content, lecture.disc.lang, lecture.disc.theme, version, slide_no)
     tuned_title = tune(lecture.title)
     with open(f"{dst}/{tuned_title}.html", "w") as f:
         f.write(html)

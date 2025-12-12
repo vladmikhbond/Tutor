@@ -10,12 +10,12 @@
         <span id="asterisk" style="color: red;"></span>
       </h3>
       <label class="inline" style="margin-left: 20px;">
-        <input type="checkbox" name="is_public" {{"checked" if lecture.is_public else ""}} > Public
+        <input type="checkbox" name="is_public" {{"checked" if lecture.is_public else ""}} >Public
       </label>
-      <button id="monoButton" type="button">
+      <button id="monoButton" type="button" style="margin-left: 30px;">
           M
       </button>
-      <a href="/lecture/trans/{{lecture.id}}" style="margin-left: 50px;">HTML</a>
+      <a href="/lecture/trans/{{lecture.id}}?slide_no=100500" style="margin-left: 30px;">Play</a>
     </header>
 
     <textarea name="content" id="content" rows="20" >{{ lecture.content }}</textarea>

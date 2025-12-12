@@ -21,25 +21,45 @@
   <table>
     <tr>
       <td> Фон</td>
+      <td>Блок</td>
       <td>Загл</td>
       <td>Текст</td>
-      <td>Блок</td>
       <td>Лінк</td>
     </tr>
     <tr>
       <td><input type="color" name="page_bg_color" value="{{colors['page_bg']}}"></td>
+      <td><input type="color" name="bg_color" value="{{colors['bg']}}"></td>
       <td><input type="color" name="header_color" value="{{colors['header']}}"></td>
       <td><input type="color" name="text_color" value="{{colors['text']}}"></td>
-      <td><input type="color" name="bg_color" value="{{colors['bg']}}"></td>
-      <td><input type="color" name="link_color" value="{{colors['link']}}"></td>
-      
+      <td><input type="color" name="link_color" value="{{colors['link']}}"></td>  
     </tr>
   </table>
 
   <footer class="grid">
     <button type="submit" >Save</button>
     <a href="/disc/list" role="button" class="secondary">To Index</a>
+    <button id="colors_button" style="width: 100px;">Colors</button>
   </footer>      
 </form>
 
+<script>
+  
+const COLORS = [
+    { "page_bg": "#edf2f8", "header": "#0000ff", "text": "#000080", "bg": "#e6eef5", "link": "#d3589b" },
+    { "page_bg": "#FF0000", "header": "#0000ff", "text": "#000080", "bg": "#e6eef5", "link": "#d3589b" },
+    { "page_bg": "#00FF00", "header": "#0000ff", "text": "#000080", "bg": "#e6eef5", "link": "#d3589b" },
+    { "page_bg": "#0000FF", "header": "#0000ff", "text": "#000080", "bg": "#e6eef5", "link": "#d3589b" },
+  ]
+  let color_idx = 0;
+
+  document.getElementById("colors_button").addEventListener("click", (e) => {
+      e.preventDefault()
+
+      for (let name of ["page_bg", "header", "text", "bg", "link"])  {
+        let el = document.getElementsByName(name+"_color")[0]
+        el.value = COLORS[color_idx][name]
+      }
+      color_idx = (color_idx + 1) % COLORS.length;
+  })
+</script>
 {% endblock %}

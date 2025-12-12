@@ -4,17 +4,6 @@ TODO
 
 
 
------------------------------------------
-<style>
-:root {{   
-    --focus-block-br-color: blue;
- }}
-</style>
-<link href='sys/themes/{self.theme}.css' type='text/css' rel='stylesheet' id="theme_link" />
-------------------------------------------
-
-
-
 --- збірка і запуск продуктового контейнеру pss_cont
 
 cd c:\git\dock\psscont
