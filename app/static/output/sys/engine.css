@@ -7,7 +7,7 @@
     --text-color: #000080;
     --bg-color: #e6eef5;
     --link-color: #d3589b; */
-    --border-radius: 4px;
+    --border-radius: 6px;
 }
 
 /* ---------------------------------------- */
@@ -40,7 +40,7 @@ body {
     border-width: 3px;
     border-radius: var(--border-radius);
     background-color: var(--page-bg-color);
-    margin-top: 4px; 
+    margin-top: 8px; 
     padding: 8px;
     font-size: 16px;
 }
@@ -52,7 +52,7 @@ body {
     font-size: 14px;
     font-weight: 400;
     border-radius: var(--border-radius);;
-    margin-top: 1px; 
+    margin-top: 8px; 
     background-color: var(--bg-color);
     border: 3px solid var(--bg-color);
     padding: 8px;
@@ -112,16 +112,18 @@ body {
 }
 
 
-.alef6 
-{
-    border-color: var(--bg-color);
-    border-width: 1px;
+.alef6 table * {
+    background: var(--bg-color) !important;
+    color: var(--text-color) !important;
+    border-color: var(--text-color) !important;
 }
-.alef6 table    
-{
+
+.alef6 table thead,
+.alef6 table thead tr,
+.alef6 table thead th {
     background-color: var(--bg-color) !important;
     color: var(--text-color) !important;
-    border-color: var(--header-color);
-
 }
+
+
 

@@ -4,7 +4,7 @@
 // const START_SLIDE_NO={slide_no}; 
 // const VERSION = "{self.version}";
 // const LIGHT_COLORS = {"page-bg": "#edf2f8", "header": "#0000ff", "text": "#000080", "bg": "#e6eef5", "link": "#d3589b"}
-const DARK_COLORS = {"page-bg": "#666", "header": "#aaaaff", "text": "#fff", "bg": "#444", "link": "#d3589b"}
+const DARK_COLORS = {"page_bg": "#666", "header": "#aaaaff", "text": "#fff", "bg": "#444", "link": "#d3589b"}
 
 // ------------------------------- globals ------------------------------------------
 
