@@ -1,4 +1,7 @@
 TODO
+стандартні сольорові схеми (templates/lecture/edit.html)
+світла тема (output/sys/engine.css)
+
 
 статистика по студентм - задачі, тести з датами
 

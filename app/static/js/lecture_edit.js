@@ -184,7 +184,7 @@ monoButton.addEventListener("click", () => {
   if (content.style.fontFamily !== "monospace") {
     content.style.fontFamily = "monospace";
   } else {
-      content.style.fontFamily = "inherit";
+    content.style.fontFamily = "inherit";
   }       
 });
 
