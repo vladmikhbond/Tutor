@@ -120,15 +120,15 @@ class RenderHtml:
         return f'<div id="n{ord_no}" class="alef4">{slide.text}</div>'
 
 
-    def render5(self, slide: Slide, ord_no: int):
+    def render5(self, slide: Slide, slide_no: int):
         content = slide.text
         return f'''
-<div id="n{ord_no}" class="alef5">
-    <div id="editor{ord_no}"></div>
+<div id="n{slide_no}" class="alef5">
+    <div id="editor{slide_no}"></div>
 </div>
 
 <script>
-    const editor{ord_no} = ace.edit("editor{ord_no}", {{
+    const editor{slide_no} = ace.edit("editor{slide_no}", {{
         theme: "ace/theme/github",
         mode: "ace/mode/{self.lang}",
         value:  `{content}`,    
@@ -136,7 +136,8 @@ class RenderHtml:
         wrap: true,
         autoScrollEditorIntoView: true,
     }});
-    editor{ord_no}.session.setUseWorker(false);
+    editor{slide_no}.session.setUseWorker(false);
+    editor{slide_no}.renderer.setShowGutter(false);
 </script>
 '''
 
