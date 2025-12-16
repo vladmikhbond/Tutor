@@ -1,13 +1,15 @@
 const content = document.getElementById("content");
 
-//#region --------------------- for play button ---------------------
+//#region --------------------- for Play link ---------------------
 
 document.getElementById("playLink").addEventListener("click", (e) => {
   e.preventDefault();
+
+  // calculate slide nomber
   const caretPos = content.selectionStart;
   const str = content.value.slice(0, caretPos);
   const slide_no = [...str].reduce((n, ch) => n + MARKS.includes(ch), 0) - 1;
-
+  // 
   const lecture_id = document.getElementById("lecture_id").value;
   window.location.href = `/lecture/trans/${lecture_id}?slide_no=${slide_no}`;
 });
@@ -46,7 +48,7 @@ content.addEventListener("click", () => {
 });
 
 comment.addEventListener("click", ()=> {
-   const AA = "@@";
+   const AA = "@@ ";
 
    let start = content.selectionStart, end = content.selectionEnd;
    let selected = content.value.slice(start, end);

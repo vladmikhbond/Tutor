@@ -66,20 +66,27 @@ class Parser:
              [(0, '111'), (2, '222'), (0, '333'), (1, '4444'), (0, '555')]
         0 маркує звичайний рядок, 1 маркує {{...}}, 2 маркує [[...]]
         """
-        T1 = r"\{\{(.*)\}\}"
-        T2 = r"\[\[(.*)\]\]"
+        # lexemas   '{{'='\1'     '}}'='\2'     '[['='\3'     ']]'='\4'
+        line = line.replace('{{', '\1').replace('}}', '\2').replace('[[', '\3').replace(']]', '\4')
         
-        lst1 = re.split(T1, line)
-        lev1 =[(i % 2, s) for i, s in enumerate(lst1) ]
-
-        res: List[SpottedLine] = []
-        for m, c in lev1:
-            if m == 0:
-                lst2 = re.split(T2, c)
-                lev2 =[(i % 2 * 2, s) for i, s in enumerate(lst2) ]
-                res.extend(lev2)
+        m, s = 0, ""
+        res = []
+        for c in line:
+            if c == '\1':
+                res.append((m, s)); s = ""
+                m = 1
+            elif c == '\2':
+                res.append((m, s)); s = ""
+                m = 0
+            elif c == '\3':
+                res.append((m, s)); s = ""
+                m = 2
+            elif c == '\4':
+                res.append((m, s)); s = ""
+                m = 0
             else:
-                res.append((m, c))
+                s += c
+        res.append((m, s))
         # remove empty lines
         res = [(m, c) for m, c in res if c != ""]
         return res
