@@ -1,7 +1,20 @@
 const content = document.getElementById("content");
 
-//#region --------------------- for confext menu ---------------------
+//#region --------------------- for play button ---------------------
 
+document.getElementById("playLink").addEventListener("click", (e) => {
+  e.preventDefault();
+  const caretPos = content.selectionStart;
+  const str = content.value.slice(0, caretPos);
+  const slide_no = [...str].reduce((n, ch) => n + MARKS.includes(ch), 0) - 1;
+
+  const lecture_id = document.getElementById("lecture_id").value;
+  window.location.href = `/lecture/trans/${lecture_id}?slide_no=${slide_no}`;
+});
+
+//#endregion
+
+//#region --------------------- for confext menu ---------------------
 
 const menu = document.getElementById("context-menu");
 const comment = document.getElementById("comment");
