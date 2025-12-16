@@ -1,12 +1,14 @@
 /* цей файл має знаходитися у папці sys */
 
 // ---------------------- Параметри рендерінгу (визначені на html-сторінці)-----------------------
-// const START_SLIDE_NO={slide_no}; 
-// const VERSION = "{self.version}";
-// const LIGHT_COLORS = {"page-bg": "#edf2f8", "header": "#0000ff", "text": "#000080", "bg": "#e6eef5", "link": "#d3589b"}
-const DARK_COLORS = {"page_bg": "#666", "header": "#f9f9ffff", "text": "#fff", "bg": "#444", "link": "#d3589b"}
+// const START_SLIDE_NO
+// const VERSION 
+// const LIGHT_COLORS 
 
 // ------------------------------- globals ------------------------------------------
+
+const COLOR_NAMES = ["page_bg", "header", "text", "bg", "link", "aux"];
+const DARK_COLORS = {"page_bg": "#666", "header": "#f9f9ffff", "text": "#fff", "bg": "#444", "link": "#888"};
 
 let current_slide_no = START_SLIDE_NO; // номер сфокусованого слйду
 let slides = document.querySelectorAll("#lecture > div");
@@ -26,11 +28,9 @@ function getRootVar(name) {
 }
 
 function setColors(colors){
-    setRootVar('--page-bg-color', colors["page_bg"]);
-    setRootVar('--header-color', colors["header"]);
-    setRootVar('--text-color', colors["text"]);
-    setRootVar('--bg-color', colors["bg"]);
-    setRootVar('--link-color', colors["link"]);
+    for (let name of COLOR_NAMES) {
+        setRootVar(`--page-${name}`, colors[name]);
+    }
 }
 
 document.getElementById("theme_toggle").addEventListener("click", () => {

@@ -23,6 +23,12 @@ templates = Jinja2Templates(directory="app/templates")
 
 router = APIRouter()
 
+COLOR_NAMES = ["page_bg", "header", "text", "bg", "link", "aux"]
+DEFAULT_LIGHT_COLORS = {
+    "page_bg": "#edf2f8", "header": "#0000ff", "text": "#000080", 
+    "bg": "#e6eef5", "link": "#d3589b", "aux": "#ffffff"
+}
+
 # ----------------------- list
 
 @router.get("/list")
@@ -40,11 +46,7 @@ async def get_disc_list(
             {"request": request, "discs": discs})
 
 
-# ------- new 
-DEFAULT_LIGHT_COLORS = {
-    "page_bg": "#edf2f8", "header": "#0000ff", "text": "#000080", "bg": "#e6eef5", "link": "#d3589b"
-}
-
+# ------- new
 
 @router.get("/new")
 async def get_disc_new(
@@ -64,19 +66,15 @@ async def post_disc_new(
     request: Request,
     title: str = Form(...),
     lang: str = Form(...),
-    page_bg_color: str = Form(...),
-    header_color: str = Form(...),
-    text_color: str = Form(...),
-    bg_color: str = Form(...),
-    link_color: str = Form(...),
     db: Session = Depends(get_db),
     user: User = Depends(get_current_tutor)
 ):
-    colors = {"page_bg": page_bg_color, 
-              "header": header_color,
-              "text": text_color, 
-              "bg": bg_color, 
-              "link": link_color}
+    # colors from request form
+    form = await request.form()
+    colors = {}
+    for name in COLOR_NAMES:
+        colors[name] = form.get(name)
+
     disc = Disc(
         title = title,
         theme = json.dumps(colors), 
@@ -119,22 +117,20 @@ async def post_disc_edit(
     request: Request,
     title: str = Form(...),
     lang: str = Form(...),
-    page_bg_color: str = Form(...),
-    header_color: str = Form(...),
-    text_color: str = Form(...),
-    bg_color: str = Form(...),
-    link_color: str = Form(...),
     db: Session = Depends(get_db),
     user: User = Depends(get_current_tutor)
 ):
+    # colors from request form
+    form = await request.form()
+    colors = {}
+    for name in COLOR_NAMES:
+        colors[name] = form.get(name)
+
     disc = db.get(Disc, id)
     if not disc:
         raise HTTPException(404, f"Saving changes of disc id={id} is failed.")
-    colors = {"page_bg": page_bg_color, 
-            "header": header_color,
-            "text": text_color, 
-            "bg": bg_color, 
-            "link": link_color}
+
+
     disc.title = title
     disc.lang = lang 
     disc.theme = json.dumps(colors)
@@ -235,10 +231,6 @@ def zip_sys(zf):
 
     arc("engine.css")
     arc("engine.js")
-    arc("themes/theme1_dark.css")
-    arc("themes/theme1_light.css")
-    arc("themes/theme2_dark.css")
-    arc("themes/theme2_light.css")
     zf.write("app/static/output/sys/pic/pensil.png", "sys/pic/pensil.png")
     
     

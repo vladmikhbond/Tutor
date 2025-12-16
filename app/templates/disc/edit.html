@@ -25,13 +25,15 @@
       <td>Загл</td>
       <td>Текст</td>
       <td>Лінк</td>
+      <td>Допо</td>
     </tr>
     <tr>
-      <td><input type="color" name="page_bg_color" value="{{colors['page_bg']}}"></td>
-      <td><input type="color" name="bg_color" value="{{colors['bg']}}"></td>
-      <td><input type="color" name="header_color" value="{{colors['header']}}"></td>
-      <td><input type="color" name="text_color" value="{{colors['text']}}"></td>
-      <td><input type="color" name="link_color" value="{{colors['link']}}"></td>  
+      <td><input type="color" name="page_bg" value="{{colors['page_bg']}}"></td>
+      <td><input type="color" name="bg" value="{{colors['bg']}}"></td>
+      <td><input type="color" name="header" value="{{colors['header']}}"></td>
+      <td><input type="color" name="text" value="{{colors['text']}}"></td>
+      <td><input type="color" name="link" value="{{colors['link']}}"></td>
+      <td><input type="color" name="aux" value="{{colors['aux']}}"></td>  
     </tr>
   </table>
 
@@ -45,18 +47,18 @@
 <script>
   
 const COLORS = [
-    { "page_bg": "#edf2f8", "header": "#0000ff", "text": "#000080", "bg": "#e6eef5", "link": "#d3589b" },
-    { "page_bg": "#FF0000", "header": "#0000ff", "text": "#000080", "bg": "#e6eef5", "link": "#d3589b" },
-    { "page_bg": "#00FF00", "header": "#0000ff", "text": "#000080", "bg": "#e6eef5", "link": "#d3589b" },
-    { "page_bg": "#0000FF", "header": "#0000ff", "text": "#000080", "bg": "#e6eef5", "link": "#d3589b" },
+    { "page_bg": "#edf2f8", "header": "#0000ff", "text": "#000080", "bg": "#e6eef5", "link": "#d3589b", "aux": "#d3589b" },
+    { "page_bg": "#FF0000", "header": "#0000ff", "text": "#000080", "bg": "#e6eef5", "link": "#d3589b", "aux": "#d3589b" },
+    { "page_bg": "#00FF00", "header": "#0000ff", "text": "#000080", "bg": "#e6eef5", "link": "#d3589b", "aux": "#d3589b" },
+    { "page_bg": "#0000FF", "header": "#0000ff", "text": "#000080", "bg": "#e6eef5", "link": "#d3589b", "aux": "#d3589b" },
   ]
   let color_idx = 0;
 
   document.getElementById("colors_button").addEventListener("click", (e) => {
       e.preventDefault()
 
-      for (let name of ["page_bg", "header", "text", "bg", "link"])  {
-        let el = document.getElementsByName(name+"_color")[0]
+      for (let name of ["page_bg", "header", "text", "bg", "link", "aux"])  {
+        let el = document.getElementsByName(name)[0]
         el.value = COLORS[color_idx][name]
       }
       color_idx = (color_idx + 1) % COLORS.length;

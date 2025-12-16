@@ -118,11 +118,8 @@ body {
 
 }
 
-
-
-
 .alef6 table * {
-    background: var(--bg-color) !important;
+    background: var(--aux-color) !important;
     color: var(--text-color) !important;
     border-color: var(--text-color) !important;
 }
@@ -130,7 +127,7 @@ body {
 .alef6 table thead,
 .alef6 table thead tr,
 .alef6 table thead th {
-    background-color: var(--bg-color) !important;
+    background-color: var(--aux-color) !important;
     color: var(--text-color) !important;
 }
 
