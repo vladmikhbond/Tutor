@@ -14,7 +14,7 @@ from ..models.pss_models import User
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
 TOKEN_LIFETIME = int(os.getenv("TOKEN_LIFETIME", "180"))
-PSS_HOST = os.getenv("PSS_HOST")
+# PSS_HOST = os.getenv("PSS_HOST")
 
 # шаблони Jinja2
 templates = Jinja2Templates(directory="app/templates")
@@ -34,24 +34,23 @@ async def login(
     username: str = Form(...),
     password: str = Form(...),
 ):
-    url = f"{PSS_HOST}/token"
+    url = f"{request.url}token/"
     data = {"username": username, "password": password}
 
     client = httpx.AsyncClient()
     try:
-        pss_response = await client.post(url, data=data)
+        response = await client.post(url, data=data)
     except httpx.RequestError as e:
-        raise HTTPException(500, f"{e}\nА чи працює pss_cont на :7000 у мережі докера mynet?")
+        raise HTTPException(500, e)
     finally:
         await client.aclose()
 
-    if pss_response.is_success:
-        answer_json = pss_response.json()
-        token = answer_json["access_token"]
+    if response.is_success:
+        token = response.json()
     else: 
         return templates.TemplateResponse("login/login.html", {
             "request": request, 
-            "error": f"Invalid credentials. Response status_code: {pss_response.status_code}"
+            "error": f"Invalid credentials. Response status_code: {response.status_code}"
         })
 
     redirect = RedirectResponse("/disc/list", status_code=302)
@@ -76,7 +75,7 @@ async def logout(response: Response):
 
 # =================================================================
 
-# описуємо джерело токена (cookie)
+# Containeer of the token is cookie
 cookie_scheme = APIKeyCookie(name="access_token")
 
 def get_current_user(token: str = Security(cookie_scheme)) -> User:
