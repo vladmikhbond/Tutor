@@ -29,7 +29,7 @@ function getRootVar(name) {
 
 function setColors(colors){
     for (let name of COLOR_NAMES) {
-        setRootVar(`--page-${name}`, colors[name]);
+        setRootVar(`--${name}-color`, colors[name]);
     }
 }
 

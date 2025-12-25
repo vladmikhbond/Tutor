@@ -191,7 +191,7 @@ async def post_lecture_picture(
         db.rollback()
         return {"error": str(e)}
 
-# ----------------------- trans 
+# ----------------------- trans(lation to html)
 
 @router.get("/trans/{id}")
 async def get_lecture_trans(

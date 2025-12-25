@@ -1,4 +1,5 @@
-TODO
+TODO:
+sql queries
 
 стандартні сольорові схеми (templates/lecture/edit.html)
 світла тема (output/sys/engine.css)

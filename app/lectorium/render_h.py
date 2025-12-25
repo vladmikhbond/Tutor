@@ -38,8 +38,7 @@ class RenderHtml:
 
     def html_doc(self, content):
         """
-           Кінцева html сторінка.
-           Обирає світлу або темну тему редактора ace9.
+           html сторінка.
         """
         title = self.slides[0].text
         
