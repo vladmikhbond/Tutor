@@ -167,11 +167,51 @@ async def post_disc_del(
     db.commit()
     return RedirectResponse(url="/disc/list", status_code=302)
 
+# ------- saving
+
+@router.get("/save/{id}")
+async def get_save(
+    id: int, 
+    request: Request, 
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_tutor)
+):
+    """ 
+    Збереження дисципліни.
+    """
+    disc = db.get(Disc, id)
+    if not disc:
+        raise HTTPException(404, f"Saving of disc id={id} is failed.")    
+    return save_zip(disc, db) 
+
+
+def save_zip(disc: Disc, db: Session):
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, 'w', zipfile.ZIP_DEFLATED) as zf:
+
+        # Запакувати лекції         
+        for lecture in disc.lectures:
+            tuned_title = tune(lecture.title)
+            zf.writestr(tuned_title + ".txt", lecture.content)
+        # Запакувати малюнки
+        pictures: List[Picture] = db.query(Picture).filter(Picture.disc_id == lecture.disc_id ).all()
+        for picture in pictures:
+            zf.writestr(f"pic/{picture.title}", picture.image)
+
+    # Повернути файл [назва_дисципліни].txt.zip
+    buffer.seek(0)
+    return StreamingResponse(
+            buffer,
+            media_type="application/zip",
+            headers={"Content-Disposition": f"attachment; filename={tune(disc.title)}.txt.zip"}
+        )
+
+
 
 # ------- export
 
 @router.get("/export/{id}")
-async def get_export_del(
+async def get_export(
     id: int, 
     request: Request, 
     db: Session = Depends(get_db),
@@ -183,11 +223,10 @@ async def get_export_del(
     disc = db.get(Disc, id)
     if not disc:
         raise HTTPException(404, f"Export of disc id={id} is failed.")
-    
-    return export_n_zip(disc, db) 
+    return export_zip(disc, db) 
 
 
-def export_n_zip(disc: Disc, db: Session):
+def export_zip(disc: Disc, db: Session):
     buffer = io.BytesIO()
     with zipfile.ZipFile(buffer, 'w', zipfile.ZIP_DEFLATED) as zf:
 
