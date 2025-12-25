@@ -1,21 +1,10 @@
 TODO
-token_router
-
 
 стандартні сольорові схеми (templates/lecture/edit.html)
 світла тема (output/sys/engine.css)
 
-
 статистика по студентм - задачі, тести з датами
 
-
-
---- збірка і запуск продуктового контейнеру pss_cont
-
-cd c:\git\dock\psscont
-docker build -t pss_img .
-docker run -d --env-file env --network mynet -p 7000:7000 -v C:\Git\PY\DBconverter:/data --name pss_cont pss_img
-docker save -o c:\docker_bag\pss.tar pss_img
 
 --- збірка і запуск продуктового контейнеру tutor_cont
 
