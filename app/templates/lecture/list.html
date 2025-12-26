@@ -19,15 +19,16 @@
 <table>
   <tbody>
     {% for lecture in disc.lectures %}
+    {% set weight = 700 if lecture.is_public else 400 %}
     <tr>
-      <td>
-        {{ lecture.title }}
+      <td style="font-weight: {{weight}};">
+        <a href="/lecture/public/{{lecture.id}}"> {{ lecture.title }} </a>
         <span style="margin-left: 20px; font-size: small;">{{lecture.volume // 100 / 10}}</span>
-        </td>
+      </td>
       <td>
         
         <a href="/lecture/edit/{{lecture.id}}">edit</a> | 
-        <a href="/lecture/trans/{{lecture.id}}">play</a> | 
+        <a href="/lecture/play/{{lecture.id}}">play</a> | 
         <a href="/lecture/del/{{lecture.id}}">del</a>
       </td>
     </tr>

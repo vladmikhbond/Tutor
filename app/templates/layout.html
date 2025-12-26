@@ -13,12 +13,20 @@
         <nav>
         <ul>
             <li style="color: darkred"><strong>Tutor</strong></li>
+            <li style="margin-left: 1rem;">
+            </li>
         </ul>
         <ul>
             <li><a href="/disc/list">Disciplines</a></li>
             <li><a href="/user/list">Users</a></li>
             <li><a href="/static/help.html">Help</a></li>
-            <li><a href="/logout">Bye</a></li>
+            <li><a href="/logout">
+                {% if request.state.user %}
+                    Привіт, {{ request.state.user.username }}
+                {% else %}
+                    Привіт!
+                {% endif %}
+            </a></li>
         </ul>
         </nav>
         {% block content %}{% endblock %}

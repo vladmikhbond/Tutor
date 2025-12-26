@@ -36,6 +36,22 @@ async def get_lecture_list(
     return templates.TemplateResponse("lecture/list.html", 
             {"request": request, "disc": disc})
 
+@router.get("/public/{id}")
+async def get_lecture_public(
+    request: Request, 
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_tutor)
+):
+    """ 
+    Змінити is_public на протилежне.
+    """   
+    lecture = db.get(Lecture, id)
+    lecture.is_public = not lecture.is_public
+    db.commit()
+    return RedirectResponse(url=f"/lecture/list/{lecture.disc_id}", status_code=302)
+
+
 
 # ------- new 
 
@@ -194,8 +210,8 @@ async def post_lecture_picture(
 
 # ----------------------- trans(lation to html)
 
-@router.get("/trans/{id}")
-async def get_lecture_trans(
+@router.get("/play/{id}")
+async def get_lecture_play(
     id: int,
     slide_no: int = 0,
     db: Session = Depends(get_db),
