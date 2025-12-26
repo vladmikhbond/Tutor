@@ -4,7 +4,6 @@ from fastapi import APIRouter, Depends, HTTPException, Request, Form, Response, 
 from fastapi.responses import RedirectResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
-from app.routers.filter_router import get_user_filter
 from ..models.pss_models import User
 from .login_router import get_current_tutor
 from ..dal import get_users_db  # Функція для отримання сесії БД
@@ -15,6 +14,10 @@ from ..dal import get_users_db  # Функція для отримання се�
 templates = Jinja2Templates(directory="app/templates")
 
 router = APIRouter()
+
+from urllib.parse import unquote
+USER_FILTER_KEY = "TUTOR_user_filter"
+
 
 # ----------------------- list
 
@@ -28,7 +31,7 @@ async def get_user_list(
     Усі відфільтровані користувачи.
     """  
     users = db.query(User).all()
-    filter = get_user_filter(request) 
+    filter = unquote(request.cookies.get(USER_FILTER_KEY, "")).strip()
 
     if filter:
         users = [u for u in users if re.search(filter, u.username, re.RegexFlag.U) is not None] 

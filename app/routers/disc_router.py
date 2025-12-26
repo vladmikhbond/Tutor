@@ -187,8 +187,9 @@ async def get_save(
 
 def save_zip(disc: Disc, db: Session):
     buffer = io.BytesIO()
-    with zipfile.ZipFile(buffer, 'w', zipfile.ZIP_DEFLATED) as zf:
+    disc.lectures.sort(key = lambda l: l.title)
 
+    with zipfile.ZipFile(buffer, 'w', zipfile.ZIP_DEFLATED) as zf:
         # Запакувати лекції         
         for lecture in disc.lectures:
             tuned_title = tune(lecture.title)

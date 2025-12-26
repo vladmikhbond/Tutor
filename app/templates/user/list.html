@@ -5,20 +5,14 @@
 {% block content %}
     
 <h2>Users</h2> 
-
-  {# ------------ Filter form -------------- #} 
-  <form action="/filter/user" method="post" class="inline">
     
-    <fieldset role="group" style="margin-top: 16px;"  class="inline">
-      <a href="/user/new" style="margin-right: 60px;"  class="inline">New Users</a>
-      <input name="filter_value" style=" width: 200px;" title="User filter" value="{{filter_val}}">        
-      <button type="submit"  title="User filter">Filter</button>
-      <a href="https://regex101.com/" style="color: gray;">regex</a>  
-    </fieldset>
-      <input type="hidden" name="referer" value="{{request.url.path}}" > 
-      
-  </form>
-
+<fieldset role="group">
+  <a href="/user/new">New Users</a>
+  <input id="user_filter" title="Фільтр користувачів" style="max-width: 200px; height: 15px;"> 
+  <a href="https://regex101.com/" style="color: gray; margin-left: 20px;">regex</a>  
+</fieldset>
+<input type="hidden" name="referer" value="{{request.url.path}}" > 
+  
 
 {% if users and users|length %}
 <table>
@@ -40,4 +34,8 @@
   </div>
 {% endif %}
 
+{% endblock %}
+
+{% block script %}
+<script src="/static/js/user_list.js" type="text/javascript" charset="utf-8"></script>
 {% endblock %}
