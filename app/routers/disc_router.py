@@ -12,7 +12,7 @@ from sqlalchemy.orm import Session
 
 from app.models.pss_models import User
 
-from ..models.models import Disc, Picture
+from ..models.models import Disc, Lecture, Picture
 from ..routers.login_router import get_current_tutor
 from ..dal import get_db  # Функція для отримання сесії БД
 from ..lectorium.converter import convert, tune
@@ -227,11 +227,14 @@ async def get_export(
 
 
 def export_zip(disc: Disc, db: Session):
+    # Get the public lectures only
+    lectures = db.query(Lecture).filter(Lecture.disc_id == disc.id).filter(Lecture.is_public).all()
+    lectures.sort(key = lambda l: l.title)
+    
     buffer = io.BytesIO()
-    with zipfile.ZipFile(buffer, 'w', zipfile.ZIP_DEFLATED) as zf:
-
-        # Запакувати лекції         
-        for lecture in disc.lectures:
+    with zipfile.ZipFile(buffer, 'w', zipfile.ZIP_DEFLATED) as zf:        
+        # Запакувати лекції
+        for lecture in lectures:
             html = convert(lecture.content, lecture.disc.lang, lecture.disc.theme, version="student")
             tuned_title = tune(lecture.title)
             zf.writestr(tuned_title + ".html", html)
@@ -239,14 +242,14 @@ def export_zip(disc: Disc, db: Session):
         # Створити і запакувати індекс
         FAKE_HTTP = "http://"
         index_content = f"@2 {disc.title}\n"
-        for lecture in disc.lectures:
+        for lecture in lectures:
             index_content += f"@3 [[{FAKE_HTTP}{tune(lecture.title)}.html|{lecture.title}]]\n"
         index_html = convert(index_content, disc.lang, disc.theme, version="student")
         index_html = index_html.replace(FAKE_HTTP, "")
         zf.writestr("index.html", index_html)
         
         # Запакувати малюнки
-        pictures: List[Picture] = db.query(Picture).filter(Picture.disc_id == lecture.disc_id ).all()
+        pictures: List[Picture] = db.query(Picture).filter(Picture.disc_id == Picture.disc_id ).all()
         for picture in pictures:
             zf.writestr(f"pic/{picture.title}", picture.image)
         

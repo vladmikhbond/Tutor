@@ -31,6 +31,7 @@ async def get_lecture_list(
     Усі лекції із згаданої дисципліни.
     """   
     disc = db.get(Disc, disc_id)
+    disc.lectures.sort(key=lambda l: l.title)
 
     return templates.TemplateResponse("lecture/list.html", 
             {"request": request, "disc": disc})
