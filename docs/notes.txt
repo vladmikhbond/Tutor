@@ -9,6 +9,10 @@ sql queries
 
 --- збірка і запуск продуктового контейнеру tutor_cont
 
+docker stop tutor_cont
+docker rm tutor_cont
+docker rmi tutor_img
+
 cd c:\git\dock\Tutor
 docker build -t tutor_img .
 docker run -d --env-file env --network mynet -p 7003:7003 -v C:\Git\PY\DBconverter:/data   --name tutor_cont  tutor_img
