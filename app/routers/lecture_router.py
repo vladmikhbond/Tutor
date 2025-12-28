@@ -193,7 +193,7 @@ async def post_lecture_picture(
         db.rollback()
         return {"error": str(e)}
 
-# ----------------------- trans(lation to html)
+# ----------------------- play = translation to html
 
 @router.get("/play/{id}")
 async def get_lecture_play(
@@ -204,7 +204,7 @@ async def get_lecture_play(
 ):
     """ 
     Трансляція лекції у версії "tutor".
-    Отримує лекцію з БД і створює файл {disc.title}.html і папку pic в папці app/static/output
+    Отримує лекцію з БД і створює файл [disc.title].html і папку pic в папці app/static/output
     """
     lecture = db.get(Lecture, id)
     if not lecture:

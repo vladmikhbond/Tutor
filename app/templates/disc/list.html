@@ -3,10 +3,12 @@
 {% block title %}{% endblock %}
 
 {% block content %}
+
     
 <h2>Disciplines</h2>
 
 <a href="/disc/new" style="margin-right: 60px;">New Disc</a>
+<a href="/disc/clear" style="margin-right: 60px;" title="Clear output folder">🧹</a>
 
 {% if discs and discs|length %}
 <table>

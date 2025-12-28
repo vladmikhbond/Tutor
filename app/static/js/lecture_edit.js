@@ -11,7 +11,7 @@ document.getElementById("playLink").addEventListener("click", (e) => {
   const slide_no = [...str].reduce((n, ch) => n + MARKS.includes(ch), 0) - 1;
   // 
   const lecture_id = document.getElementById("lecture_id").value;
-  window.location.href = `/lecture/trans/${lecture_id}?slide_no=${slide_no}`;
+  window.location.href = `/lecture/play/${lecture_id}?slide_no=${slide_no}`;
 });
 
 //#endregion

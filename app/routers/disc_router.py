@@ -46,6 +46,7 @@ async def get_disc_list(
             {"request": request, "discs": discs})
 
 
+
 # ------- new
 
 @router.get("/new")
@@ -275,8 +276,28 @@ def zip_sys(zf):
     arc("engine.css")
     arc("engine.js")
     zf.write("app/static/output/sys/pic/pensil.png", "sys/pic/pensil.png")
-    
-    
+
+# --------------------------- clear output
+   
+@router.get("/clear")
+async def get_disc_clear(
+    request: Request,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_tutor)
+):
+    """ 
+    Спустошує вихідну папку.
+    """   
+    return remove_files("app/static/output")
+
+def remove_files(path):
+    count_files = 0
+    for root, dirs, files in os.walk(path):  
+        for file in files:
+            if not (root.endswith("/sys") or root.endswith("/sys/pic")):
+                os.remove(os.path.join(root, file)) 
+                count_files += 1
+    return count_files
 # =================================================================================================================
 
 # експортує на диск - мабуть зайве
@@ -312,22 +333,4 @@ def export_disc(disc: Disc, db: Session):
 
 
 
-
-# not used yet
-def clear_output_folder():
-    """
-    Видаляє усе, крім папки sys. Папку pic спустошує. 
-    """
-    folder = "app/static/output"
-    exclude = "sys"
-
-    for name in os.listdir(folder):
-        path = os.path.join(folder, name)
-        if name == exclude:
-            continue
-        if os.path.isdir(path):
-            shutil.rmtree(path)
-        else:
-            os.remove(path)
-    os.mkdir(folder + "/pic")
 
