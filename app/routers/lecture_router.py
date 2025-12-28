@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request, Form, File, Uplo
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 from ..models.models import Disc, Lecture, Picture
 from ..models.pss_models import User
@@ -216,20 +217,29 @@ async def get_lecture_play(
     return RedirectResponse(url, status_code=302)
 
 
-def export_lecture(lecture: Lecture, dst:str, db:Session, version: str, slide_no: int):
+def export_lecture(lecture: Lecture, dst_path:str, db:Session, version: str, slide_no: int):
 
     # create file {lect_title}.html
     html = convert(lecture.content, lecture.disc.lang, lecture.disc.theme, version, slide_no)
     tuned_title = tune(lecture.title)
-    with open(f"{dst}/{tuned_title}.html", "w") as f:
+    with open(f"{dst_path}/{tuned_title}.html", "w") as f:
         f.write(html)
     
-    # create folder pic
-    lines = get_style(lecture.content, 2)
-    pictures: List[Picture] = db.query(Picture).filter(
-            Picture.disc_id == lecture.disc_id and Picture.title in lines).all()
+    # select pictures from the lecture
+    lines = [l.lower() for l in get_style(lecture.content, 2)]
+
+    pictures = (
+        db.query(Picture)
+        .filter(
+            Picture.disc_id == lecture.disc_id,
+            func.lower(Picture.title).in_([s.lower() for s in lines])
+        )
+        .all()
+    )
+        
+    # create folder 'pic'
     for picture in pictures:
-        with open(f"{dst}/pic/{picture.title}", "bw") as f:
+        with open(f"{dst_path}/pic/{picture.title}", "bw") as f:
             f.write(picture.image)
     return tuned_title
      
