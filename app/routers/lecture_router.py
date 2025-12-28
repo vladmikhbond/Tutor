@@ -29,14 +29,13 @@ async def get_lecture_list(
     user: User = Depends(get_current_tutor)
 ):
     """ 
-    Усі лекції із згаданої дисципліни.
+    Усі лекції певної дисципліни.
     """   
     disc = db.get(Disc, disc_id)
     disc.lectures.sort(key=lambda l: l.title)
 
     return templates.TemplateResponse("lecture/list.html", 
             {"request": request, "disc": disc})
-
 
 
 # ------- new 
@@ -225,7 +224,7 @@ def export_lecture(lecture: Lecture, dst_path:str, db:Session, version: str, sli
     with open(f"{dst_path}/{tuned_title}.html", "w") as f:
         f.write(html)
     
-    # select pictures from the lecture
+    # select all picture names from the lecture
     lines = [l.lower() for l in get_style(lecture.content, 2)]
 
     pictures = (
@@ -285,7 +284,7 @@ async def get_lecture_public(
     user: User = Depends(get_current_tutor)
 ):
     """ 
-    Змінити значення is_public на протилежне.
+    Змінити значення поля is_public на протилежне.
     """   
     lecture = db.get(Lecture, id)
     lecture.is_public = not lecture.is_public
