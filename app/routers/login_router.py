@@ -66,14 +66,21 @@ async def login(
     )
     return redirect    
 
-@router.get("/logout")
-async def logout(response: Response):
-    response.delete_cookie(
-        key="access_token"
-    )
-    return {"message": "Session ended"}   
+@router.get("/login/logout")
+async def logout(request: Request):
+    resp = templates.TemplateResponse("login/login.html", {"request": request})
+    resp.delete_cookie("access_token", path="/")
+    return resp
 
-# =================================================================
+# -------------------------- help
+
+@router.get("/login/help")
+async def logout(request: Request, response: Response):
+    
+    return templates.TemplateResponse("login/help.html", {"request": request})  
+
+# ---------------------------- aux
+
 
 # Containeer of the token is cookie
 cookie_scheme = APIKeyCookie(name="access_token")

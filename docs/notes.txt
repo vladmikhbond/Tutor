@@ -1,5 +1,6 @@
 TODO:
 sql queries
+help
 
 стандартні кольорові схеми (templates/lecture/edit.html)
 світла тема (output/sys/engine.css)

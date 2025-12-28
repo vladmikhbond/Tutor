@@ -19,8 +19,8 @@
         <ul>
             <li><a href="/disc/list">Disciplines</a></li>
             <li><a href="/user/list">Users</a></li>
-            <li><a href="/static/help.html">Help</a></li>
-            <li><a href="/logout">
+            <li><a href="/login/help">❓</a></li>
+            <li><a href="/login/logout">
                 {% if request.state.user %}
                     Привіт, {{ request.state.user.username }}
                 {% else %}
