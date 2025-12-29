@@ -101,3 +101,35 @@ def get_current_tutor(token: str = Security(cookie_scheme)) -> User:
     if user.role != "tutor":
         raise HTTPException(status_code=403, detail="Permission denied: tutors only.")
     return user
+
+
+# -------------------------------- Аналітика перегляду декцій (не використовується)
+
+
+from fastapi.responses import Response
+import json
+import time
+
+@router.post("/analytics/leave")
+async def analytics_leave(request: Request):
+    body = await request.body()
+
+    try:
+        data = json.loads(body)
+    except Exception:
+        data = {}
+
+    analytics_record = {
+        "timestamp": int(time.time()),
+        "ip": request.client.host if request.client else None,
+        "user_agent": request.headers.get("user-agent"),
+        "url": data.get("url"),
+        "referrer": data.get("referrer"),
+        "duration_ms": data.get("duration"),
+    }
+
+    # Тут зберігаєш у БД / файл / лог
+    print(analytics_record)
+
+    # ВАЖЛИВО: sendBeacon очікує 204 або 200 без тіла
+    return Response(status_code=204)

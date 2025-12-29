@@ -239,7 +239,7 @@ function canvasPainter() {
     };
 }
 
-//-------------------------------- Масштабування зображіень ----------------------
+//-------------------------------- Масштабування зображень ----------------------
 
 // Зміна розміру зображення по кліку миші на зображенні
 
@@ -276,4 +276,35 @@ function img_size(e) {
     img.style.height = (h * k) + 'px';
     img.style.width  = (w * k) + 'px';
 }
+
+// ---------------------------- Дані для аналітики перегляду лекцій (не використовується)
+
+(function () {
+    let startTime = Date.now();
+    let sent = false;
+
+    function sendAnalytics() {
+        // блокує повторне посилання
+        if (sent) return;
+        sent = true;
+
+        const data = {
+            url: location.href,
+            referrer: document.referrer,
+            duration: Date.now() - startTime
+        };
+
+        navigator.sendBeacon(
+            "/analytics/leave",
+            JSON.stringify(data)
+        );
+    }
+
+    document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "hidden") {
+            sendAnalytics();
+        }
+    });
+})();
+
 
