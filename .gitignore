@@ -1,7 +1,9 @@
-app/static/output/*.html
-app/static/output/pic
-app/export
+app/static/output/*
+!app/static/output/sys
+!app/static/output/sys/**
 
+app/export/*
+*.tar
 
 # Python
 __pycache__/
@@ -22,7 +24,6 @@ nosetests.xml
 coverage.xml
 *.cover
 
-# Environment variables
-.env.local
-.env.*
-*.tar
+
+
+
