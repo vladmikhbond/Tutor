@@ -237,6 +237,43 @@ function canvasPainter() {
             e.preventDefault(); 
         }
     };
+}
 
+//-------------------------------- Масштабування зображіень ----------------------
+
+// Зміна розміру зображення по кліку миші на зображенні
+
+if (VERSION === 'tutor') {
+    document.querySelectorAll('.alef3 > img').forEach(img => {
+        img.addEventListener('mousedown', img_size);
+    });
+}
+
+
+// Зменшення зображень після завантаження картинок
+window.addEventListener("load", function() {
+    document.querySelectorAll('.alef3 > img').forEach((img) => {
+        const k = 0.9; 
+        while (img.height > window.innerHeight/2 || img.width > window.innerWidth/2) {
+            img.height *= k; 
+            img.width *= k;
+        }
+    });
+});
+
+
+// Зміна розміру зображення
+function img_size(e) {
+    let k = 1.4141;
+    const img = e.target;
+    const h = img.height;
+    const w = img.width;
+
+    if (e.button !== 0) { // права кнопка миші
+        k = 1 / k;
+    }
+
+    img.style.height = (h * k) + 'px';
+    img.style.width  = (w * k) + 'px';
 }
 
