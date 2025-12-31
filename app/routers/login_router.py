@@ -14,7 +14,6 @@ from ..models.pss_models import User
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
 TOKEN_LIFETIME = int(os.getenv("TOKEN_LIFETIME", "180"))
-# PSS_HOST = os.getenv("PSS_HOST")
 
 # шаблони Jinja2
 templates = Jinja2Templates(directory="app/templates")
