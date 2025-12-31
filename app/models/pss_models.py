@@ -32,8 +32,7 @@ class User(Base):
     
     hashed_password: Mapped[bytes] = mapped_column(LargeBinary)
     role: Mapped[str] = mapped_column(String)     # 'student', 'tutor', 'admin'
-    # nav
-    tickets: Mapped[list["Ticket"]] = relationship(back_populates="user", cascade="all, delete-orphan")
+
 
 # =============================================================
 
@@ -63,14 +62,13 @@ class User(Base):
  
 #     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
 
-#     username: Mapped[str] = mapped_column(String, ForeignKey("users.username", ondelete="CASCADE"))
+#     username: Mapped[str] = mapped_column(String)
 #     problem_id: Mapped[str] = mapped_column(String, ForeignKey("problems.id", ondelete="CASCADE")) 
 #     records: Mapped[str] = mapped_column(Text, default="")
 #     comment: Mapped[str] = mapped_column(String)
 #     expire_time: Mapped[datetime] = mapped_column(DateTime)
 #     state: Mapped[int] = mapped_column(Integer, default=0) # 1 - problem is solved
 #     #  nav
-#     user: Mapped["User"] = relationship(back_populates="tickets")
 #     problem: Mapped["Problem"] = relationship(back_populates="tickets")
 
 #     def do_record(self, solving, check_message):  
