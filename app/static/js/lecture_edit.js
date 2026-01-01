@@ -1,20 +1,6 @@
 const content = document.getElementById("content");
 
-//#region --------------------- for Play link ---------------------
 
-document.getElementById("playLink").addEventListener("click", (e) => {
-  e.preventDefault();
-
-  // calculate slide nomber
-  const caretPos = content.selectionStart;
-  const str = content.value.slice(0, caretPos);
-  const slide_no = [...str].reduce((n, ch) => n + MARKS.includes(ch), 0) - 1;
-  // 
-  const lecture_id = document.getElementById("lecture_id").value;
-  window.location.href = `/lecture/play/${lecture_id}?slide_no=${slide_no}`;
-});
-
-//#endregion
 
 //#region --------------------- for confext menu ---------------------
 
@@ -137,6 +123,27 @@ window.addEventListener('load', function (e) {
 
 //#endregion
 
+//#region --------------------- for Play link ---------------------
+
+document.getElementById("playLink").addEventListener("click", async (e) => {
+  e.preventDefault();
+
+  await saveLecture();
+
+  // calculate slide_no
+  const caretPos = content.selectionStart;
+  const str = content.value.slice(0, caretPos);
+  const slide_no = [...str].reduce((n, ch) => n + MARKS.includes(ch), 0) - 1;
+
+  // open html of the lecture
+  const lecture_id = document.getElementById("lecture_id").value;
+  const href = `/lecture/play/${lecture_id}?slide_no=${slide_no}`;
+  window.open(href, "_blank");
+});
+
+//#endregion
+
+
 //#region --------------------- for save lection ---------------------------
 
 // The '*' indices if the content.value changed.
@@ -167,7 +174,9 @@ window.onbeforeunload = function (e) {
     }
 };
 
-async function saveLecture() {
+async function saveLecture() 
+{
+  asterisk.innerHTML = "";
 
   const data = new FormData(edit_form); 
   try 
@@ -182,11 +191,11 @@ async function saveLecture() {
     }
   } 
   catch (err) 
-  {
+  {      
+    asterisk.innerHTML = "*";
     alert(`Saving lecture error: ${err.message}`);
   }
 
-  asterisk.innerHTML = "";
 }
 
 //#endregion
