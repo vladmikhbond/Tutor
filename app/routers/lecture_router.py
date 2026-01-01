@@ -1,7 +1,9 @@
+import os
 import re
 import datetime as dt
+import shutil
 from typing import List
-from fastapi import APIRouter, Depends, HTTPException, Request, Form, File, UploadFile
+from fastapi import APIRouter, Depends, HTTPException, Request, Form, File, Response, UploadFile
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 
@@ -290,4 +292,56 @@ async def get_lecture_public(
     lecture.is_public = not lecture.is_public
     db.commit()
     return RedirectResponse(url=f"/lecture/list/{lecture.disc_id}", status_code=302)
+
+# -----------------------------------------------------------------------------
+
+@router.get("/publish/{disc_id}")
+async def get_lecture_public(
+    request: Request, 
+    disc_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_tutor)
+):
+    """ 
+    Опублікувати відкриті лекції дисципліни.
+    """  
+    PATH_TO_PUBLIC = "/data/public/" 
+
+    disc = db.get(Disc, disc_id)
+    report = export_disc(disc, db, PATH_TO_PUBLIC + tune(disc.title))
+    return Response(content=report, media_type="text/plain")
+
+
+def export_disc(disc: Disc, db: Session, dst: str):
+
+    PATH_TO_SYS = "app/static/output/sys"
+
+    # Якщо папка дисципліни вже існує, видалити її
+    if os.path.exists(dst):
+        shutil.rmtree(dst)
+    
+    # Створити папку з підпапками sys і pic
+    os.mkdir(dst)
+    shutil.copytree(PATH_TO_SYS, f"{dst}/sys")
+    os.mkdir(dst + "/pic")
+    
+    # Зберігти лекції
+    report = ""
+    index_content = f"@2 {disc.title}\n"
+    lectures = sorted((l for l in disc.lectures), key=lambda l: l.title)
+    for lecture in lectures:
+        if lecture.is_public:
+            tuned_title = export_lecture(lecture, dst, db, version="student", slide_no=100500)
+            index_content += f"@3 [[http://{tuned_title}.html|{lecture.title}]]\n"
+            report += lecture.title + "\n"
+    
+    # Зберігти індекс
+    index_html = convert(index_content, disc.lang, disc.theme, version="student") \
+                .replace("http://", "")  
+    fname = f"{dst}/index.html"
+    with open(fname, "w") as f:
+        f.write(index_html)
+
+    return report
+
 

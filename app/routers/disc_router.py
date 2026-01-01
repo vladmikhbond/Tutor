@@ -220,15 +220,15 @@ async def get_export(
     user: User = Depends(get_current_tutor)
 ):
     """ 
-    Експорт дисципліни.
+    Експорт дисципліни у вигляді zip файлу.
     """
     disc = db.get(Disc, id)
     if not disc:
         raise HTTPException(404, f"Export of disc id={id} is failed.")
-    return export_zip(disc, db) 
+    return zip_disc(disc, db) 
 
 
-def export_zip(disc: Disc, db: Session):
+def zip_disc(disc: Disc, db: Session):
     # Get the public lectures only
     lectures = db.query(Lecture).filter(Lecture.disc_id == disc.id).filter(Lecture.is_public).all()
     lectures.sort(key = lambda l: l.title)
@@ -300,36 +300,7 @@ def remove_files(path):
     return count_files
 # =================================================================================================================
 
-# експортує на диск - мабуть зайве
 
-def export_disc(disc: Disc, db: Session):
-
-    sys = "app/static/output/sys"
-    dst = f"app/export/{disc.title}"
-
-    # Якщо папка {disc.title} вже існує — видалити 
-    if os.path.exists(dst):
-        shutil.rmtree(dst)
-    
-    # Створити папку з підпапками sys і pic
-    os.mkdir(dst)
-    shutil.copytree(sys, f"{dst}/sys")
-    os.mkdir(dst + "/pic")
-    
-    # Зберігти лекції 
-    index_content = f"@2 {disc.title}\n"
-    for lecture in disc.lectures:
-        tuned_title = export_lecture(lecture, dst, db, version="student", slide_no=100500)
-        index_content += f"@3 [[http://{tuned_title}.html|{lecture.title}]]\n"
-    
-    # Зберігти індекс
-    html = convert(index_content, disc.lang, disc.theme, version="student")
-
-    html = html.replace("http://", "")  
-    fname = f"{dst}/index.html"
-    with open(fname, "w") as f:
-        f.write(html)
-    return fname
 
 
 

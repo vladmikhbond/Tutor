@@ -3,7 +3,7 @@
 {% block title %}{% endblock %}
 
 {% block content %}
- 
+{#------------------- filters -------------------#}
 <nav>
   <h2 class="inline">{{disc.title}}</h2>
   <form class="inline" method="post" action="/lecture/search/{{disc.id}}">
@@ -13,7 +13,11 @@
     </fieldset>
   </form>
 </nav>
+
 <a href="/lecture/new/{{disc.id}}" style="margin-right: 60px;">New lecture</a>
+<a href="/lecture/publish/{{disc.id}}" style="margin-right: 60px;">Publish</a>
+
+{#------------------- lectures ------------------#}
 
 {% if disc.lectures and disc.lectures|length %}
 <table>
