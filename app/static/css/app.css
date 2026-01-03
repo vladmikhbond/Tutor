@@ -1,3 +1,7 @@
+html {
+  font-size: 100%;
+}
+
 /* однакова висота кнопок схвалення і відмови на формах */
 footer.grid button,
 footer.grid a[role="button"] {

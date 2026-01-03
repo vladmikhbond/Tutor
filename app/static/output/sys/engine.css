@@ -1,6 +1,7 @@
 /* цей файл має знаходитися у папці sys */
 
 :root {
+    /* --pico-scale: 0.75; */
     --border-radius: 6px;
 }
 
@@ -115,7 +116,7 @@ body {
 .alef6 table * {
     background: var(--aux-color) !important;
     color: var(--text-color) !important;
-    border-color: var(--header-color) !important;
+    border-color: var(--link-color) !important;
     border: solid 1px;
 }
 
