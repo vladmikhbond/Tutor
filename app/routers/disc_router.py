@@ -23,9 +23,9 @@ templates = Jinja2Templates(directory="app/templates")
 
 router = APIRouter()
 
-COLOR_NAMES = ["page_bg", "header", "text", "bg", "link", "aux"]
+COLOR_NAMES = ["page-bg", "header", "text", "bg", "link", "aux"]
 DEFAULT_LIGHT_COLORS = {
-    "page_bg": "#edf2f8", "header": "#0000ff", "text": "#000080", 
+    "page-bg": "#edf2f8", "header": "#0000ff", "text": "#000080", 
     "bg": "#e6eef5", "link": "#d3589b", "aux": "#ffffff"
 }
 
@@ -298,7 +298,6 @@ def remove_files(path):
                 os.remove(os.path.join(root, file)) 
                 count_files += 1
     return count_files
-# =================================================================================================================
 
 
 

@@ -29,19 +29,19 @@ body {
 /* -------------- slides ---------------- */
 
 .alef3.foc{
-    border-color: var(--link-color);
+    /* border-color: var(--link-color);
     border-style: solid;
     border-width: 3px;
-    border-radius: var(--border-radius);
-    background-color: var(--page-bg-color);
+    border-radius: var(--border-radius); */
+    background-color: var(--aux-color);
     margin-top: 8px; 
     padding: 8px;
     font-size: 16px;
 }
 
 .alef3, 
-.alef4, 
-.alef6 { 
+.alef4
+{ 
     color: var(--text-color);
     font-size: 14px;
     font-weight: 400;
@@ -106,7 +106,7 @@ body {
 
 .ace-github, 
 .ace-github .ace_scroller {
-    background-color: var(--page_bg-color) !important;
+    background-color: var(--page-bg-color) !important;
     border: solid thin;
     border-color: var(--header-color);
 
@@ -115,7 +115,8 @@ body {
 .alef6 table * {
     background: var(--aux-color) !important;
     color: var(--text-color) !important;
-    border-color: var(--text-color) !important;
+    border-color: var(--header-color) !important;
+    border: solid 1px;
 }
 
 .alef6 table thead,

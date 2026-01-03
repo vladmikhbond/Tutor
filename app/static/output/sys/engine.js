@@ -7,8 +7,8 @@
 
 // ------------------------------- globals ------------------------------------------
 
-const COLOR_NAMES = ["page_bg", "header", "text", "bg", "link", "aux"];
-const DARK_COLORS = {"page_bg": "#666", "header": "#f9f9ffff", "text": "#fff", "bg": "#444", "link": "#888"};
+const COLOR_NAMES = ["page-bg", "header", "text", "bg", "link", "aux"];
+const DARK_COLORS = {"page-bg": "#666", "header": "#f9f9ffff", "text": "#fff", "bg": "#444", "link": "#888"};
 
 let current_slide_no = START_SLIDE_NO; // номер сфокусованого слйду
 let slides = document.querySelectorAll("#lecture > div");
