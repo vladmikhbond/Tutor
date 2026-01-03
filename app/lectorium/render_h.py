@@ -143,9 +143,18 @@ class RenderHtml:
     def render6(self, slide: Slide, ord_no: int):
         content = '<table><thead>'
         lines = slide.text.strip().splitlines()
+        
+        # define separator
+        line0 = lines[0].strip()
+
+        SEP = ',' 
+        if len(line0) == 1:
+            SEP = line0[0]
+            lines = lines[1:]
+
         # table header 
         content += '<tr><th>'
-        cells = lines[0].split(',')
+        cells = lines[0].split(SEP)
         cells = [c.strip() for c in cells]
         content += '</th><th>'.join(cells)
         
@@ -154,7 +163,7 @@ class RenderHtml:
         # table body
         for line in lines[1:]:
             content += '<tr><td>'
-            cells = line.split(',')
+            cells = line.split(SEP)
             cells = [c.strip() for c in cells]
             content += '</td><td>'.join(cells)
             content += '</td></tr>'
