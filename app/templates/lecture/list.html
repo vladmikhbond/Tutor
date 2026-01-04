@@ -25,7 +25,7 @@
     {% for lecture in disc.lectures %}
     {% set weight = 700 if lecture.is_public else 400 %}
     <tr>
-      <td style="font-weight: {{weight}};">
+      <td style="font-weight: {{weight}}; width: 500px;" >
         <a href="/lecture/public/{{lecture.id}}"> {{ lecture.title }} </a>
         <span style="margin-left: 20px; font-size: small;">{{lecture.volume // 100 / 10}}</span>
       </td>

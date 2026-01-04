@@ -96,22 +96,23 @@ body {
 .ace_editor { 
     color: var(--text-color);
     font-size: 14px;
-    border-radius: var(--border-radius);
     margin-top: 2px; 
+
     line-height: 1.6 !important;
+    border: solid thin;
+    border-color: var(--aux-color);
+    border-radius: var(--border-radius);
 }
-.ace_editor .ace_active-line {   
+
+.ace_scroller {
+    background-color: var(--page-bg-color) !important;
+        padding: 5px;
+}
+
+.ace_active-line {   
     background-color: var(--bg-color) !important;    /* рядок з кареткою */
 }
 
-
-.ace-github, 
-.ace-github .ace_scroller {
-    background-color: var(--page-bg-color) !important;
-    border: solid thin;
-    border-color: var(--header-color);
-
-}
 
 .alef6 table * {
     background: var(--aux-color) !important;

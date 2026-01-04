@@ -1,6 +1,8 @@
 TODO:
 sql queries
-help
+help про підг лекцій
+доробити OOP
+
 
 стандартні кольорові схеми (templates/lecture/edit.html)
 світла тема (output/sys/engine.css)
