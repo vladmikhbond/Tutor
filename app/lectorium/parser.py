@@ -17,7 +17,7 @@ class Slide:
 
     @property
     def text(self):
-        return self.splines[0][1]
+        return self.splines[0][1] if len(self.splines) > 0 else ""
     
     def __str__(self):
         lst = [str(spline) for spline in self.splines]

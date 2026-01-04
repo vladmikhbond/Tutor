@@ -1,3 +1,4 @@
+from http.client import HTTPException
 import re
 from typing import List, Tuple
 from .parser import Slide
@@ -21,16 +22,18 @@ class RenderHtml:
     
     def render(self) -> tuple[str, str]:
         lst: List[str] = [] 
-        
-        for i, slide in enumerate(self.slides):
-            if   slide.mark == "@1": x = self.render1(slide, i)
-            elif slide.mark == "@2": x = self.render2(slide, i)
-            elif slide.mark == "@3": x = self.render3(slide, i)
-            elif slide.mark == "@4": x = self.render4(slide, i)
-            elif slide.mark == "@5": x = self.render5(slide, i)
-            elif slide.mark == "@6": x = self.render6(slide, i)
+        try:
+            for i, slide in enumerate(self.slides):
+                if   slide.mark == "@1": x = self.render1(slide, i)
+                elif slide.mark == "@2": x = self.render2(slide, i)
+                elif slide.mark == "@3": x = self.render3(slide, i)
+                elif slide.mark == "@4": x = self.render4(slide, i)
+                elif slide.mark == "@5": x = self.render5(slide, i)
+                elif slide.mark == "@6": x = self.render6(slide, i)
 
-            lst.append(x)
+                lst.append(x)
+        except Exception as e:
+            raise HTTPException (f"ERROR: Slide {i} {slide.mark} {slide.text}")
 
         content = '\n'.join(lst)
         return self.html_doc(content)
