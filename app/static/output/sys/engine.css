@@ -28,30 +28,6 @@ body {
 
 /* -------------- slides ---------------- */
 
-.alef3.foc{
-    /* border-color: var(--link-color);
-    border-style: solid;
-    border-width: 3px;
-    border-radius: var(--border-radius); */
-    background-color: var(--aux-color);
-    margin-top: 8px; 
-    padding: 8px;
-    font-size: 16px;
-}
-
-.alef3, 
-.alef4
-{ 
-    color: var(--text-color);
-    font-size: 14px;
-    font-weight: 400;
-    border-radius: var(--border-radius);;
-    margin-top: 8px; 
-    background-color: var(--bg-color);
-    border: 3px solid var(--bg-color);
-    padding: 8px;
-}
-
 
 .alef1, .alef2  {
     font-size: 26px;
@@ -65,8 +41,24 @@ body {
     font-size: 20px;
 }
 
-.alef3 { 
-   white-space: pre-wrap;
+.alef3.foc{
+    background-color: var(--aux-color);
+    margin-top: 8px; 
+    padding: 8px;
+    font-size: 16px;
+}
+
+.alef3
+{ 
+    color: var(--text-color);
+    font-size: 14px;
+    font-weight: 400;
+    border-radius: var(--border-radius);;
+    margin-top: 8px; 
+    background-color: var(--bg-color);
+    border: 3px solid var(--bg-color);
+    padding: 8px;
+    white-space: pre-wrap;
 }
 
 .alef3 > img { 
@@ -84,11 +76,18 @@ body {
     font-family: monospace;
 }
 
-.alef4 {
+
+.alef4
+{ 
+    font-size: 14px;
+    margin-top: 8px;
+    color: var(--link-color);
+    background-color: var(--bg-color);
+    border: 3px solid var(--link-color);
+    border-radius: var(--border-radius);
+    padding: 8px;
     font-weight: bold;
     white-space: pre;
-    color: var(--link-color);
-    border: solid 3px;
 }
 
 /* .alef5 */
@@ -99,7 +98,7 @@ body {
 
     line-height: 1.6 !important;
     border: solid thin;
-    border-color: var(--aux-color);
+    border-color: var(--link-color);
     border-radius: var(--border-radius);
 }
 
@@ -109,7 +108,7 @@ body {
 }
 
 .ace_active-line {   
-    background-color: var(--bg-color) !important;    /* рядок з кареткою */
+    background-color: var(--aux-color) !important;    /* рядок з кареткою */
 }
 
 
