@@ -1,7 +1,6 @@
 /* цей файл має знаходитися у папці sys */
 
 :root {
-    /* --pico-scale: 0.75; */
     --border-radius: 6px;
 }
 
@@ -21,7 +20,7 @@
 }
 
 body {
-    background-color: var(--page-bg-color);
+    background-color: var(--body-color);
     margin-top: none;
     padding: 20px;
 } 
@@ -105,7 +104,7 @@ body {
 }
 
 .ace_scroller {
-    background-color: var(--page-bg-color) !important;
+    background-color: var(--body-color) !important;
         padding: 5px;
 }
 

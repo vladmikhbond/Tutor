@@ -8,7 +8,7 @@ class RenderHtml:
     """
     version = "student" | "tutor"
     lang = "python" | "javascript" | "csharp"
-    colors_json = {"page-bg": "#edf2f8", "header": "#0000ff", "text": "#000080", "bg": "#e6eef5", "link": "#d3589b", "aux": "#ffffff"}
+    colors_json = {"body": "#edf2f8", "header": "#0000ff", "text": "#000080", "bg": "#e6eef5", "link": "#d3589b", "aux": "#ffffff"}
     """
 
     def __init__(self, slides: List[Slide], lang:str, colors_json: str, version: str, slide_no: int):

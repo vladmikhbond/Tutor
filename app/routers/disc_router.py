@@ -23,9 +23,9 @@ templates = Jinja2Templates(directory="app/templates")
 
 router = APIRouter()
 
-COLOR_NAMES = ["page-bg", "header", "text", "bg", "link", "aux"]
+COLOR_NAMES = ["body", "header", "text", "bg", "link", "aux"]
 DEFAULT_LIGHT_COLORS = {
-    "page-bg": "#edf2f8", "header": "#0000ff", "text": "#000080", 
+    "body": "#edf2f8", "header": "#0000ff", "text": "#000080", 
     "bg": "#e6eef5", "link": "#d3589b", "aux": "#ffffff"
 }
 
