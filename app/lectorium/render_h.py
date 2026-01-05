@@ -57,7 +57,6 @@ class RenderHtml:
 <link href='sys/engine.css' type='text/css' rel='stylesheet' />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/ace.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/mode-{self.lang}.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/theme-github.min.js" id="ace_theme_link" ></script>
 
 
 <script>

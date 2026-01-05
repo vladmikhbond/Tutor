@@ -1,14 +1,15 @@
 /* цей файл має знаходитися у папці sys */
 
-// ---------------------- Параметри рендерінгу (визначені на html-сторінці)-----------------------
+// ---------------------- Параметри, визначені на html-сторінці (встановлюються при рендерінгу) -----------------------
 // const START_SLIDE_NO
 // const VERSION 
 // const LIGHT_COLORS 
 
 // ------------------------------- globals ------------------------------------------
+const DARK_COLORS = 
+   {"body": "#0a0a0a", "header": "#b2f7f1", "text": "#fff", "bg": "#242429", "link": "#8e98a527", "aux": "#524F5E"};
 
-const COLOR_NAMES = ["body", "header", "text", "bg", "link", "aux"];
-const DARK_COLORS = {"body": "#666", "header": "#f9f9ffff", "text": "#fff", "bg": "#444", "link": "#888"};
+const COLOR_NAMES = Object.getOwnPropertyNames(DARK_COLORS)
 
 let current_slide_no = START_SLIDE_NO; // номер сфокусованого слйду
 let slides = document.querySelectorAll("#lecture > div");

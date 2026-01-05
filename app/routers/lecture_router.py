@@ -278,8 +278,8 @@ async def post_lecture_picture(
 # ----------------------- mark as public
 
 
-@router.get("/public/{id}")
-async def get_lecture_public(
+@router.post("/public/{id}")
+async def post_lecture_public(
     request: Request, 
     id: int,
     db: Session = Depends(get_db),

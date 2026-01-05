@@ -23,15 +23,15 @@
 <table>
   <tbody>
     {% for lecture in disc.lectures %}
-    {% set weight = 700 if lecture.is_public else 400 %}
+    {% set checked = "checked" if lecture.is_public else "" %}
+    
     <tr>
-      <td style="font-weight: {{weight}}; width: 500px;" >
-        <a href="/lecture/public/{{lecture.id}}"> {{ lecture.title }} </a>
+      <td>
+        <input type="checkbox" {{checked}} onchange="f(event, {{lecture.id}})" >
+        <a href="/lecture/edit/{{lecture.id}}"> {{ lecture.title }} </a>
         <span style="margin-left: 20px; font-size: small;">{{lecture.volume // 100 / 10}}</span>
       </td>
       <td>
-        
-        <a href="/lecture/edit/{{lecture.id}}">edit</a> | 
         <a href="/lecture/play/{{lecture.id}}">play</a> | 
         <a href="/lecture/del/{{lecture.id}}">del</a>
       </td>
@@ -45,4 +45,13 @@
   </div>
 {% endif %}
 
+{% endblock %}
+
+{% block script %}
+<script>
+  async function f(e, lect_id) {
+    let url = `/lecture/public/${lect_id}`
+    await fetch(url, { method: "POST"});
+  }
+</script>
 {% endblock %}
