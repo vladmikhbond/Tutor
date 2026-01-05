@@ -40,10 +40,12 @@ comment.addEventListener("click", ()=> {
    let selected = content.value.slice(start, end);
    let lines = selected.split("\n");
    for (let i = 0; i < lines.length; i++) {
-      if (lines[i].slice(0, AA.length) === AA)
+      if (lines[i].slice(0, AA.length) === AA) {
           lines[i] = lines[i].slice(AA.length);
-      else
-          lines[i] = AA + lines[i];
+      } else {
+          if (lines[i].trim() !== "")
+            lines[i] = AA + lines[i];
+      }
    }
    let newSelected = lines.join("\n");
    replaceString(content, newSelected, start, end)

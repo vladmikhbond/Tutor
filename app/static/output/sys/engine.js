@@ -43,8 +43,6 @@ document.getElementById("theme_toggle").addEventListener("click", () => {
     }
 });
 
-
-
 // ---------------------------------- навігація -----------------------------
 
 document.addEventListener("keydown", (e) => {
