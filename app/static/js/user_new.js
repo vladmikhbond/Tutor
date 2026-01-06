@@ -6,15 +6,17 @@ document.getElementById("mailButton").addEventListener("click", (e) => {
   e.preventDefault();
   let addresses = namesArea.value.split("\n");
   let logins = [];
-  for (let a of addresses) {
-      a = a.trim();
-      if (!a) continue;
-      let i = a.indexOf("@");
-      if (i == -1) {
-         logins.push("ERROR: " + a)
-      } else {
-         let login = groupLetter.value + a[0].toUpperCase() + a.slice(1, i);
+  const re = /[a-zA-Z0-9]+\.([a-zA-Z0-9]+)@.*/;
+  for (let addr of addresses) {
+      addr = addr.trim();
+      if (!addr) continue;
+      const found = addr.match(re); 
+      if (found) {
+         let name = found[1];
+         let login = groupLetter.value + name[0].toUpperCase() + name.slice(1);
          logins.push(login)
+      } else {
+         logins.push(`--------- Error in :  ${addr}`)
       }
   }
   let loginsStr = logins.join("\n");
