@@ -286,7 +286,7 @@ async def get_disc_clear(
     user: User = Depends(get_current_tutor)
 ):
     """ 
-    Спустошує вихідну папку.
+    Спустошує вихідну папку. Залишає в ній підпапку sys і файл _sample_.html.
     """   
     return remove_files("app/static/output")
 
@@ -294,9 +294,10 @@ def remove_files(path):
     count_files = 0
     for root, dirs, files in os.walk(path):  
         for file in files:
-            if not (root.endswith("/sys") or root.endswith("/sys/pic")):
-                os.remove(os.path.join(root, file)) 
-                count_files += 1
+            if root.endswith("/sys") or root.endswith("/sys/pic") or file == "_sample_.html":
+                continue
+            os.remove(os.path.join(root, file)) 
+            count_files += 1
     return count_files
 
 

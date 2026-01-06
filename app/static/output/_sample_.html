@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>_TEST_</title>
+<link href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" rel="stylesheet" />
+<link href='sys/engine.css' type='text/css' rel='stylesheet' />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/ace.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/mode-csharp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/theme-github.min.js" id="ace_theme_link" ></script>    
+</head>
+
+<body>
+<div class="container">
+        <div id="dash" > 
+            <span id="theme_toggle"> ◐ </span>
+            <span id="pensil"> ✏ </span>
+        </div>
+        <div id="lecture">
+            <div id="n0" class="alef1">_TEST_</div>
+
+<!-- ------------------------------- BEGIN SLIDES --------------------------------- -->
+
+<div id="n1" class="alef2">Присвоювання</div>
+<div id="n2" class="alef4">ім'я = вираз;</div>
+<div id="n3" class="alef3">В мові <i>C</i># точка з комою ставиться наприкінці кожної команди.
+Тут точка з комою є термінатором<i>,</i> а не сепаратором<i>,</i> як у <i>JS</i>.</div>
+<div id="n4" class="alef3">Ланцюжкове присвоєння
+<span>
+int a, b;
+a = (b = 5);
+</span></div>
+<div id="n5" class="alef3">Ланцюжкове присвоєння</div>
+
+<div id="n6" class="alef5">
+    <div id="editor6"></div>
+</div>
+
+<script>
+    const editor6 = ace.edit("editor6", {
+        theme: "ace/theme/github",
+        mode: "ace/mode/csharp",
+        value:  `int a, b;
+a = (b = 5);
+`,    
+        maxLines: 30,
+        wrap: true,
+        autoScrollEditorIntoView: true,
+    });
+    editor6.session.setUseWorker(false);
+    editor6.renderer.setShowGutter(false);
+</script>
+
+<div id="n7" class="alef6"><table><thead><tr><th>Команда</th><th>Назва</th><th>Зміст</th></hr></thead><tbody><tr><td>01 NNNN</td><td>зчитати</td><td>скопіювати до суматора зміст комірки NNNN</td></tr><tr><td>02 NNNN</td><td>записати</td><td>зміст суматора скопіювати в комірку NNNN</td></tr><tr><td>11 NNNN</td><td>додати</td><td>додати до суматора зміст комірки NNNN</td></tr><tr><td>12 NNNN</td><td>відняти</td><td>відняти від суматора зміст комірки NNNN</td></tr><tr><td>13 NNNN</td><td>помножити</td><td>помножити суматор на зміст комірки NNNN</td></tr><tr><td>20 NNNN</td><td>перейти</td><td>занести в лічильник команд число NNNN</td></tr></tbody></table></div>
+<div id="n8" class="alef3">Документація по С#
+<a href="https://docs.microsoft.com/en-us/dotnet/csharp/">https://docs.microsoft.com/en-us/dotnet/csharp/</a></div>
+</div>
+
+<!-- ------------------------------- END SLIDES --------------------------------- -->
+
+    <script>
+        const START_SLIDE_NO=100500; 
+        const VERSION = "student";
+        let LIGHT_COLORS = {"body": "#ffffff", "header": "#000024", "text": "#00000a", "bg": "#fbf6f6", "link": "#000000", "aux": "#d0e0fe"};
+
+        function setRootVar(name, value) {
+            document.documentElement.style.setProperty(name, value);
+        }
+
+        window.addEventListener("message", (event) => {
+
+            LIGHT_COLORS  = event.data;
+            for (let name in LIGHT_COLORS) {
+                setRootVar(`--${name}-color`, LIGHT_COLORS[name]);
+            }
+        });
+
+    </script>
+    <script src='sys/engine.js'></script>
+
+</div>
+</body>
+</html>
+
+

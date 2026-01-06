@@ -28,31 +28,62 @@
       <td>Aux</td>
     </tr>
     <tr>
-      <td><input type="color" name="header" value="{{colors['header']}}"></td>
-      <td><input type="color" name="text" value="{{colors['text']}}"></td>
-      <td><input type="color" name="link" value="{{colors['link']}}"></td>
-      <td><input type="color" name="body" value="{{colors['body']}}"></td>
-      <td><input type="color" name="bg" value="{{colors['bg']}}"></td>      
-      <td><input type="color" name="aux" value="{{colors['aux']}}"></td>  
+      <td><input type="color" name="header" id="header" value="{{colors['header']}}"></td>
+      <td><input type="color" name="text" id="text" value="{{colors['text']}}"></td>
+      <td><input type="color" name="link" id="link" value="{{colors['link']}}"></td>
+      <td><input type="color" name="body" id="body" value="{{colors['body']}}"></td>
+      <td><input type="color" name="bg" id="bg" value="{{colors['bg']}}"></td>      
+      <td><input type="color" name="aux" id="aux" value="{{colors['aux']}}"></td>  
     </tr>
   </table>
 
   <footer class="grid">
     <button type="submit" >Save</button>
     <a href="/disc/list" role="button" class="secondary">To Index</a>
-    <button id="colors_button" style="width: 100px;">Colors</button>
+    <button id="colors_button" class="outline" style="width: 70px; font-size: xx-large;">🎨</button>
   </footer>      
 </form>
 
+{# --------------------- фрейм зі зразковою сторінкою -----------------------  #}
+
+<iframe id="child" src="/static/output/_sample_.html" width="100%">  </iframe>
+
+<script>
+const child = document.getElementById("child");
+
+child.onload = () => {
+    const doc = child.contentDocument;
+    const height = doc.documentElement.scrollHeight;
+    child.style.height = height + "px";
+    post_colors();
+};
+
+// Зміна будь-якого коліру надсилає повідомлення на зразкову сторінку у фреймі
+document.querySelectorAll('input[type="color"]')
+  .forEach(input => {
+      input.addEventListener("change", post_colors);
+  });
+
+
+function post_colors() {    
+    child.contentWindow.postMessage(
+        { "body": body.value, "header": header.value, "text": text.value, 
+          "bg": bg.value, "link": link.value, "aux": aux.value },
+        "*"
+    );
+}
+</script>
+{# --------------------- кінець фрейму зі зразковою сторінкою -----------------------  #}
+
 <script>
   const COLORS = [
-    {name: "aaa", "body": "#ffffff", "header": "#030018", "text": "#0A002A", "bg": "#f6fcb0", "link": "#9df33f", "aux": "#DEDAFF"},
-    {name: "bbb", "body": "#ffffff", "header": "#090D3C", "text": "#27175D", "bg": "#FAF8ED", "link": "#a7e04b", "aux": "#B7A1D8"},
-    {name: "ccc", "body": "#ffffff", "header": "#5553c2", "text": "#000047", "bg": "#EFF6F8", "link": "#c3ec77", "aux": "#B5C1F1"},
-    {name: "ddd", "body": "#ffffff", "header": "#b2d66f", "text": "#000047", "bg": "#F5F5FB", "link": "#e1b357", "aux": "#B3B7E5"},
-    {name: "eee", "body": "#ffffff", "header": "#000000", "text": "#000000", "bg": "#F5EFE9", "link": "#e0c136", "aux": "#D6B9A8"},
-    {name: "fff", "body": "#ffffff", "header": "#000024", "text": "#00000A", "bg": "#FBF6F6", "link": "#d8eb6c", "aux": "#D0E0FE"},
-    {name: "ggg", "body": "#ffffff", "header": "#030018", "text": "#0A002A", "bg": "#ecf6fc", "link": "#9df33f", "aux": "#DEDAFF"}
+    {name: "🍾", "body": "#ffffff", "header": "#030018", "text": "#0A002A", "bg": "#f6fcb0", "link": "#9df33f", "aux": "#DEDAFF"},
+    {name: "🍿", "body": "#ffffff", "header": "#090D3C", "text": "#27175D", "bg": "#FAF8ED", "link": "#a7e04b", "aux": "#B7A1D8"},
+    {name: "🎀", "body": "#ffffff", "header": "#5553c2", "text": "#000047", "bg": "#EFF6F8", "link": "#c3ec77", "aux": "#B5C1F1"},
+    {name: "🎁", "body": "#ffffff", "header": "#b2d66f", "text": "#000047", "bg": "#F5F5FB", "link": "#e1b357", "aux": "#B3B7E5"},
+    {name: "🎂", "body": "#ffffff", "header": "#000000", "text": "#000000", "bg": "#F5EFE9", "link": "#e0c136", "aux": "#D6B9A8"},
+    {name: "🎄", "body": "#ffffff", "header": "#000024", "text": "#00000A", "bg": "#FBF6F6", "link": "#d8eb6c", "aux": "#D0E0FE"},
+    {name: "🎉", "body": "#ffffff", "header": "#030018", "text": "#0A002A", "bg": "#ecf6fc", "link": "#9df33f", "aux": "#DEDAFF"}
   ]
 
   let colors_button = document.getElementById("colors_button");

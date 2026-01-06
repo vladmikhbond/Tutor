@@ -15,8 +15,12 @@ let current_slide_no = START_SLIDE_NO; // номер сфокусованого 
 let slides = document.querySelectorAll("#lecture > div");
 let theme = "light";
 
+
 setColors(LIGHT_COLORS);
 go(0);
+if (VERSION !== 'tutor') {
+    document.getElementById("pensil").style.display = "none";
+}
 
 // ----------------------- перемикач світлої і темної тем --------------------------
 
