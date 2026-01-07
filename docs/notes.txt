@@ -1,16 +1,6 @@
 TODO:
 sql queries
-
-
-
-
-стандартні кольорові схеми (templates/lecture/edit.html)
-світла тема (output/sys/engine.css)
-
 статистика по студентм - задачі, тести з датами
 
-
-----------------file  render_h.py #60:--------------
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/theme-github.min.js" id="ace_theme_link" ></script>
 
 

@@ -49,6 +49,8 @@
 <iframe id="child" src="/static/output/_sample_.html" width="100%">  </iframe>
 
 <script>
+
+// --------------------- фрейм зі зразковою сторінкою ----------------------- 
 const child = document.getElementById("child");
 
 child.onload = () => {
@@ -72,10 +74,10 @@ function post_colors() {
         "*"
     );
 }
-</script>
-{# --------------------- кінець фрейму зі зразковою сторінкою -----------------------  #}
 
-<script>
+// --------------------- набори кольорів ----------------------- 
+
+
   const COLORS = [
     {name: "🍾", "body": "#ffffff", "header": "#090D3C", "text": "#27175D", "bg": "#FAF8ED", "link": "#F1E5F6", "aux": "#B7A1D8"},
     {name: "🍿", "body": "#ffffff", "header": "#5553C2", "text": "#000047", "bg": "#EFF6F8", "link": "#DDE3F6", "aux": "#B5C1F1"},
@@ -98,6 +100,7 @@ function post_colors() {
       }
       colors_button.innerHTML = COLORS[color_idx].name;
       color_idx = (color_idx + 1) % COLORS.length;
+      post_colors();
   })
 </script>
 {% endblock %}
