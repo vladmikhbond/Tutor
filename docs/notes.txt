@@ -1,6 +1,6 @@
 TODO:
 sql queries
-help про підг лекцій
+
 
 
 

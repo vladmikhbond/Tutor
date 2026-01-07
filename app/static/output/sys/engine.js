@@ -7,7 +7,7 @@
 
 // ------------------------------- globals ------------------------------------------
 const DARK_COLORS = 
-   {"body": "#0a0a0a", "header": "#b2f7f1", "text": "#fff", "bg": "#242429", "link": "#8e98a527", "aux": "#524F5E"};
+   {"body": "#0A0A0A", "header": "#B2F7F1", "text": "#ffffff", "bg": "#242429", "link": "#1E1F21", "aux": "#524F5E"};
 
 const COLOR_NAMES = Object.getOwnPropertyNames(DARK_COLORS)
 
