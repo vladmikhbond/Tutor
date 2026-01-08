@@ -8,7 +8,10 @@ from .models.pss_models import User
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
 
-app = FastAPI()
+# параметр для запуску з проксі-сервером
+app = FastAPI(root_path="/tutor")
+
+
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 @app.middleware("http")
