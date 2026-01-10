@@ -1,13 +1,16 @@
 import os
 
 from fastapi.security import APIKeyCookie
-import httpx
 import jwt
 
 from fastapi.security import OAuth2PasswordRequestForm
-from fastapi import APIRouter, HTTPException, Request, Form, Response, Security
+from fastapi import APIRouter, HTTPException, Request, Form, Response, Security, Depends
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
+from sqlalchemy.orm import Session
+
+from .. import dal
+from ..routers.token_router import authenticated_user, create_access_token
 
 from ..models.pss_models import User
 
@@ -32,25 +35,17 @@ async def login(
     request: Request,
     username: str = Form(...),
     password: str = Form(...),
+    db: Session = Depends(dal.get_users_db),
 ):
-    url = f"{request.url}token/"
-    data = {"username": username, "password": password}
-
-    client = httpx.AsyncClient()
-    try:
-        response = await client.post(url, data=data)
-    except httpx.RequestError as e:
-        raise HTTPException(500, e)
-    finally:
-        await client.aclose()
-
-    if response.is_success:
-        token = response.json()
-    else: 
+    # Authenticate locally using DB + helpers from token_router
+    user = authenticated_user(db, username, password)
+    if user is None:
         return templates.TemplateResponse("login/login.html", {
-            "request": request, 
-            "error": f"Invalid credentials. Response status_code: {response.status_code}"
+            "request": request,
+            "error": "Invalid credentials."
         })
+
+    token = create_access_token(payload={"sub": username, "role": user.role})
 
     redirect = RedirectResponse("/disc/list", status_code=302)
 
