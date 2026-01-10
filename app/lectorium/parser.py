@@ -38,11 +38,14 @@ class Parser:
         return "\n".join(lines) 
 
     def replace_emoji(self):
-        MARKS = ['🔴','🔴','📔','❗','📗','📘']
+        MARKS = ['🔴','🟥','🟦','🟨','🟩','⬛']
         lines = self.source.splitlines()
         for i, l in enumerate(lines):
-            if len(l) > 0 and l[0] in MARKS:
-                lines[i] = "@" + l[1:]
+            if l == "":
+                continue
+            n = MARKS.find(l[0])
+            if n > -1 :
+                lines[i] = f"@{n + 1}{l[1:]}"
         return "\n".join(lines) 
 
 
