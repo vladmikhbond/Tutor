@@ -96,7 +96,7 @@ upload_form.addEventListener("submit", async (e) => {
 //#region --------------------- for insert emoji with ctrl key ------------
 
 //               1    2    3     4    5     6
-const MARKS = ['🔴','🔴','📔','❗','📗','📘']
+const MARKS = ['🔴','🟥','🟦','🟨','🟩','⬛']
 
 content.addEventListener("keydown", (e) => {
   
@@ -105,7 +105,7 @@ content.addEventListener("keydown", (e) => {
     e.preventDefault();
     const index = content.selectionStart;
     if (content.value[index - 1] === '\n' || index == 0) {
-      let mark = MARKS[e.key - 1] + e.key + " ";
+      let mark = MARKS[e.key - 1];
       replaceString(content, mark, index)
     }
   }

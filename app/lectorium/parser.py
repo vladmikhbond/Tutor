@@ -38,7 +38,7 @@ class Parser:
         return "\n".join(lines) 
 
     def replace_emoji(self):
-        MARKS = ['🔴','🟥','🟦','🟨','🟩','⬛']
+        MARKS = '🔴🟥🟦🟨🟩⬛'
         lines = self.source.splitlines()
         for i, l in enumerate(lines):
             if l == "":
