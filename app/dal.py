@@ -1,8 +1,6 @@
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, event
 from sqlalchemy.orm import sessionmaker, Session
-
-from sqlalchemy import event
 from sqlalchemy.engine import Engine
 
 # --------------------------- Tutor.db ------------------------
@@ -37,14 +35,14 @@ def get_db():
 
 # --------------------------- Users.db ------------------------
 
-engine_attend = create_engine(
+engine_users = create_engine(
     "sqlite:////data/Users.db",
     echo=True,
     connect_args={"check_same_thread": False}  # потрібно для SQLite + багатопоточного доступу
 )
 
 # Створюємо фабрику сесій
-SessionLocalUsers = sessionmaker(autocommit=False, autoflush=False, bind=engine_attend)
+SessionLocalUsers = sessionmaker(autocommit=False, autoflush=False, bind=engine_users)
 
 # Dependency для роутерів
 def get_users_db():
@@ -62,11 +60,19 @@ engine_attend = create_engine(
     connect_args={"check_same_thread": False}  # потрібно для SQLite + багатопоточного доступу
 )
 
+# Створюємо фабрику сесій
+SessionLocalAttend = sessionmaker(autocommit=False, autoflush=False, bind=engine_attend)
+
 # Dependency для роутерів
 def get_attend_db():
-    db: Session = sessionmaker(autocommit=False, autoflush=False, bind=engine_attend)
+    db: Session = SessionLocalAttend()
     try:
         yield db
     finally:
         db.close()
 
+# ================================================================
+
+# from .models.attend_models import Base
+
+# Base.metadata.create_all(engine_attend)

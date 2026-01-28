@@ -1,5 +1,7 @@
 from fastapi import FastAPI
-from .routers import login_router, disc_router, lecture_router, user_router, token_router
+
+from app.models.attend_models import Snapshot
+from .routers import login_router, disc_router, lecture_router, user_router, token_router, attend_router
 from fastapi.staticfiles import StaticFiles
 import os
 import jwt
@@ -11,6 +13,21 @@ ALGORITHM = os.getenv("ALGORITHM")
 app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
+
+# -------------------------------------middleware----------------------------------------
+
+from fastapi.middleware.cors import CORSMiddleware
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://meet.google.com"],
+    allow_credentials=False,
+    allow_methods=["POST", "OPTIONS"],
+    allow_headers=["Content-Type", "X-API-Key"],
+)
+
+# ------------------------------------middleware-----------------------------------------
 
 @app.middleware("http")
 async def attach_current_user(request, call_next):
@@ -31,4 +48,5 @@ app.include_router(disc_router.router, prefix="/disc", tags=["disc"])
 app.include_router(lecture_router.router, prefix="/lecture", tags=["lecture"])
 app.include_router(user_router.router, prefix="/user", tags=["user"])
 app.include_router(token_router.router, prefix="/token", tags=["token"])
+app.include_router(attend_router.router, prefix="/attend", tags=["attend"])
 
