@@ -10,7 +10,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 from ..models.models import Disc, Lecture, Picture
-from ..models.pss_models import User
+from ..models.pset_models import User
 
 from .login_router import get_current_tutor
 from ..dal import get_db  # Функція для отримання сесії БД

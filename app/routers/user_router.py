@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request, Form, Response, 
 from fastapi.responses import RedirectResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
-from ..models.pss_models import User
+from ..models.pset_models import User
 from .login_router import get_current_tutor
 from ..dal import get_users_db  # Функція для отримання сесії БД
 

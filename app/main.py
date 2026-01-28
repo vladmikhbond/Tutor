@@ -3,7 +3,7 @@ from .routers import login_router, disc_router, lecture_router, user_router, tok
 from fastapi.staticfiles import StaticFiles
 import os
 import jwt
-from .models.pss_models import User
+from .models.pset_models import User
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")

@@ -12,7 +12,7 @@ from sqlalchemy.orm import Session
 from .. import dal
 from ..routers.token_router import authenticated_user, create_access_token
 
-from ..models.pss_models import User
+from ..models.pset_models import User
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")

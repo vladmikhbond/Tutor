@@ -5,6 +5,8 @@ from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy import event
 from sqlalchemy.engine import Engine
 
+# --------------------------- Tutor.db ------------------------
+
 TUTOR_DB = "sqlite:////data/Tutor.db"
 
 # Підтримка foreign keys для SQLite
@@ -33,20 +35,36 @@ def get_db():
     finally:
         db.close()
 
-
 # --------------------------- Users.db ------------------------
-engine_users = create_engine(
+
+engine_attend = create_engine(
     "sqlite:////data/Users.db",
     echo=True,
     connect_args={"check_same_thread": False}  # потрібно для SQLite + багатопоточного доступу
 )
 
 # Створюємо фабрику сесій
-SessionLocalUsers = sessionmaker(autocommit=False, autoflush=False, bind=engine_users)
+SessionLocalUsers = sessionmaker(autocommit=False, autoflush=False, bind=engine_attend)
 
 # Dependency для роутерів
 def get_users_db():
     db: Session = SessionLocalUsers()
+    try:
+        yield db
+    finally:
+        db.close()
+
+# --------------------------- Attend.db ------------------------
+
+engine_attend = create_engine(
+    "sqlite:////data/Attend.db",
+    echo=True,
+    connect_args={"check_same_thread": False}  # потрібно для SQLite + багатопоточного доступу
+)
+
+# Dependency для роутерів
+def get_attend_db():
+    db: Session = sessionmaker(autocommit=False, autoflush=False, bind=engine_attend)
     try:
         yield db
     finally:

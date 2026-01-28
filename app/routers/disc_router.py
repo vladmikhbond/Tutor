@@ -10,7 +10,7 @@ from fastapi.responses import RedirectResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
-from app.models.pss_models import User
+from app.models.pset_models import User
 
 from ..models.models import Disc, Lecture, Picture
 from ..routers.login_router import get_current_tutor

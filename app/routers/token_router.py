@@ -13,7 +13,7 @@ from pydantic import BaseModel
 from fastapi import APIRouter
 from sqlalchemy.orm import Session
 
-from ..models.pss_models import User
+from ..models.pset_models import User
 from .. import dal
 
 
