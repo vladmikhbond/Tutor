@@ -4,103 +4,20 @@
 
 {% block content %}
 
-<h2>{{ disc.title }}</h2>
+<h2>{{ shadule.classes }}</h2>
 <form method="post" >
   <label>
-    Title
-    <input name="title" value="{{ disc.title }}" required>
-  </label>
+    Classes
+    <input name="classes" value="{{ shadule.classes }}" required>
+  </label>  
   <label>
-    Language
-    <select name="lang" required="">
-      <option value="csharp" {{ 'selected' if disc.lang == 'csharp' else '' }}>C#</option>
-      <option value="javascript" {{ 'selected' if disc.lang == 'javascript' else '' }}>Javascript</option>
-      <option value="python" {{ 'selected' if disc.lang == 'python' else '' }}>Python</option>
-    </select>
+    Moments
+    <input name="moments" value="{{ shadule.moments }}">
   </label>
-  <table>
-    <tr>
-      <td>Head</td>
-      <td>Text</td>
-      <td>Link</td>
-      <td>Body</td>
-      <td>Back</td>
-      <td>Aux</td>
-    </tr>
-    <tr>
-      <td><input type="color" name="header" id="header" value="{{colors['header']}}"></td>
-      <td><input type="color" name="text" id="text" value="{{colors['text']}}"></td>
-      <td><input type="color" name="link" id="link" value="{{colors['link']}}"></td>
-      <td><input type="color" name="body" id="body" value="{{colors['body']}}"></td>
-      <td><input type="color" name="bg" id="bg" value="{{colors['bg']}}"></td>      
-      <td><input type="color" name="aux" id="aux" value="{{colors['aux']}}"></td>  
-    </tr>
-  </table>
-
   <footer class="grid">
     <button type="submit" >Save</button>
-    <a href="/disc/list" role="button" class="secondary">To Index</a>
-    <button id="colors_button" class="outline" style="width: 70px; font-size: xx-large;">🎨</button>
+    <a href="/attend/list" role="button" class="secondary">To Index</a>
   </footer>      
 </form>
 
-{# --------------------- фрейм зі зразковою сторінкою -----------------------  #}
-
-<iframe id="child" src="/static/output/_sample_.html" width="100%">  </iframe>
-
-<script>
-
-// --------------------- фрейм зі зразковою сторінкою ----------------------- 
-const child = document.getElementById("child");
-
-child.onload = () => {
-    const doc = child.contentDocument;
-    const height = doc.documentElement.scrollHeight;
-    child.style.height = height + "px";
-    post_colors();
-};
-
-// Зміна будь-якого коліру надсилає повідомлення на зразкову сторінку у фреймі
-document.querySelectorAll('input[type="color"]')
-  .forEach(input => {
-      input.addEventListener("change", post_colors);
-  });
-
-
-function post_colors() {    
-    child.contentWindow.postMessage(
-        { "body": body.value, "header": header.value, "text": text.value, 
-          "bg": bg.value, "link": link.value, "aux": aux.value },
-        "*"
-    );
-}
-
-// --------------------- набори кольорів ----------------------- 
-
-
-  const COLORS = [
-    {name: "🍾", "body": "#ffffff", "header": "#090D3C", "text": "#27175D", "bg": "#FAF8ED", "link": "#F1E5F6", "aux": "#B7A1D8"},
-    {name: "🍿", "body": "#ffffff", "header": "#5553C2", "text": "#000047", "bg": "#EFF6F8", "link": "#DDE3F6", "aux": "#B5C1F1"},
-    {name: "🎀", "body": "#ffffff", "header": "#B2D66F", "text": "#000047", "bg": "#F5F5FB", "link": "#EBF5EF", "aux": "#B3B7E5"},
-    {name: "🎁", "body": "#ffffff", "header": "#000000", "text": "#000000", "bg": "#F5EFE9", "link": "#E5F8F2", "aux": "#D6B9A8"},
-    {name: "🎂", "body": "#ffffff", "header": "#000024", "text": "#00000A", "bg": "#FBF6F6", "link": "#E0EEF6", "aux": "#D0E0FE"},
-    {name: "🎉", "body": "#ffffff", "header": "#030018", "text": "#0A002A", "bg": "#F2F9FD", "link": "#ECE7FC", "aux": "#DEDAFF"}
-  ]
-
-  let colors_button = document.getElementById("colors_button");
-  let color_idx = 0;
-  
-  // Перебирає набори кольорів
-  colors_button.addEventListener("click", (e) => {
-      e.preventDefault();
-
-      for (let el_name of ["body", "header", "text", "bg", "link", "aux"])  {
-        let el = document.getElementsByName(el_name)[0]
-        el.value = COLORS[color_idx][el_name]
-      }
-      colors_button.innerHTML = COLORS[color_idx].name;
-      color_idx = (color_idx + 1) % COLORS.length;
-      post_colors();
-  })
-</script>
 {% endblock %}

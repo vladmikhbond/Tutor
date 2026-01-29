@@ -1,6 +1,7 @@
 
 from datetime import datetime
-from fastapi import Depends, Request
+from fastapi import Depends, Form, HTTPException, Request
+from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from fastapi import APIRouter
@@ -52,14 +53,46 @@ async def get_attend_list(
     shadules = db.query(Shadule).filter(Shadule.username == user.username).all()
     return templates.TemplateResponse("attend/list.html", {"request": request, "shadules": shadules})
 
+# -------------------------- new -------------------------
+
+@router.get("/new")
+async def get_attend_new (
+    request: Request, 
+    db: Session = Depends(get_attend_db),
+    user: User = Depends(get_current_tutor)
+):
+    """ 
+    Новий розклад.
+    """
+    shadule = Shadule(classes="", moments="") 
+    return templates.TemplateResponse("attend/edit.html", {"request": request, "shadule": shadule})
+
+@router.post("/new")
+async def post_attend_new(
+    request: Request,
+    classes: str = Form(...),
+    moments: str = Form(""),
+    db: Session = Depends(get_attend_db),
+    user: User = Depends(get_current_tutor)
+):
+    shadule = Shadule(
+        classes = classes,
+        moments = moments,
+        username = user.username,
+    )
+    try:
+        db.add(shadule) 
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        return templates.TemplateResponse("attend/edit.html", {"request": request, "hadule": shadule})
+    return RedirectResponse(url="/attend/list", status_code=302)
 
 # -------------------------- edit -------------------------
 
-
-
-@router.get("/edit")
+@router.get("/edit/{id}")
 async def get_attend_edit(
-
+    id: int,
     request: Request, 
     db: Session = Depends(get_attend_db),
     user: User = Depends(get_current_tutor)
@@ -67,34 +100,57 @@ async def get_attend_edit(
     """ 
     Редагування розкладу.
     """
-    shadules = db.query(Shadule).filter(Shadule.username == user.username).all()
-    txt = '\n'.join([s])
-    return templates.TemplateResponse("attend/edit.html", {"request": request, "": disc, "colors": colors})
+    shadule = db.get(Shadule, id)
+    if not shadule:
+        return RedirectResponse(url="/attend/list", status_code=302)
+    
+    return templates.TemplateResponse("attend/edit.html", {"request": request, "shadule": shadule})
 
 
-# @router.post("/edit/{id}")
-# async def post_disc_edit(
-#     id: int,
-#     request: Request,
-#     title: str = Form(...),
-#     lang: str = Form(...),
-#     db: Session = Depends(get_db),
-#     user: User = Depends(get_current_tutor)
-# ):
-#     # colors from request form
-#     form = await request.form()
-#     colors = {}
-#     for name in COLOR_NAMES:
-#         colors[name] = form.get(name)
+@router.post("/edit/{id}")
+async def post_attend_edit(
+    id: int,
+    request: Request,
+    classes: str = Form(...),
+    moments: str = Form(""),
+    db: Session = Depends(get_attend_db),
+    user: User = Depends(get_current_tutor)
+):
+    shadule = db.get(Shadule, id)
+    if not shadule:
+        raise HTTPException(404, f"Saving changes of shadule id={id} is failed.")
+    shadule.classes = classes
+    shadule.moments = moments
+    db.commit()
 
-#     disc = db.get(Disc, id)
-#     if not disc:
-#         raise HTTPException(404, f"Saving changes of disc id={id} is failed.")
+    return RedirectResponse(url="/attend/list", status_code=302)
+
+# ------- del 
+
+@router.get("/del/{id}")
+async def get_attend_del(
+    id: int, 
+    request: Request, 
+    db: Session = Depends(get_attend_db),
+    user: User = Depends(get_current_tutor)
+):
+    """ 
+    Видалення розкладу.
+    """
+    shadule = db.get(Shadule, id)
+    if not shadule:
+        return RedirectResponse(url="/attend/list", status_code=302)
+    
+    return templates.TemplateResponse("attend/del.html", {"request": request, "shadule": shadule})
 
 
-#     disc.title = title
-#     disc.lang = lang 
-#     disc.theme = json.dumps(colors)
-#     db.commit()
-#     return RedirectResponse(url="/disc/list", status_code=302)
-
+@router.post("/del/{id}")
+async def post_attend_del(
+    id: int,
+    db: Session = Depends(get_attend_db),
+    user: User = Depends(get_current_tutor)
+):
+    shadule = db.get(Shadule, id)
+    db.delete(shadule)
+    db.commit()
+    return RedirectResponse(url="/attend/list", status_code=302)
