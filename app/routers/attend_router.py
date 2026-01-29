@@ -41,6 +41,7 @@ async def post_snapshot(
     return {"status": "ok"}
 
 # -------------------------- list -------------------------
+
 @router.get("/list")
 async def get_attend_list(
     request: Request, 
@@ -154,3 +155,22 @@ async def post_attend_del(
     db.delete(shadule)
     db.commit()
     return RedirectResponse(url="/attend/list", status_code=302)
+
+# -------------------------- report -------------------------
+
+@router.get("/report/{id}")
+async def get_attend_report(
+    id: int,
+    request: Request, 
+    db: Session = Depends(get_attend_db),
+    user: User = Depends(get_current_tutor)
+):
+    """ 
+    Звіт з одного виду занятть.
+    """
+    # get time list
+    shadule = db.get(Shadule, id)
+
+
+
+    return templates.TemplateResponse("attend/report.html", {"request": request})
