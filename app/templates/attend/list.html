@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+
+<h2>Shadules</h2>
+
+<a href="/attend/new" style="margin-right: 60px;">New Shadule</a>
+
+{% if shadules and shadules|length %}
+<table>
+  <tbody>
+    {% for shadule in shadules %}
+    <tr>
+      <td>{{ shadule.classes }}</td>
+      <td>{{ shadule.moments }}</td>
+      
+      <td>
+          <a href="/attend/edit/{{shadule.id}}">edit</a> | 
+          <a href="/attend/del/{{shadule.id}}">del</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+  <div>
+    No shadules.
+  </div>
+{% endif %}
+
+{% endblock %}

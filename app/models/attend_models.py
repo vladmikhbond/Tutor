@@ -8,12 +8,15 @@ class Base(DeclarativeBase):
 
 class Shadule(Base):
     __tablename__ = "schedules"
-
+    
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     
     username: Mapped[str] = mapped_column(String)
     classes_name: Mapped[str] = mapped_column(String)
     moments: Mapped[str] = mapped_column(String)     # '27/01/2026 11:15,    02/02/2026 11:15,    27/01/2026 11:15'
+
+    def __str__(self):
+        return f"{self.classes_name}: {self.moments}"
 
 
 
