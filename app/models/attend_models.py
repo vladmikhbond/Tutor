@@ -1,6 +1,6 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import List
-from sqlalchemy import Integer, String, DateTime, Text
+from sqlalchemy import Boolean, Integer, String, DateTime, Text
 from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase
 
 class Base(DeclarativeBase):
@@ -15,6 +15,15 @@ class Shadule(Base):
     username: Mapped[str] = mapped_column(String)
     classes: Mapped[str] = mapped_column(String)
     moments: Mapped[str] = mapped_column(String)     # '27/01/2026 11:15,    02/02/2026 11:15,    27/01/2026 11:15'
+
+    @property
+    def moments_dt(self) -> List[datetime]:
+        return (self.moments.split(',')
+                       .map(lambda m: m.strip())
+                       .filter(Boolean)
+                       .map(lambda m: datetime
+                            .strptime(m, "%d/%m/%Y %H:%M") 
+                            .replace(tzinfo=timezone.utc) ))
 
 
 
@@ -49,7 +58,9 @@ class Lesson:
         self.shots = shots.sort(key = lambda s: s.when) 
     
     def matrix(self):
-        
+        """
+        Словник відвідувань одного заняття.
+        """
         dic: dict[str, List[int]] = dict()
         for i, shot in enumerate(self.shots):
             for name in shot.names:
