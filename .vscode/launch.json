@@ -11,6 +11,20 @@
             "request": "launch",
             "program": "run.py",
             "console": "integratedTerminal"
+        },
+        {
+            "name": "Pytest debug",
+            "type": "debugpy",
+            "module": "pytest",
+            "args": [
+                "tests/test_executors.py",
+                "-q",
+                "--disable-warnings"
+            ],
+            "request": "launch",
+            "console": "integratedTerminal",
+            "justMyCode": false
         }
+
     ]
 }

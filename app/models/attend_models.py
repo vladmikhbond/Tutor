@@ -38,7 +38,8 @@ class Snapshot(Base):
 
     @property
     def names(self) -> List[str]:
-        return self.visitors.split(',')
+        not_empty_str = map(lambda x: x.strip(), self.visitors.split(','))
+        return [x for x in not_empty_str if x ]
 
 
 # ===================== Not for DB ===================
@@ -55,7 +56,7 @@ class Lesson:
         self.begin = begin
         self.end = begin + timedelta(minutes=95)
         shots = [s for s in shots if self.begin <= s.when <= self.end and s.visitors.strip() != ""]
-        self.shots = shots.sort(key = lambda s: s.when) 
+        self.shots = sorted(shots, key=lambda s: s.when)
     
     def matrix(self):
         """
@@ -65,13 +66,14 @@ class Lesson:
         for i, shot in enumerate(self.shots):
             for name in shot.names:
                 if name in dic:
-                    dic[name].add(i)
+                    dic[name].append(i)
                 else:
-                    dict[name] = [i]
+                    dic[name] = [i]
         dic2: dict[str, str] = dict()
         n = len(self.shots)
         for k in dic:
             dic2[k] = list_to_str(dic[k], n)
+        return dic2 
 
 
 def list_to_str(ints: List[int], n):
