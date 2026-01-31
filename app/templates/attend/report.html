@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+<h2>{{classes}}</h2>
+
+<table>
+  <thead>
+    <tr>
+       <th>Name</th>
+       {% for t, h in v_headers %}
+       <th title="{{t}}">{{ h }}</th>
+       {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for i in range(names|count) %}
+    <tr>
+      <td>{{names[i]}}</td>
+      {% for cell in matrix[i] %}
+      <td>{{ cell }}</td>
+       {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

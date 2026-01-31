@@ -46,16 +46,18 @@ def get_shadule_dict(shad: Shadule, shots: List[Snapshot]) -> Dict[datetime, Lis
 
 def create_matrix(shad: Shadule, shots: List[Snapshot]):
     """
-    З усіх занятьрозкладу і знімків будуємо матрицю відвідувань
+    З розкладу і знімків будуємо матрицю відвідувань
     """
     shad_dict = get_shadule_dict(shad, shots)
     column_dict_list = [get_column_dict(shad_dict[b]) for b in shad_dict]
 
-    # find all names
-    sets = map(lambda x: Set(x.keys()), column_dict_list)
-    names = sorted(List(Set().union(*sets)))
+    # all names
+    sets = map(lambda x: set(x.keys()), column_dict_list)
+    names = sorted(list(set().union(*sets)))
+    # all begins
+    begins = shad.begins
 
-    # create matrix 
+    # create matrix with column of names
     matrix = []
     for name in names:
         row = []
@@ -64,9 +66,9 @@ def create_matrix(shad: Shadule, shots: List[Snapshot]):
                 row.append(col_dict[name])
             else: 
                 row.append("")
-        matrix.append[row]
+        matrix.append(row)
 
-    return names, matrix 
+    return names, begins, matrix 
 
     
         

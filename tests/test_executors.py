@@ -1,11 +1,11 @@
 import pytest
 from datetime import datetime, timezone, timedelta
 from app.models.attend_models import Shadule, Snapshot
-from app.models.attend_report import get_column_dict, get_shadule_dict, list_to_str
+from app.models.attend_report import get_column_dict, get_shadule_dict, list_to_str, create_matrix
 
 def base_datetime():
     """Base datetime for testing"""
-    return datetime(2026, 1, 30, 10, 0, 0, tzinfo=timezone.utc)
+    return datetime(2026, 1, 30, 10, 0, 0)
 
 def create_snapshot(base_datetime, minutes_offset=0, visitors="Alice,Bob"):
     """Factory fixture to create snapshots"""  
@@ -59,3 +59,17 @@ def test_get_shadule_dict():
     d = get_shadule_dict(shad, [sh1, sh2, sh3, sh4])
     assert d[dt1] == [sh1, sh2]
     assert d[dt2] == [sh3, sh4]
+
+def test_create_matrix():
+    dt1 = base_datetime()
+    dt2 = dt1 + timedelta(days=1)
+    shad = Shadule(moments=f"{dt1:%d/%m/%Y %H:%M},{ dt2:%d/%m/%Y %H:%M}")
+    sh1 = create_snapshot(dt1, 1, "111, 222, 333")
+    sh2 = create_snapshot(dt1, 2, "111, 222")    
+    sh3 = create_snapshot(dt2, 1, "111, 222, 333")
+    sh4 = create_snapshot(dt2, 2, "111, 333") 
+    ns, bs, m = create_matrix(shad, [sh1, sh2, sh3, sh4])
+    assert ns == ["111", "222", "333"] 
+    assert bs == [dt1, dt2]
+    assert m[0][0] == "++"
+    assert m[1][1] == "+-"

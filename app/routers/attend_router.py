@@ -7,6 +7,7 @@ from pydantic import BaseModel
 from fastapi import APIRouter
 from sqlalchemy.orm import Session
 
+from app.models.attend_report import create_matrix
 from app.models.pset_models import User
 from app.routers.login_router import get_current_tutor
 
@@ -40,6 +41,26 @@ async def post_snapshot(
     db.commit()
     return {"status": "ok"}
 
+
+@router.get("/report/{classes}")
+async def get_attend_report(
+    request: Request,
+    classes: str,
+    db: Session = Depends(get_attend_db),
+    user: User = Depends(get_current_tutor)
+):
+    """ 
+    Матриця відвідування занять (classes).
+    """
+    shadule = db.query(Shadule).filter(
+        Shadule.username == user.username and Shadule.classes == classes).one_or_none()
+    shots = db.query(Snapshot).filter(Snapshot.username == user.username).all()
+    names, begins, matrix = create_matrix(shadule, shots)
+    v_headers = [(beg, beg.strftime("%d/%m")) for beg in begins]
+
+    return templates.TemplateResponse("attend/report.html", {"request": request, 
+        "names": names, "v_headers":v_headers, "matrix": matrix, "classes": shadule.classes})
+
 # -------------------------- list -------------------------
 
 @router.get("/list")
@@ -49,7 +70,7 @@ async def get_attend_list(
     user: User = Depends(get_current_tutor)
 ):
     """ 
-    Редагування розкладу.
+    Всі заняття викладача.
     """
     shadules = db.query(Shadule).filter(Shadule.username == user.username).all()
     return templates.TemplateResponse("attend/list.html", {"request": request, "shadules": shadules})

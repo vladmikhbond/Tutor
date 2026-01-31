@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 
-from app.models.attend_models import Snapshot
 from .routers import login_router, disc_router, lecture_router, user_router, token_router, attend_router
 from fastapi.staticfiles import StaticFiles
 import os

@@ -19,7 +19,7 @@ class Shadule(Base):
     @property
     def begins(self) -> List[datetime]:
         not_empty_str = map(lambda x: x.strip(), self.moments.split(','))
-        return [datetime.strptime(x, "%d/%m/%Y %H:%M").replace(tzinfo=timezone.utc) 
+        return [datetime.strptime(x, "%d/%m/%Y %H:%M") 
                     for x in not_empty_str if x ]
 
 
