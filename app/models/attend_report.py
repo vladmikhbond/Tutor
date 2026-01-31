@@ -5,61 +5,61 @@ from .attend_models import Snapshot, Shadule
 def list_to_str(ints: List[int], n):
     return ''.join('+' if i in ints else '-' for i in range(n))
     
-def attend_dict(snapshots: List[Snapshot]) -> Dict[str, str]:
+def get_column_dict(shots: List[Snapshot]) -> Dict[str, str]:
     """
     Створює словник відвідувань одного заняття. Ключі - імена, значення - рядки.
     d["Іван"] == "+++"
     """
     
     dic: dict[str, List[int]] = dict()
-    for i, shot in enumerate(snapshots):
+    for i, shot in enumerate(shots):
         for name in shot.names:
             if name in dic:
                 dic[name].append(i)
             else:
                 dic[name] = [i]
     dic2: Dict[str, str] = dict()
-    n = len(snapshots)
+    n = len(shots)
     for k in dic:
         dic2[k] = list_to_str(dic[k], n)
 
     return dic2 
 
 
-def get_lesson_dict(shad: Shadule, shots: List[Snapshot]):
+def get_shadule_dict(shad: Shadule, shots: List[Snapshot]) -> Dict[datetime, List[Shadule]]:
     """
     Поділяємо знімки на заняття за розкладом
     """
     lesson_dict: dict[int, List[Snapshot]] = dict()
 
-    for i, begin in enumerate(shad.begins):
-        end = begin + timedelta(minutes=95)
+    for b in shad.begins:
+        end = b + timedelta(minutes=95)
         for shot in shots:
-            if begin <= shot.when <= end:
-                if i in lesson_dict:
-                    lesson_dict[i].append(shot)
+            if b <= shot.when <= end:
+                if b in lesson_dict:
+                    lesson_dict[b].append(shot)
                 else:
-                    lesson_dict[i] = [shot]
+                    lesson_dict[b] = [shot]
     return lesson_dict
 
 
 
 def create_matrix(shad: Shadule, shots: List[Snapshot]):
     """
-    з тих словників будуємо матрицю відвідувань
+    З усіх занятьрозкладу і знімків будуємо матрицю відвідувань
     """
-    lesson_dict = get_lesson_dict(shad, shots)
-    col_dict_list: List[Dict[str, str]] = [attend_dict(lesson_dict[i]) for i in lesson_dict]
+    shad_dict = get_shadule_dict(shad, shots)
+    column_dict_list = [get_column_dict(shad_dict[b]) for b in shad_dict]
 
     # find all names
-    sets = map(lambda x: Set(x.keys()), col_dict_list)
+    sets = map(lambda x: Set(x.keys()), column_dict_list)
     names = sorted(List(Set().union(*sets)))
 
-    # create empty matrix with column of names
+    # create matrix 
     matrix = []
     for name in names:
         row = []
-        for col_dict in col_dict_list:
+        for col_dict in column_dict_list:
             if name in col_dict:
                 row.append(col_dict[name])
             else: 
