@@ -1,9 +1,8 @@
+import os, jwt
 from fastapi import FastAPI
-
-from .routers import login_router, disc_router, lecture_router, user_router, token_router, attend_router
 from fastapi.staticfiles import StaticFiles
-import os
-import jwt
+from fastapi.middleware.cors import CORSMiddleware
+from .routers import login_router, disc_router, lecture_router, user_router, token_router, attend_router
 from .models.pset_models import User
 
 SECRET_KEY = os.getenv("SECRET_KEY")
@@ -14,9 +13,6 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 # -------------------------------------middleware----------------------------------------
-
-from fastapi.middleware.cors import CORSMiddleware
-
 
 app.add_middleware(
     CORSMiddleware,
