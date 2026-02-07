@@ -16,8 +16,14 @@
       <option value="csharp" {{ 'selected' if disc.lang == 'csharp' else '' }}>C#</option>
       <option value="javascript" {{ 'selected' if disc.lang == 'javascript' else '' }}>Javascript</option>
       <option value="python" {{ 'selected' if disc.lang == 'python' else '' }}>Python</option>
+      <option value="haskell" {{ 'selected' if disc.lang == 'haskell' else '' }}>Haskell</option>
     </select>
   </label>
+  <label>
+    Username Sample
+    <input type="text" name="stud_filter" value="{{ disc.stud_filter }}">
+  </label>
+
   <table>
     <tr>
       <td>Head</td>
@@ -46,7 +52,7 @@
 
 {# --------------------- фрейм зі зразковою сторінкою -----------------------  #}
 
-<iframe id="child" src="/static/output/_sample_.html" width="100%">  </iframe>
+<iframe id="child" src="/static/output/_sample_.html" width="100%" height="100%">  </iframe>
 
 <script>
 

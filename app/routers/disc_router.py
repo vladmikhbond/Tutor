@@ -57,7 +57,7 @@ async def get_disc_new(
     """ 
     Створення нової дисципліни.
     """
-    disc = Disc(title="", lang="", theme="") 
+    disc = Disc(title="", lang="", theme="", stud_filter="") 
     colors = DEFAULT_LIGHT_COLORS
     return templates.TemplateResponse("disc/edit.html", {"request": request, "disc": disc, "colors": colors})
 
@@ -66,7 +66,8 @@ async def get_disc_new(
 async def post_disc_new(
     request: Request,
     title: str = Form(...),
-    lang: str = Form(...),
+    lang: str = Form(...),    
+    stud_filter: str = Form(""),
     db: Session = Depends(get_db),
     user: User = Depends(get_current_tutor)
 ):
@@ -80,6 +81,7 @@ async def post_disc_new(
         title = title,
         theme = json.dumps(colors), 
         lang = lang,
+        stud_filter = stud_filter,
         username = user.username,
     )
     try:
@@ -118,6 +120,7 @@ async def post_disc_edit(
     request: Request,
     title: str = Form(...),
     lang: str = Form(...),
+    stud_filter: str = Form(""),
     db: Session = Depends(get_db),
     user: User = Depends(get_current_tutor)
 ):
@@ -134,6 +137,7 @@ async def post_disc_edit(
 
     disc.title = title
     disc.lang = lang 
+    disc.stud_filter = stud_filter
     disc.theme = json.dumps(colors)
     db.commit()
     return RedirectResponse(url="/disc/list", status_code=302)
@@ -266,16 +270,16 @@ def zip_disc(disc: Disc, db: Session):
             headers={"Content-Disposition": f"attachment; filename={tune(disc.title)}.zip"}
         )
 
-def zip_sys(zf):
+def zip_sys(zip_file):
 
     def arc(name):
         with open(f"app/static/output/sys/{name}", "r", encoding="utf-8") as f:
             text = f.read()
-        zf.writestr(f"sys/{name}", text)
+        zip_file.writestr(f"sys/{name}", text)
 
     arc("engine.css")
     arc("engine.js")
-    zf.write("app/static/output/sys/pic/pensil.png", "sys/pic/pensil.png")
+    zip_file.write("app/static/output/sys/pic/pensil.png", "sys/pic/pensil.png")
 
 # --------------------------- clear output
    

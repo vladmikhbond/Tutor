@@ -57,6 +57,7 @@ class Disc(Base):
     title: Mapped[str] = mapped_column(String)
     lang: Mapped[str] = mapped_column(String)
     theme: Mapped[str] = mapped_column(String)
+    stud_filter: Mapped[str] = mapped_column(String, default='')
     #  nav
     lectures: Mapped[list["Lecture"]] = relationship(back_populates="disc", cascade="all, delete-orphan")
     pictures: Mapped[list["Picture"]] = relationship(back_populates="disc", cascade="all, delete-orphan")

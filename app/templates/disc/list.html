@@ -8,7 +8,7 @@
 <h2>Disciplines</h2>
 
 <a href="/disc/new" style="margin-right: 60px;">New Disc</a>
-<a href="/disc/clear" style="margin-right: 60px;" title="Empty output folder">🗑️</a>
+<a href="/disc/clear" style="margin-right: 60px;" title="This empties the output folder.">🗑️</a>
 
 {% if discs and discs|length %}
 <table>
@@ -16,6 +16,8 @@
     {% for disc in discs %}
     <tr>
       <td><a href="/lecture/list/{{disc.id}}">{{ disc.title }}</a></td>
+      <td>{{ disc.lang }}</td>
+      <td>{{ disc.stud_filter }}</td>
       <td>
           <a href="/disc/edit/{{disc.id}}">edit</a> | 
           <a href="/disc/del/{{disc.id}}">del</a> | 
