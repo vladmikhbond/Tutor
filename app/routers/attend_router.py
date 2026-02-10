@@ -19,48 +19,6 @@ router = APIRouter()
 # шаблони Jinja2
 templates = Jinja2Templates(directory="app/templates")
 
-# ---------------------------- Snapshot (AJAX) ------------------------
-
-API_KEY = "secret123"
-
-class SnapshotRequest(BaseModel):
-    username: str
-    visitors: list[str]
-
-@router.post("/snapshot")
-async def post_snapshot(
-    data: SnapshotRequest,
-    db: Session = Depends(get_attend_db)
-):
-    snapshot = Snapshot(
-        username = data.username,
-        visitors = ",".join(data.visitors),  
-        when = datetime.now()
-    )
-    db.add(snapshot)
-    db.commit()
-    return {"status": "ok"}
-
-
-@router.get("/report/{classes}")
-async def get_attend_report(
-    request: Request,
-    classes: str,
-    db: Session = Depends(get_attend_db),
-    user: User = Depends(get_current_tutor)
-):
-    """ 
-    Матриця відвідування занять (classes).
-    """
-    shadule = db.query(Shadule).filter(
-        Shadule.username == user.username and Shadule.classes == classes).one_or_none()
-    shots = db.query(Snapshot).filter(Snapshot.username == user.username).all()
-    names, begins, matrix = create_matrix(shadule, shots)
-    v_headers = [(beg, beg.strftime("%d/%m")) for beg in begins]
-
-    return templates.TemplateResponse("attend/report.html", {"request": request, 
-        "names": names, "v_headers":v_headers, "matrix": matrix, "classes": shadule.classes})
-
 # -------------------------- list -------------------------
 
 @router.get("/list")
@@ -177,21 +135,47 @@ async def post_attend_del(
     db.commit()
     return RedirectResponse(url="/attend/list", status_code=302)
 
+# ---------------------------- Snapshot (AJAX) ------------------------
+
+API_KEY = "secret123"
+
+class SnapshotRequest(BaseModel):
+    username: str
+    visitors: list[str]
+
+@router.post("/snapshot")
+async def post_snapshot(
+    data: SnapshotRequest,
+    db: Session = Depends(get_attend_db)
+):
+    snapshot = Snapshot(
+        username = data.username,
+        visitors = ",".join(data.visitors),  
+        when = datetime.now()
+    )
+    db.add(snapshot)
+    db.commit()
+    return {"status": "ok"}
+
 # -------------------------- report -------------------------
 
-@router.get("/report/{id}")
+@router.get("/report/{classes}")
 async def get_attend_report(
-    id: int,
-    request: Request, 
+    request: Request,
+    classes: str,
     db: Session = Depends(get_attend_db),
     user: User = Depends(get_current_tutor)
 ):
     """ 
-    Звіт з одного виду занятть.
+    Матриця відвідування занять (classes).
     """
-    # get time list
-    shadule = db.get(Shadule, id)
+    shadule = db.query(Shadule).filter(
+        Shadule.username == user.username and Shadule.classes == classes).one_or_none()
+    shots = db.query(Snapshot).filter(Snapshot.username == user.username).all()
+    names, begins, matrix = create_matrix(shadule, shots)
+    v_headers = [(beg, beg.strftime("%d/%m")) for beg in begins]
+
+    return templates.TemplateResponse("attend/report.html", {"request": request, 
+        "names": names, "v_headers":v_headers, "matrix": matrix, "classes": shadule.classes})
 
 
-
-    return templates.TemplateResponse("attend/report.html", {"request": request})
