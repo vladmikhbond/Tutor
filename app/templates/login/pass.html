@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+    <form method="post">
+      
+      <label for="newpassword">
+        New Password
+        <input name="password" placeholder="Enter your new password" required>
+      </label>
+
+      <footer class="grid">
+        <button type="submit">OK</button>
+        <a href="/check/open_list" role="button" class="secondary">Cancel</a>
+      </footer> 
+
+      {% if error %}
+        <p style="color: var(--del-color);">{{ error }}</p>
+      {% endif %}
+    </form>
+{% endblock %}

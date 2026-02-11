@@ -1,11 +1,12 @@
 import os
 
+import bcrypt
 from fastapi.security import APIKeyCookie
 import jwt
 
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi import APIRouter, HTTPException, Request, Form, Response, Security, Depends
-from fastapi.responses import RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
@@ -95,6 +96,38 @@ def get_current_tutor(token: str = Security(cookie_scheme)) -> User:
     if user.role != "tutor":
         raise HTTPException(status_code=403, detail="Permission denied: tutors only.")
     return user
+
+# ----------------------- Зміна паролю
+
+@router.get("/pass")
+async def get_pass(
+    request: Request, 
+    user: User = Depends(get_current_user) 
+):
+    return templates.TemplateResponse("login/pass.html", {"request": request})
+
+@router.post("/pass")
+async def post_pass (
+    request: Request,
+    password: str = Form(...),
+    db: Session = Depends(dal.get_users_db),
+    current_user: User = Depends(get_current_user) 
+):
+    user = db.get(User, current_user.username);
+    if not user:
+        raise HTTPException(400)
+    user.hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
+    try:
+        db.commit()
+    except:
+        error = "Не вдалося змінити пароль"
+        return templates.TemplateResponse("login/pass.html", {"request": request, "error": error}) 
+
+    html = f'Пароль змінено на "{password}". Для продовження роботи <a href="/">увійдіть з новим паролем</a>.'
+    return HTMLResponse(content=html, status_code=200)
+
+
+
 
 
 # -------------------------------- Аналітика перегляду декцій (не використовується)
