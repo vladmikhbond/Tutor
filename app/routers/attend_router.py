@@ -169,8 +169,7 @@ async def get_attend_report(
     """ 
     Матриця відвідування занять (classes).
     """
-    shadule = db.query(Shadule).filter(
-        Shadule.username == user.username and Shadule.classes == classes).one_or_none()
+    shadule = db.query(Shadule).filter(Shadule.username == user.username).filter(Shadule.classes == classes).one_or_none()
     shots = db.query(Snapshot).filter(Snapshot.username == user.username).all()
     names, begins, matrix = create_matrix(shadule, shots)
     v_headers = [(beg, beg.strftime("%d/%m")) for beg in begins]

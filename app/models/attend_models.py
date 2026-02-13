@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 from typing import List
+from zoneinfo import ZoneInfo
 from sqlalchemy import Integer, String, DateTime, Text
 from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase
 
@@ -14,14 +15,12 @@ class Shadule(Base):
     
     username: Mapped[str] = mapped_column(String)
     classes: Mapped[str] = mapped_column(String)
-    moments: Mapped[str] = mapped_column(String)     # '27/01/2026 11:15,    12/02/2026 11:15,    13/02/2026 11:15'
+    moments: Mapped[str] = mapped_column(String)     # (за Київом) '27/01/2026 11:15,    12/02/2026 11:15,    13/02/2026 11:15'
 
     @property
     def begins(self) -> List[datetime]:
         not_empty_str = map(lambda x: x.strip(), self.moments.split(','))
-        return [datetime.strptime(x, "%d/%m/%Y %H:%M") 
-                    for x in not_empty_str if x ]
-
+        return [str_to_time(x, "%d/%m/%Y %H:%M") for x in not_empty_str if x ]
 
 
 class Snapshot(Base):
@@ -38,3 +37,9 @@ class Snapshot(Base):
         not_empty_str = map(lambda x: x.strip(), self.visitors.split(','))
         return [x for x in not_empty_str if x ]
 
+# str(Kyiv) -> time(UTC)
+def str_to_time(s: str, TIME_FMT) -> datetime:
+    return datetime.strptime(s, TIME_FMT) \
+        .replace(tzinfo=ZoneInfo("Europe/Kyiv")) \
+        .astimezone(ZoneInfo("UTC")) \
+        .replace(tzinfo=None)
