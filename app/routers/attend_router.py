@@ -60,12 +60,18 @@ async def post_attend_new(
         moments = moments,
         username = user.username,
     )
+
+    # check if moments are correct
+    if (mes := shadule.moments_ok()) != "ok":
+        shadule.moments = f"{mes}\n{shadule.moments}"
+        return templates.TemplateResponse("attend/edit.html", {"request": request, "shadule": shadule})
+    
     try:
         db.add(shadule) 
         db.commit()
     except Exception as e:
         db.rollback()
-        return templates.TemplateResponse("attend/edit.html", {"request": request, "hadule": shadule})
+        return templates.TemplateResponse("attend/edit.html", {"request": request, "shadule": shadule})
     return RedirectResponse(url="/attend/list", status_code=302)
 
 # -------------------------- edit -------------------------
@@ -98,11 +104,16 @@ async def post_attend_edit(
 ):
     shadule = db.get(Shadule, id)
     if not shadule:
-        raise HTTPException(404, f"Saving changes of shadule id={id} is failed.")
+        raise HTTPException(404, f"Not found shadule_id={id} in DB.")
     shadule.classes = classes
     shadule.moments = moments
+    
+    # check if moments are correct
+    if (mes := shadule.moments_ok()) != "ok":
+        shadule.moments = f"{mes}\n{shadule.moments}"
+        return templates.TemplateResponse("attend/edit.html", {"request": request, "shadule": shadule})
+    
     db.commit()
-
     return RedirectResponse(url="/attend/list", status_code=302)
 
 # ------- del 

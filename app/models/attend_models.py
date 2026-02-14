@@ -21,6 +21,15 @@ class Shadule(Base):
     def begins(self) -> List[datetime]:
         not_empty_str = map(lambda x: x.strip(), self.moments.split(','))
         return [str_to_time(x, "%d/%m/%Y %H:%M") for x in not_empty_str if x ]
+    
+    def moments_ok(self):
+        try:
+            self.begins
+        except Exception as e:
+            return e
+        else: 
+            return "ok"
+
 
 
 class Snapshot(Base):
