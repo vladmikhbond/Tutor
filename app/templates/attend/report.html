@@ -1,8 +1,15 @@
 {% extends "layout.html" %}
 
-{% block title %}{% endblock %}
+{% block title %}
+{% endblock %}
 
 {% block content %}
+<style>
+  .cell {
+    font-size: x-small;
+    color: gray;
+  }
+</style>
 <h2>{{classes}}</h2>
 
 <table>
@@ -19,7 +26,7 @@
     <tr>
       <td>{{names[i]}}</td>
       {% for cell in matrix[i] %}
-      <td>{{ cell }}</td>
+      <td class="cell">{{ cell }}</td>
        {% endfor %}
     </tr>
     {% endfor %}

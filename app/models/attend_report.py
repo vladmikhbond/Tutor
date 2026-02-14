@@ -3,7 +3,7 @@ from typing import Dict, List, Set
 from .attend_models import Snapshot, Shadule
 
 def list_to_str(ints: List[int], n):
-    return ''.join('+' if i in ints else '-' for i in range(n))
+    return ''.join('█' if i in ints else '─' for i in range(n))
     
 def get_column_dict(shots: List[Snapshot]) -> Dict[str, str]:
     """
