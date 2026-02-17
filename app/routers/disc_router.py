@@ -300,6 +300,8 @@ def remove_files(path):
         for file in files:
             if root.endswith("/sys") or root.endswith("/sys/pic") or file == "_sample_.html":
                 continue
+            if file == "Довідка.html":
+                continue
             os.remove(os.path.join(root, file)) 
             count_files += 1
     return count_files

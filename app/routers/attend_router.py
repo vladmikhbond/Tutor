@@ -169,6 +169,8 @@ async def post_snapshot(
     return {"status": "ok"}
 
 # -------------------------- report -------------------------
+import locale
+
 
 @router.get("/report/{classes}")
 async def get_attend_report(
@@ -185,7 +187,12 @@ async def get_attend_report(
     names, begins, matrix = create_matrix(shadule, shots)
     v_headers = [(beg, beg.strftime("%d/%m")) for beg in begins]
 
+    names = sorted([change(n) for n in names])
+
     return templates.TemplateResponse("attend/report.html", {"request": request, 
         "names": names, "v_headers":v_headers, "matrix": matrix, "classes": shadule.classes})
 
-
+def change(name):
+    """John Doe -> Doe John"""
+    first, last = name.split()
+    return f"{last} {first}"

@@ -21,7 +21,8 @@
             <li><a href="/user/list">Users</a></li>
             <li><a href="/attend/list">Attendance</a></li>
             <li><a href="/pass">Pass</a></li>
-            <li><a href="/login/help">❓</a></li>
+            {#<li><a href="/login/help">❓</a></li>#}
+            <li><a href="/static/output/Довідка.html">❓</a></li>
             <li><a href="/login/logout" title="Exit">
                 {% if request.state.user %}
                     Hi, {{ request.state.user.username }}
