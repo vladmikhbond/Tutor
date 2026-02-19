@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta, timezone
-from typing import Dict, List, Set
+from typing import Dict, List, Set, Tuple
 from .attend_models import Snapshot, Shadule
 
 def list_to_str(ints: List[int], n):
@@ -13,7 +13,7 @@ def get_column_dict(shots: List[Snapshot]) -> Dict[str, str]:
     
     dic: dict[str, List[int]] = dict()
     for i, shot in enumerate(shots):
-        for name in shot.names:
+        for name in shot.get_names():
             if name in dic:
                 dic[name].append(i)
             else:
@@ -26,42 +26,49 @@ def get_column_dict(shots: List[Snapshot]) -> Dict[str, str]:
     return dic2 
 
 
-def get_shadule_dict(shad: Shadule, shots: List[Snapshot]) -> Dict[datetime, List[Shadule]]:
+def get_begin_shots_dict(shad: Shadule, shots: List[Snapshot]) -> Dict[datetime, List[Snapshot]]:
     """
-    Поділяємо знімки на заняття за розкладом
-    """
-    lesson_dict: dict[int, List[Snapshot]] = dict()
+    Створює словник, який поділяє знімки на заняття. Ключ - дата-час початку, значення - список знимків того заняття.
+    d["12-1-2026 7:45"] == [shot1, shot2, shot3, shot4]
 
-    for b in shad.begins:
-        end = b + timedelta(minutes=95)
+    """
+    lesson_dict: dict[datetime, List[Snapshot]] = dict()
+
+    for begin in shad.get_begins():
+        end = begin + timedelta(seconds=95*60)
         for shot in shots:
-            if b <= shot.when <= end:
-                if b in lesson_dict:
-                    lesson_dict[b].append(shot)
+            if begin <= shot.when <= end:
+                if begin in lesson_dict:
+                    lesson_dict[begin].append(shot)
                 else:
-                    lesson_dict[b] = [shot]
+                    lesson_dict[begin] = [shot]
     return lesson_dict
 
 
-
-def create_matrix(shad: Shadule, shots: List[Snapshot]):
+type Matrix = List[List[str]]
+        
+def create_matrix(shad: Shadule, shots: List[Snapshot]) -> Tuple[List[str], Matrix, List[str]]:
     """
     З розкладу і знімків будуємо матрицю відвідувань
     """
-    shad_dict = get_shadule_dict(shad, shots)
-    column_dict_list = [get_column_dict(shad_dict[b]) for b in shad_dict]
+    begin_shots_dict: Dict[datetime, List[Snapshot]] = get_begin_shots_dict(shad, shots)
 
-    # all names
-    sets = map(lambda x: set(x.keys()), column_dict_list)
+    column_dict_list: Dict[datetime, Dict[str, str]] = \
+        {begin : get_column_dict(begin_shots_dict[begin]) for begin in begin_shots_dict}
+
+    # all names - left header
+    sets = map(lambda x: set(x.keys()), column_dict_list.values())
     names = sorted(list(set().union(*sets)))
-    # all begins
-    begins = shad.begins
 
-    # create matrix with column of names
-    matrix = []
+    # all begins - upper header
+    begins = shad.get_begins()
+
+    # create matrix 
+    matrix: Matrix = []
     for name in names:
-        row = []
-        for col_dict in column_dict_list:
+        row: List[str] = []
+        for begin in begins:
+            col_dict = column_dict_list.get(begin, dict())
             if name in col_dict:
                 row.append(col_dict[name])
             else: 
@@ -69,22 +76,3 @@ def create_matrix(shad: Shadule, shots: List[Snapshot]):
         matrix.append(row)
 
     return names, begins, matrix 
-
-    
-        
-
-
-
-
-
-
-    
-    
-
-
-        
-
-    
-        
-    
-    

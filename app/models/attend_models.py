@@ -17,14 +17,14 @@ class Shadule(Base):
     classes: Mapped[str] = mapped_column(String)
     moments: Mapped[str] = mapped_column(String)     # (за Київом) '27/01/2026 11:15,    12/02/2026 11:15,    13/02/2026 11:15'
 
-    @property
-    def begins(self) -> List[datetime]:
+
+    def get_begins(self) -> List[datetime]:
         not_empty_str = map(lambda x: x.strip(), self.moments.split(','))
         return [str_to_time(x, "%d/%m/%Y %H:%M") for x in not_empty_str if x ]
     
     def moments_ok(self):
         try:
-            self.begins
+            self.get_begins()
         except Exception as e:
             return e
         else: 
@@ -41,8 +41,8 @@ class Snapshot(Base):
     when: Mapped[datetime] = mapped_column(DateTime)
     visitors: Mapped[str] = mapped_column(Text)
 
-    @property
-    def names(self) -> List[str]:
+
+    def get_names(self) -> List[str]:
         not_empty_str = map(lambda x: x.strip(), self.visitors.split(','))
         return [x for x in not_empty_str if x ]
 
