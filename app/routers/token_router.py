@@ -50,7 +50,9 @@ async def login_for_access_token(
 def authenticated_user(db: Session, username: str, password: str):
     """ Login for token issue """
     user = db.get(User, username)
-    ### на той випадок, якщо в базу вставляли юзера вручну
+    if user is None:
+       return None 
+    ### це на той випадок, якщо в базу вставляли юзера вручну
     if isinstance(user.hashed_password, str):
         user.hashed_password = user.hashed_password.encode('utf-8')
     ###    
