@@ -95,6 +95,7 @@ function go(delta) {
 // ------------------------- Малювання олівцем --------------------------------
 
 let canvas = null;
+let alt_state = 0;
 
 document.getElementById("pensil").addEventListener("click", canvasPainter);
 
@@ -156,11 +157,36 @@ function canvasPainter() {
     canvas.onmouseup = function (e) {
         if (drawing) {
             let curve = curves[curves.length - 1]
-            transform(curve);
+            smooth(curve);
+            if (alt_state)
+                transform(curve);
             drawing = false;
             draw();
         }
     };
+
+    canvas.onkeydown = function(e) 
+    {
+        // Ctrl+Z видаляє останню криву
+        if (e.ctrlKey && e.key === "z") { 
+            if (curves.length > 0) {
+                curves.pop();
+                draw();
+            }
+            e.preventDefault(); 
+        } 
+        if (e.key == "Alt") {
+            alt_state = 1;
+        } 
+    }
+
+    canvas.onkeyup = function(e) 
+    {
+        if (e.key == "Alt") {
+            alt_state = 0;
+        }    
+    };
+
 
     function transform(curve) {
         let first = curve[0], last = curve[curve.length - 1];
@@ -177,9 +203,10 @@ function canvasPainter() {
             // hor
             if (Math.abs(first.y - last.y) / len < 0.03) 
                 first.y = last.y;
-        } else {
-            smooth(curve);
-        }
+        } 
+        // else {
+        //     smooth(curve);
+        // }
     }
 
     function is_straight_line(curve) {
@@ -230,16 +257,8 @@ function canvasPainter() {
         }
     }
 
-    // Ctrl+Z видаляє останню криву
-    canvas.onkeydown = function (e) {
-        if (e.ctrlKey && e.key === "z") { 
-            if (curves.length > 0) {
-                curves.pop();
-                draw();
-            }
-            e.preventDefault(); 
-        }
-    };
+
+
 }
 
 //-------------------------------- Масштабування зображень ----------------------
@@ -282,7 +301,7 @@ function img_size(e) {
 
 // ---------------------------- Дані для аналітики перегляду лекцій (не використовується)
 
-(function () {
+{
     let startTime = Date.now();
     let sent = false;
 
@@ -308,6 +327,6 @@ function img_size(e) {
             sendAnalytics();
         }
     });
-})();
+}
 
 
