@@ -94,17 +94,20 @@ function go(delta) {
 
 // ------------------------- Малювання олівцем --------------------------------
 
+document.getElementById("pensil")
+        .addEventListener("click", canvasPainter);
+
 let canvas = null;
 let alt_state = 0;
 
-document.getElementById("pensil").addEventListener("click", canvasPainter);
-
 function canvasPainter() {
+   
     if (canvas) {
         document.body.removeChild(canvas);
         canvas = null;
         return;
     }
+
     const n = current_slide_no;
     let pen_color = "red";
 
@@ -117,9 +120,7 @@ function canvasPainter() {
     canvas.style.top = slides[n].offsetTop + "px";
     canvas.style.left = slides[n].offsetLeft + "px";
     canvas.style.borderRight = `solid 1px ${pen_color}`;
-
     canvas.style.cursor = "url('sys/pic/pensil.png'), crosshair";
-
     canvas.setAttribute("tabindex", "0");
 
     document.body.appendChild(canvas);
@@ -131,6 +132,7 @@ function canvasPainter() {
     ctx.lineCap = "round";
 
     let curves = [], drawing = false; 
+    let ctrlPressed = false, zPressed = false;
 
     canvas.onmousedown = function (e) {
         let x = e.pageX - e.target.offsetLeft,
@@ -167,22 +169,33 @@ function canvasPainter() {
 
     canvas.onkeydown = function(e) 
     {
-        // Ctrl+Z видаляє останню криву
-        if (e.ctrlKey && e.key === "z") { 
+        if (e.key === "Control") {
+            ctrlPressed = true;
+        }
+        if (e.key === "z") {
+            zPressed = true;
+        }
+        if (ctrlPressed && zPressed) { 
             if (curves.length > 0) {
                 curves.pop();
                 draw();
             }
             e.preventDefault(); 
         } 
-        if (e.key == "Alt") {
+        if (e.key === "Alt") {
             alt_state = 1;
         } 
     }
 
     canvas.onkeyup = function(e) 
     {
-        if (e.key == "Alt") {
+        if (e.key === "Control") {
+            ctrlPressed = false;
+        }
+        if (e.key === "z") {
+            zPressed = false;
+        }
+        if (e.key === "Alt") {
             alt_state = 0;
         }    
     };
@@ -204,9 +217,6 @@ function canvasPainter() {
             if (Math.abs(first.y - last.y) / len < 0.03) 
                 first.y = last.y;
         } 
-        // else {
-        //     smooth(curve);
-        // }
     }
 
     function is_straight_line(curve) {
