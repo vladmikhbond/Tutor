@@ -309,34 +309,29 @@ function img_size(e) {
     img.style.width  = (w * k) + 'px';
 }
 
-// ---------------------------- Дані для аналітики перегляду лекцій (не використовується)
-
+// ---------------------------- Дані для логу перегляду лекцій (post to /disc/log in the student app)
 {
     let startTime = Date.now();
-    let sent = false;
 
-    function sendAnalytics() {
-        // блокує повторне посилання
-        if (sent) return;
-        sent = true;
-
-        const data = {
-            url: location.href,
-            referrer: document.referrer,
-            duration: Date.now() - startTime
-        };
-
-        navigator.sendBeacon(
-            "/analytics/leave",
-            JSON.stringify(data)
-        );
-    }
-
-    document.addEventListener("visibilitychange", () => {
+    document.addEventListener("visibilitychange", async () => 
+    {
+        if (document.visibilityState === "visible") {
+            startTime = Date.now();
+        }
         if (document.visibilityState === "hidden") {
-            sendAnalytics();
+            const duration = Date.now() - startTime; 
+
+            const data = {
+                href: location.href ,
+                referrer: document.referrer,
+                duration: duration
+            };
+            let url = document.location.origin + "/disc/log";
+                const response = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            });
         }
     });
 }
-
-
