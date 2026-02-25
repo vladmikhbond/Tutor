@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+    
+<h2>Stat</h2> 
+      
+
+{% if logs and logs|length %}
+<table>
+  <tbody>
+    {% for log in logs %}
+    <tr>
+      <td>{{ log.lec }}</td>
+      <td>{{ log.duration }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+  <div>
+    No visits.
+  </div>
+{% endif %}
+
+{% endblock %}
+
+{% block script %}
+
+{% endblock %}

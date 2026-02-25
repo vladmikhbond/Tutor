@@ -18,7 +18,7 @@ router = APIRouter()
 # шаблони Jinja2
 templates = Jinja2Templates(directory="app/templates")
 
-
+import json
 # -------------------------- visits -------------------------
 
 @router.get("/visits/{username}")
@@ -30,12 +30,20 @@ async def get_stat_visits(
 ):
     """ 
     Відвідування лекцій студентом
+    body = {
+                href: location.href ,
+                referrer: document.referrer,
+                duration: duration
+            }
     """
     logs = db.query(Log).filter(Log.username == username).all()
+    for log in logs:
+        obj = json.loads(log.body)
+        log.lec = obj['href']
+        log.duration = obj['duration']
 
-
-    # shadules = db.query(Shadule).filter(Shadule.username == user.username).all()
-    # return templates.TemplateResponse("attend/list.html", {"request": request, "shadules": shadules})
+    
+    return templates.TemplateResponse("stat/visits.html", {"request": request, "logs": logs})
 
 # # -------------------------- new -------------------------
 
