@@ -321,9 +321,9 @@ function img_size(e) {
         if (document.visibilityState === "hidden") {
             const duration = Date.now() - startTime; 
 
+            let lecture = location.pathname.slice(location.pathname.lastIndexOf('/') + 1)
             const data = {
-                href: location.href ,
-                referrer: document.referrer,
+                lecture: lecture,
                 duration: duration
             };
             let url = document.location.origin + "/disc/log";

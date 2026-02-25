@@ -19,6 +19,7 @@ router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
 
 import json
+import urllib.parse
 # -------------------------- visits -------------------------
 
 @router.get("/visits/{username}")
@@ -31,15 +32,15 @@ async def get_stat_visits(
     """ 
     Відвідування лекцій студентом
     body = {
-                href: location.href ,
-                referrer: document.referrer,
+                lecture: lecture,
                 duration: duration
             }
     """
     logs = db.query(Log).filter(Log.username == username).all()
     for log in logs:
         obj = json.loads(log.body)
-        log.lec = obj['href']
+        log.lecture = urllib.parse.unquote(obj['lecture'])
+        
         log.duration = obj['duration']
 
     
