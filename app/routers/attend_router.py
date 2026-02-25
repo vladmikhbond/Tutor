@@ -167,9 +167,7 @@ async def post_snapshot(
     db.commit()
     return {"status": "ok"}
 
-# -------------------------- report -------------------------
-import locale
-
+# --------------------------attend report -------------------------
 
 @router.get("/report/{classes}")
 async def get_attend_report(
@@ -195,3 +193,4 @@ def change(name):
     """John Doe -> Doe John"""
     first, last = name.split()
     return f"{last} {first}"
+

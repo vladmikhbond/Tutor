@@ -19,7 +19,7 @@
   <tbody>
     {% for user in users %}
     <tr>
-      <td><a href="/stat/{{user.username}}">{{ user.username }}</a></td>
+      <td><a href="/stat/visits/{{user.username}}">{{ user.username }}</a></td>
       <td>
           <a href="/user/reset/{{user.username}}">pas</a> | 
           <a href="/user/del/{{user.username}}">del</a>

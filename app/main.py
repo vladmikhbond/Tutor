@@ -2,7 +2,7 @@ import os, jwt
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-from .routers import login_router, disc_router, lecture_router, user_router, token_router, attend_router
+from .routers import login_router, disc_router, lecture_router, user_router, token_router, attend_router, stat_router
 from .models.pset_models import User
 
 SECRET_KEY = os.getenv("SECRET_KEY")
@@ -44,4 +44,5 @@ app.include_router(lecture_router.router, prefix="/lecture", tags=["lecture"])
 app.include_router(user_router.router, prefix="/user", tags=["user"])
 app.include_router(token_router.router, prefix="/token", tags=["token"])
 app.include_router(attend_router.router, prefix="/attend", tags=["attend"])
+app.include_router(stat_router.router, prefix="/stat", tags=["stat"])
 

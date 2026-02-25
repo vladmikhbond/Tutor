@@ -1,8 +1,9 @@
 from datetime import datetime, timezone
 from typing import List
-from zoneinfo import ZoneInfo
+
 from sqlalchemy import Integer, String, DateTime, Text
 from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase
+from ..routers.utils import str_to_time
 
 class Base(DeclarativeBase):
     pass
@@ -46,9 +47,13 @@ class Snapshot(Base):
         not_empty_str = map(lambda x: x.strip(), self.visitors.split(','))
         return [x for x in not_empty_str if x ]
 
-# str(Kyiv) -> time(UTC)
-def str_to_time(s: str, TIME_FMT) -> datetime:
-    return datetime.strptime(s, TIME_FMT) \
-        .replace(tzinfo=ZoneInfo("Europe/Kyiv")) \
-        .astimezone(ZoneInfo("UTC")) \
-        .replace(tzinfo=None)
+# --------------------- лог відвіування лекцій ---------------
+
+class Log(Base):
+    __tablename__ = "logs"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    username: Mapped[str] = mapped_column(String)
+    when: Mapped[datetime] = mapped_column(DateTime)
+    body: Mapped[str] = mapped_column(Text)
+
