@@ -1,25 +1,24 @@
-from datetime import datetime
-from fastapi import Depends, Form, HTTPException, Request
-from fastapi.responses import RedirectResponse
+import json
+import urllib.parse
+from typing import Dict
+from fastapi import Depends, Request
 from fastapi.templating import Jinja2Templates
-from pydantic import BaseModel
 from fastapi import APIRouter
 from sqlalchemy.orm import Session
 
-from app.models.attend_report import create_matrix
 from app.models.pset_models import User
 from app.routers.login_router import get_current_tutor
 
-from ..models.attend_models import Log, Shadule, Snapshot
+from ..models.attend_models import Log
 from ..dal import get_attend_db
+from ..routers.utils import time_to_str
 
 router = APIRouter()
 
 # шаблони Jinja2
 templates = Jinja2Templates(directory="app/templates")
 
-import json
-import urllib.parse
+
 # -------------------------- visits -------------------------
 
 @router.get("/visits/{username}")
@@ -30,181 +29,33 @@ async def get_stat_visits(
     user: User = Depends(get_current_tutor)
 ):
     """ 
-    Відвідування лекцій студентом
-    body = {
-                lecture: lecture,
-                duration: duration
-            }
+    Перегляд лекцій студентом
+    log.body = {lecture: ... , duration: ... }
     """
     logs = db.query(Log).filter(Log.username == username).all()
+    
+    if len(logs) == 0:
+        return templates.TemplateResponse("stat/visits.html", {"request": request, "student": username, "logs": []})
+
+    visits_dict: Dict[str, int] = {}
+    
+
     for log in logs:
         obj = json.loads(log.body)
-        log.lecture = urllib.parse.unquote(obj['lecture'])
+        lecture = urllib.parse.unquote(obj['lecture'])    
+        duration = obj['duration']
+        if lecture in visits_dict:
+            visits_dict[lecture] += duration
+        else: 
+            visits_dict[lecture] = duration
         
-        log.duration = obj['duration']
+    visits_list = sorted( visits_dict.items(), key=lambda x: x[0])
+    visits_list = [(fst, f"{snd // 60000}' {snd // 1000 % 60}\"") for fst, snd in visits_list] 
 
-    
-    return templates.TemplateResponse("stat/visits.html", {"request": request, "logs": logs})
+    last_visit = max(log.when for log in logs) 
 
-# # -------------------------- new -------------------------
-
-# @router.get("/new")
-# async def get_attend_new (
-#     request: Request, 
-#     db: Session = Depends(get_attend_db),
-#     user: User = Depends(get_current_tutor)
-# ):
-#     """ 
-#     Новий розклад.
-#     """
-#     shadule = Shadule(classes="", moments="") 
-#     return templates.TemplateResponse("attend/edit.html", {"request": request, "shadule": shadule})
-
-# @router.post("/new")
-# async def post_attend_new(
-#     request: Request,
-#     classes: str = Form(...),
-#     moments: str = Form(""),
-#     db: Session = Depends(get_attend_db),
-#     user: User = Depends(get_current_tutor)
-# ):
-#     shadule = Shadule(
-#         classes = classes,
-#         moments = moments,
-#         username = user.username,
-#     )
-
-#     # check if moments are correct
-#     if (mes := shadule.moments_ok()) != "ok":
-#         shadule.moments = f"{mes}\n{shadule.moments}"
-#         return templates.TemplateResponse("attend/edit.html", {"request": request, "shadule": shadule})
-    
-#     try:
-#         db.add(shadule) 
-#         db.commit()
-#     except Exception as e:
-#         db.rollback()
-#         return templates.TemplateResponse("attend/edit.html", {"request": request, "shadule": shadule})
-#     return RedirectResponse(url="/attend/list", status_code=302)
-
-# # -------------------------- edit -------------------------
-
-# @router.get("/edit/{id}")
-# async def get_attend_edit(
-#     id: int,
-#     request: Request, 
-#     db: Session = Depends(get_attend_db),
-#     user: User = Depends(get_current_tutor)
-# ):
-#     """ 
-#     Редагування розкладу.
-#     """
-#     shadule = db.get(Shadule, id)
-#     if not shadule:
-#         return RedirectResponse(url="/attend/list", status_code=302)
-    
-#     return templates.TemplateResponse("attend/edit.html", {"request": request, "shadule": shadule})
-
-
-# @router.post("/edit/{id}")
-# async def post_attend_edit(
-#     id: int,
-#     request: Request,
-#     classes: str = Form(...),
-#     moments: str = Form(""),
-#     db: Session = Depends(get_attend_db),
-#     user: User = Depends(get_current_tutor)
-# ):
-#     shadule = db.get(Shadule, id)
-#     if not shadule:
-#         raise HTTPException(404, f"Not found shadule_id={id} in DB.")
-#     shadule.classes = classes
-#     shadule.moments = moments
-    
-#     # check if moments are correct
-#     if (mes := shadule.moments_ok()) != "ok":
-#         shadule.moments = f"{mes}\n{shadule.moments}"
-#         return templates.TemplateResponse("attend/edit.html", {"request": request, "shadule": shadule})
-    
-#     db.commit()
-#     return RedirectResponse(url="/attend/list", status_code=302)
-
-# # ------- del 
-
-# @router.get("/del/{id}")
-# async def get_attend_del(
-#     id: int, 
-#     request: Request, 
-#     db: Session = Depends(get_attend_db),
-#     user: User = Depends(get_current_tutor)
-# ):
-#     """ 
-#     Видалення розкладу.
-#     """
-#     shadule = db.get(Shadule, id)
-#     if not shadule:
-#         return RedirectResponse(url="/attend/list", status_code=302)
-    
-#     return templates.TemplateResponse("attend/del.html", {"request": request, "shadule": shadule})
-
-
-# @router.post("/del/{id}")
-# async def post_attend_del(
-#     id: int,
-#     db: Session = Depends(get_attend_db),
-#     user: User = Depends(get_current_tutor)
-# ):
-#     shadule = db.get(Shadule, id)
-#     db.delete(shadule)
-#     db.commit()
-#     return RedirectResponse(url="/attend/list", status_code=302)
-
-# # ---------------------------- Snapshot (AJAX) ------------------------
-
-# API_KEY = "secret123"
-
-# class SnapshotRequest(BaseModel):
-#     username: str
-#     visitors: list[str]
-
-# @router.post("/snapshot")
-# async def post_snapshot(
-#     data: SnapshotRequest,
-#     db: Session = Depends(get_attend_db)
-# ):
-#     snapshot = Snapshot(
-#         username = data.username,
-#         visitors = ",".join(data.visitors),  
-#         when = datetime.now()
-#     )
-#     db.add(snapshot)
-#     db.commit()
-#     return {"status": "ok"}
-
-# # --------------------------attend report -------------------------
-
-# @router.get("/report/{classes}")
-# async def get_attend_report(
-#     request: Request,
-#     classes: str,
-#     db: Session = Depends(get_attend_db),
-#     user: User = Depends(get_current_tutor)
-# ):
-#     """ 
-#     Матриця відвідування занять (classes).
-#     """
-#     shadule = db.query(Shadule).filter(Shadule.username == user.username).filter(Shadule.classes == classes).one_or_none()
-#     shots = db.query(Snapshot).filter(Snapshot.username == user.username).all()
-#     names, begins, matrix = create_matrix(shadule, shots)
-#     v_headers = [(beg, beg.strftime("%d/%m")) for beg in begins]
-
-#     names = sorted([change(n) for n in names])
-
-#     return templates.TemplateResponse("attend/report.html", {"request": request, 
-#         "names": names, "v_headers":v_headers, "matrix": matrix, "classes": shadule.classes})
-
-# def change(name):
-#     """John Doe -> Doe John"""
-#     first, last = name.split()
-#     return f"{last} {first}"
+    return templates.TemplateResponse("stat/visits.html", {"request": request, 
+            "student": username,
+            "logs": visits_list, 
+            "last_visit": time_to_str(last_visit, "%Y-%m-%d")})
 
