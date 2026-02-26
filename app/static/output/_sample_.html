@@ -18,47 +18,55 @@
             <span id="theme_toggle"> ◐ </span>
             <span id="pensil"> ✏ </span>
         </div>
-        <div id="lecture">
-            <div id="n0" class="alef1">_TEST_</div>
+<div id="lecture">
+
 
 <!-- ------------------------------- BEGIN SLIDES --------------------------------- -->
+<div id="n0" class="alef1">_TEST_</div>
 
-<div id="n1" class="alef2">Присвоювання</div>
-<div id="n2" class="alef4">ім'я = вираз;</div>
-<div id="n3" class="alef3">В мові <i>C</i># точка з комою ставиться наприкінці кожної команди.
-Тут точка з комою є термінатором<i>,</i> а не сепаратором<i>,</i> як у <i>JS</i>.</div>
-<div id="n4" class="alef3">Ланцюжкове присвоєння
-<span>
-int a, b;
-a = (b = 5);
-</span></div>
-<div id="n5" class="alef3">Ланцюжкове присвоєння</div>
+<div id="n1" class="alef2">Заголовок другого рівня</div>
 
-<div id="n6" class="alef5">
-    <div id="editor6"></div>
+<div id="n2" class="alef3">Частина <i>else</i> виконується<i>,</i> коли умова хибна або стає такою під час виконання циклу. 
+Так само<i>,</i> як у команді <i>if,</i> ця частина не обов'язкова.
 </div>
 
+<div id="n3" class="alef4">while умова:
+    блок
+else:
+    блок
+</div>
+
+<div id="n4" class="alef5">
+    <div id="editor4"></div>
+</div>
 <script>
-    const editor6 = ace.edit("editor6", {
+    const editor4 = ace.edit("editor4", {
         theme: "ace/theme/github",
-        mode: "ace/mode/csharp",
-        value:  `int a, b;
-a = (b = 5);
-`,    
+        mode: "ace/mode/javascript",
+        value:  `# Приклад програмного коду
+a = 8
+while a < 10:
+    print(a)
+    a += 1
+else:
+    print('End')`,    
         maxLines: 30,
         wrap: true,
         autoScrollEditorIntoView: true,
     });
-    editor6.session.setUseWorker(false);
-    editor6.renderer.setShowGutter(false);
+    editor4.session.setUseWorker(false);
+    editor4.renderer.setShowGutter(false);
 </script>
 
-<div id="n7" class="alef6"><table><thead><tr><th>Команда</th><th>Назва</th><th>Зміст</th></hr></thead><tbody><tr><td>01 NNNN</td><td>зчитати</td><td>скопіювати до суматора зміст комірки NNNN</td></tr><tr><td>02 NNNN</td><td>записати</td><td>зміст суматора скопіювати в комірку NNNN</td></tr><tr><td>11 NNNN</td><td>додати</td><td>додати до суматора зміст комірки NNNN</td></tr><tr><td>12 NNNN</td><td>відняти</td><td>відняти від суматора зміст комірки NNNN</td></tr><tr><td>13 NNNN</td><td>помножити</td><td>помножити суматор на зміст комірки NNNN</td></tr><tr><td>20 NNNN</td><td>перейти</td><td>занести в лічильник команд число NNNN</td></tr></tbody></table></div>
-<div id="n8" class="alef3">Документація по С#
-<a href="https://docs.microsoft.com/en-us/dotnet/csharp/">https://docs.microsoft.com/en-us/dotnet/csharp/</a></div>
+<div id="n5" class="alef6"><table><thead><tr><th>Розділ</th><th>Функції</th></hr></thead><tbody><tr><td>Math</td><td>abs()  divmod()  max()  min()  round()  pow()</td></tr><tr><td>Sequences</td><td>all() any() max() min() map() slice()  filter()  sorted()  reversed()  enumerate()  len()  sum()  zip()  iter()  range()  hash()  next()</td></tr></tbody></table>
 </div>
 
+
+<div id="n6" class="alef3"></div>
+
+
 <!-- ------------------------------- END SLIDES --------------------------------- -->
+</div>
 
     <script>
         const START_SLIDE_NO=100500; 

@@ -98,7 +98,6 @@ document.getElementById("pensil")
         .addEventListener("click", canvasPainter);
 
 let canvas = null;
-let alt_state = 0;
 
 function canvasPainter() {
    
@@ -132,7 +131,8 @@ function canvasPainter() {
     ctx.lineCap = "round";
 
     let curves = [], drawing = false; 
-    let ctrlPressed = false, zPressed = false;
+    let ctrlPressed = false;
+    let zPressed = false;
 
     canvas.onmousedown = function (e) {
         let x = e.pageX - e.target.offsetLeft,
@@ -160,8 +160,6 @@ function canvasPainter() {
         if (drawing) {
             let curve = curves[curves.length - 1]
             smooth(curve);
-            if (alt_state)
-                transform(curve);
             drawing = false;
             draw();
         }
@@ -183,7 +181,9 @@ function canvasPainter() {
             e.preventDefault(); 
         } 
         if (e.key === "Alt") {
-            alt_state = 1;
+            let curve = curves[curves.length - 1]
+            transform(curve);
+            draw();
         } 
     }
 
@@ -194,10 +194,7 @@ function canvasPainter() {
         }
         if (e.key === "z") {
             zPressed = false;
-        }
-        if (e.key === "Alt") {
-            alt_state = 0;
-        }    
+        }   
     };
 
 

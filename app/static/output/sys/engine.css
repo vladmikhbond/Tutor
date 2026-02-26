@@ -31,12 +31,10 @@ html, body {
 }
 /* -------------- slides ---------------- */
 
-.alef3.foc{
-    border-color: var(--link-color);
-    border-style: solid;
-    border-width: 3px;
+.alef3.foc, 
+.alef4.foc {
     border-radius: var(--border-radius);
-    background-color: white;
+    background-color: rgb(255, 255, 230);
     margin-top: 15px; 
     padding: 8px;
     font-size: 16px;
@@ -51,7 +49,6 @@ html, body {
     border-radius: var(--border-radius);;
     margin-top: 8px; 
     background-color: var(--bg-color);
-    /* border: 3px solid var(--link-color); */
     padding: 8px;
 }
 
@@ -94,16 +91,21 @@ html, body {
     border: solid 3px var(--link-color);
 }
 
-/* .alef5 */
+/* this is .alef5 */
 .ace_editor { 
     color: var(--text-color);
     font-size: 14px;
     border-radius: var(--border-radius);
     margin-top: 10px; 
     line-height: 1.6 !important;
+    background-color: var(--aux-color) !important; 
 }
 .ace_editor .ace_active-line {   
     background-color: var(--aux-color) !important;    /* рядок з кареткою */
+}
+.ace_editor .ace_comment {
+    color: var(--text-color) !important;  
+    font-style: italic; 
 }
 
 .alef6 table * {
@@ -151,59 +153,4 @@ html, body {
 
 .alef6 table tbody td {
     background-color: var(--body-color) !important;
-}
-
-/* -------------- ace theme ---------------- */
-
-.ace-chrome, 
-.ace-chrome .ace_scroller {
-    background-color: var(--body-color) !important;
-    border: solid thin;
-    border-color: var(--link-color);
-}
-
-.ace-chrome .ace_keyword {
-    color: #668de2 !important;
-    font-weight: bold;
-}
-
-.ace-chrome .ace_string {
-    color: #d73a49 !important;
-}
-
-.ace-chrome .ace_comment {
-    color: #5d7a75 !important;
-    font-style: italic;
-}
-
-.ace-chrome .ace_numeric {
-    color: #b060df !important;
-}
-
-.ace_print-margin {
-    border-left: 1px dashed var(--link-color) !important;
-    background: transparent !important;
-}
-
-.ace_editor .ace_marker-layer .ace_selected-word {
-    background-color: var(--link-color) !important;
-    border: none !important;
-    opacity: 0.4 !important;
-    border-radius: 2px;
-}
-
-.ace_editor .ace_cursor {
-    color: var(--text-color) !important;
-}
-
-.ace_editor .ace_marker-layer .ace_bracket {
-    background-color: var(--link-color) !important;
-    border: 1px solid var(--header-color) !important;
-    opacity: 0.6 !important;
-}
-
-.ace_editor .ace_marker-layer .ace_selection {
-    background-color: var(--link-color) !important;
-    opacity: 0.8 !important;
-    z-index: 4; 
 }
