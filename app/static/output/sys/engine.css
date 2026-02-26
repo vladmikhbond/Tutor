@@ -36,7 +36,7 @@ html, body {
     border-style: solid;
     border-width: 3px;
     border-radius: var(--border-radius);
-    background-color: var(--body-color);
+    background-color: white;
     margin-top: 15px; 
     padding: 8px;
     font-size: 16px;
@@ -51,7 +51,7 @@ html, body {
     border-radius: var(--border-radius);;
     margin-top: 8px; 
     background-color: var(--bg-color);
-    border: 3px solid var(--bg-color);
+    /* border: 3px solid var(--link-color); */
     padding: 8px;
 }
 
@@ -79,7 +79,7 @@ html, body {
 .alef3 > a { 
     font-weight: 500;
     text-decoration: none;
-    color: var(--header-color);
+    color: var(--link-color);
 }
 
 .alef3 > span { 
@@ -90,7 +90,7 @@ html, body {
 .alef4 {
     font-weight: bold;
     white-space: pre;
-    color: var(--text-color);
+    color: var(--link-color);
     border: solid 3px var(--link-color);
 }
 
@@ -103,7 +103,7 @@ html, body {
     line-height: 1.6 !important;
 }
 .ace_editor .ace_active-line {   
-    background-color: var(--link-color) !important;    /* рядок з кареткою */
+    background-color: var(--aux-color) !important;    /* рядок з кареткою */
 }
 
 .alef6 table * {
