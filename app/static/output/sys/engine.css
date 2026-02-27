@@ -91,32 +91,28 @@ html, body {
     border: solid 3px var(--link-color);
 }
 
-/* this is .alef5 */
+/* same as .alef5 */
 .ace_editor { 
     color: var(--text-color);
     font-size: 14px;
     border-radius: var(--border-radius);
     margin-top: 10px; 
     line-height: 1.6 !important;
-    background-color: var(--aux-color) !important; 
+    background-color: var(--bg-color) !important; 
 }
 .ace_editor .ace_active-line {   
-    background-color: var(--aux-color) !important;    /* рядок з кареткою */
+    background-color: var(--bg-color) !important;    /* рядок з кареткою */
 }
 .ace_editor .ace_comment {
-    color: var(--text-color) !important;  
+    color: var(--link-color) !important;  
     font-style: italic; 
 }
+
 
 .alef6 table * {
     background: var(--aux-color) !important;
     color: var(--text-color) !important;
     border-color: var(--text-color) !important;
-}
-
-.bi.bi-moon-stars-fill,
-.bi.bi-pencil {
-    color: var(--header-color) !important;
 }
 
 .alef6 table {
