@@ -86,7 +86,8 @@ def create_matrix(shad: Shadule, shots: List[Snapshot]) -> Tuple[List[datetime],
         if len(arr) == 2:
             """ John Doe -> Doe John """
             row[0] = f"{arr[1]} {arr[0]}"
-     
+    
+    # приблизне сортування
     matrix.sort(key=lambda r: r[0])
 
     return begins, matrix 
