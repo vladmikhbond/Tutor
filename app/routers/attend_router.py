@@ -180,21 +180,15 @@ async def get_attend_report(
     Матриця відвідування занять (classes).
     """
     shadule = db.query(Shadule).filter(Shadule.username == user.username).filter(Shadule.classes == classes).one_or_none()
+    
     shots = db.query(Snapshot).filter(Snapshot.username == user.username).all()
-    names, begins, matrix = create_matrix(shadule, shots)
+
+    begins, matrix = create_matrix(shadule, shots)
+
     v_headers = [(beg, beg.strftime("%d/%m")) for beg in begins]
 
-    # norm_names = []
-    # for name in names:
-    #     arr = name.split()
-    #     if len(arr) == 2:
-    #         """ John Doe -> Doe John """
-    #         norm_names.append(f"{arr[1]} {arr[0]}")
-    # norm_names.sort()
-    
     return templates.TemplateResponse("attend/report.html", {
-        "request": request, 
-        "names": names, 
+        "request": request,  
         "v_headers": v_headers, 
         "matrix": matrix, 
         "classes": shadule.classes})

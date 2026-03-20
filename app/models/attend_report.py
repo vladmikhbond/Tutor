@@ -50,7 +50,7 @@ def get_begin_shots_dict(shad: Shadule, shots: List[Snapshot]) -> Dict[datetime,
 
 type Matrix = List[List[str]]
         
-def create_matrix(shad: Shadule, shots: List[Snapshot]) -> Tuple[List[str], List[datetime], Matrix]:
+def create_matrix(shad: Shadule, shots: List[Snapshot]) -> Tuple[List[datetime], Matrix]:
     """
     З розкладу і знімків будуємо матрицю відвідувань
     """
@@ -71,7 +71,7 @@ def create_matrix(shad: Shadule, shots: List[Snapshot]) -> Tuple[List[str], List
     # create matrix 
     matrix: Matrix = []
     for name in names:
-        row: List[str] = []
+        row: List[str] = [name]
         for begin in begins:
             col_dict = column_dict_dict.get(begin, dict())
             if name in col_dict:
@@ -80,4 +80,13 @@ def create_matrix(shad: Shadule, shots: List[Snapshot]) -> Tuple[List[str], List
                 row.append("")
         matrix.append(row)
 
-    return names, begins, matrix 
+    # normalize names  
+    for row in matrix:
+        arr = row[0].split()
+        if len(arr) == 2:
+            """ John Doe -> Doe John """
+            row[0] = f"{arr[1]} {arr[0]}"
+     
+    matrix.sort(key=lambda r: r[0])
+
+    return begins, matrix 

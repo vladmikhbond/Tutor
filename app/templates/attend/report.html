@@ -16,15 +16,14 @@
   <thead>
     <tr>
        <th>Name</th>
-       {% for t, h in v_headers %}
-       <th title="{{t}}">{{ h }}</th>
+       {% for full_date, short_date in v_headers %}
+       <th title="{{full_date}}"> {{ short_date }} </th>
        {% endfor %}
     </tr>
   </thead>
   <tbody>
-    {% for i in range(names|count) %}
+    {% for i in range(matrix|count) %}
     <tr>
-      <td>{{names[i]}}</td>
       {% for cell in matrix[i] %}
       <td class="cell">{{ cell }}</td>
        {% endfor %}
