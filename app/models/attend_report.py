@@ -8,16 +8,18 @@ def list_to_str(ints: List[int], n):
 def get_column_dict(shots: List[Snapshot]) -> Dict[str, str]:
     """
     Створює словник відвідувань одного заняття. Ключі - імена, значення - рядки.
-    d["Іван"] == "+++"
+    d["Іван Петренко"] == "─██──█"
     """
-    
-    dic: dict[str, List[int]] = dict()
+    # dic["Іван Петренко"] = [1, 2, 5]
+    dic: dict[str, List[int]] = dict()   
     for i, shot in enumerate(shots):
         for name in shot.get_names():
             if name in dic:
                 dic[name].append(i)
             else:
                 dic[name] = [i]
+
+    # dic["Іван Петренко"] = "─██──█"
     dic2: Dict[str, str] = dict()
     n = len(shots)
     for k in dic:
@@ -28,9 +30,10 @@ def get_column_dict(shots: List[Snapshot]) -> Dict[str, str]:
 
 def get_begin_shots_dict(shad: Shadule, shots: List[Snapshot]) -> Dict[datetime, List[Snapshot]]:
     """
-    Створює словник, який поділяє знімки на заняття. Ключ - дата-час початку, значення - список знимків того заняття.
+    Створює словник, який поділяє знімки на заняття.  
     d["12-1-2026 7:45"] == [shot1, shot2, shot3, shot4]
-
+    Ключ - дата-час початку, значення - список знимків того заняття, 
+    зроблених на протязі півтори години з початку заняття.
     """
     lesson_dict: dict[datetime, List[Snapshot]] = dict()
 
@@ -47,20 +50,22 @@ def get_begin_shots_dict(shad: Shadule, shots: List[Snapshot]) -> Dict[datetime,
 
 type Matrix = List[List[str]]
         
-def create_matrix(shad: Shadule, shots: List[Snapshot]) -> Tuple[List[str], Matrix, List[str]]:
+def create_matrix(shad: Shadule, shots: List[Snapshot]) -> Tuple[List[str], List[datetime], Matrix]:
     """
     З розкладу і знімків будуємо матрицю відвідувань
     """
     begin_shots_dict: Dict[datetime, List[Snapshot]] = get_begin_shots_dict(shad, shots)
-
-    column_dict_list: Dict[datetime, Dict[str, str]] = \
+    
+    # словник словнків для колонок матриці
+    # { time: {name : lines} } 
+    column_dict_dict: Dict[datetime, Dict[str, str]] = \
         {begin : get_column_dict(begin_shots_dict[begin]) for begin in begin_shots_dict}
 
-    # all names - left header
-    sets = map(lambda x: set(x.keys()), column_dict_list.values())
-    names = sorted(list(set().union(*sets)))
+    # all names - the left headers of matrix
+    sets = map(lambda x: set(x.keys()), column_dict_dict.values())
+    names = list(set().union(*sets))
 
-    # all begins - upper header
+    # all begins - the upper headers of matrix
     begins = shad.get_begins()
 
     # create matrix 
@@ -68,7 +73,7 @@ def create_matrix(shad: Shadule, shots: List[Snapshot]) -> Tuple[List[str], Matr
     for name in names:
         row: List[str] = []
         for begin in begins:
-            col_dict = column_dict_list.get(begin, dict())
+            col_dict = column_dict_dict.get(begin, dict())
             if name in col_dict:
                 row.append(col_dict[name])
             else: 

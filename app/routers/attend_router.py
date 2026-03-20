@@ -184,17 +184,17 @@ async def get_attend_report(
     names, begins, matrix = create_matrix(shadule, shots)
     v_headers = [(beg, beg.strftime("%d/%m")) for beg in begins]
 
-    norm_names = []
-    for name in names:
-        arr = name.split()
-        if len(arr) == 2:
-            """ John Doe -> Doe John """
-            norm_names.append(f"{arr[1]} {arr[0]}")
-    norm_names.sort()
+    # norm_names = []
+    # for name in names:
+    #     arr = name.split()
+    #     if len(arr) == 2:
+    #         """ John Doe -> Doe John """
+    #         norm_names.append(f"{arr[1]} {arr[0]}")
+    # norm_names.sort()
     
     return templates.TemplateResponse("attend/report.html", {
         "request": request, 
-        "names": norm_names, 
+        "names": names, 
         "v_headers": v_headers, 
         "matrix": matrix, 
         "classes": shadule.classes})
