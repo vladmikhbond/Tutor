@@ -1,7 +1,7 @@
 import re
 import bcrypt
-from fastapi import APIRouter, Depends, HTTPException, Request, Form, Response, Security
-from fastapi.responses import RedirectResponse, StreamingResponse
+from fastapi import APIRouter, Depends, Request, Form
+from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from ..models.pset_models import User
@@ -37,8 +37,8 @@ async def get_user_list(
         users = [u for u in users if re.search(filter, u.username, re.RegexFlag.U) is not None] 
     users.sort(key=lambda u: u.username)
 
-    return templates.TemplateResponse("user/list.html", 
-            {"request": request, "users": users, "filter_val": filter})
+    return templates.TemplateResponse(request, "user/list.html", 
+            {"users": users, "filter_val": filter})
 
 # ----------------------- reset password
 
@@ -56,7 +56,7 @@ async def get_user_reset(
     if not user:
         return RedirectResponse(url="/user/list", status_code=302)
     
-    return templates.TemplateResponse("user/reset.html", {"request": request, "user": user})
+    return templates.TemplateResponse(request, "user/reset.html", {"user": user})
 
 
 @router.post("/reset/{name}")
@@ -83,7 +83,7 @@ async def get_user_new(
     """ 
     Додавання нових користувачів.
     """
-    return templates.TemplateResponse("user/new.html", {"request": request, "names": ""})
+    return templates.TemplateResponse(request, "user/new.html", {"names": ""})
 
 
 @router.post("/new")
@@ -107,7 +107,7 @@ async def post_user_new(
     except Exception as e:
         db.rollback()
         err_mes = f"Error during a new disc adding: {e}"
-        return templates.TemplateResponse("user/new.html", {"request": request, "names": names})
+        return templates.TemplateResponse(request, "user/new.html", {"names": names})
     return RedirectResponse(url="/user/list", status_code=302)
 
 
@@ -127,7 +127,7 @@ async def get_user_del(
     if not user:
         return RedirectResponse(url="/user/list", status_code=302)
     
-    return templates.TemplateResponse("user/del.html", {"request": request, "user": user})
+    return templates.TemplateResponse(request, "user/del.html", {"user": user})
 
 
 @router.post("/del/{name}")

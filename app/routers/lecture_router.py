@@ -2,7 +2,6 @@ import os
 import re
 import datetime as dt
 import shutil
-from typing import List
 from fastapi import APIRouter, Depends, HTTPException, Request, Form, File, Response, UploadFile
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
@@ -36,8 +35,7 @@ async def get_lecture_list(
     disc = db.get(Disc, disc_id)
     disc.lectures.sort(key=lambda l: l.title)
 
-    return templates.TemplateResponse("lecture/list.html", 
-            {"request": request, "disc": disc})
+    return templates.TemplateResponse(request, "lecture/list.html", {"disc": disc})
 
 
 # ------- new 
@@ -51,8 +49,7 @@ async def get_lecture_new(
     """ 
     Створення нової лекції.
     """
-    return templates.TemplateResponse("lecture/new.html", 
-            {"request": request, "disc_id": disc_id})
+    return templates.TemplateResponse(request, "lecture/new.html", {"disc_id": disc_id})
 
 
 @router.post("/new/{disc_id}")
@@ -95,8 +92,8 @@ async def get_lecture_edit(
     lecture = db.get(Lecture, id)
     if not lecture:
         return RedirectResponse(url=f"/lecture/list/{lecture.disc_id}", status_code=302)
-    return templates.TemplateResponse("lecture/edit.html", 
-            {"request": request, "lecture": lecture, "disc_id": lecture.disc_id})
+    return templates.TemplateResponse(request, "lecture/edit.html", 
+            {"lecture": lecture, "disc_id": lecture.disc_id})
 
 
 @router.post("/edit/{id}")      # ajax
@@ -143,7 +140,7 @@ async def get_lecture_del(
     if not lecture:
         raise HTTPException(404, f"No lecture with id={id}")
 
-    return templates.TemplateResponse("lecture/del.html", {"request": request, "lecture": lecture})
+    return templates.TemplateResponse(request, "lecture/del.html", {"lecture": lecture})
 
 
 @router.post("/del/{id}")
@@ -273,7 +270,7 @@ async def post_lecture_picture(
                 "end": end,
                 "lec_id": lec.id
             })
-    return templates.TemplateResponse("lecture/search.html", {"request": request, "finded": finded, "sample": sample})
+    return templates.TemplateResponse(request, "lecture/search.html", {"finded": finded, "sample": sample})
 
 # ----------------------- mark as public
 

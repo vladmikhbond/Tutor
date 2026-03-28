@@ -44,7 +44,7 @@ async def get_attend_new (
     Новий розклад.
     """
     shadule = Shadule(classes="", moments="") 
-    return templates.TemplateResponse("attend/edit.html", {"request": request, "shadule": shadule})
+    return templates.TemplateResponse(request, "attend/edit.html", {"shadule": shadule})
 
 @router.post("/new")
 async def post_attend_new(
@@ -63,14 +63,14 @@ async def post_attend_new(
     # check if moments are correct
     if (mes := shadule.moments_ok()) != "ok":
         shadule.moments = f"{mes}\n{shadule.moments}"
-        return templates.TemplateResponse("attend/edit.html", {"request": request, "shadule": shadule})
+        return templates.TemplateResponse(request, "attend/edit.html", {"shadule": shadule})
     
     try:
         db.add(shadule) 
         db.commit()
     except Exception as e:
         db.rollback()
-        return templates.TemplateResponse("attend/edit.html", {"request": request, "shadule": shadule})
+        return templates.TemplateResponse(request, "attend/edit.html", {"shadule": shadule})
     return RedirectResponse(url="/attend/list", status_code=302)
 
 # -------------------------- edit -------------------------
@@ -89,7 +89,7 @@ async def get_attend_edit(
     if not shadule:
         return RedirectResponse(url="/attend/list", status_code=302)
     
-    return templates.TemplateResponse("attend/edit.html", {"request": request, "shadule": shadule})
+    return templates.TemplateResponse(request, "attend/edit.html", {"shadule": shadule})
 
 
 @router.post("/edit/{id}")
@@ -110,7 +110,7 @@ async def post_attend_edit(
     # check if moments are correct
     if (mes := shadule.moments_ok()) != "ok":
         shadule.moments = f"{mes}\n{shadule.moments}"
-        return templates.TemplateResponse("attend/edit.html", {"request": request, "shadule": shadule})
+        return templates.TemplateResponse(request, "attend/edit.html", {"shadule": shadule})
     
     db.commit()
     return RedirectResponse(url="/attend/list", status_code=302)
@@ -131,7 +131,7 @@ async def get_attend_del(
     if not shadule:
         return RedirectResponse(url="/attend/list", status_code=302)
     
-    return templates.TemplateResponse("attend/del.html", {"request": request, "shadule": shadule})
+    return templates.TemplateResponse(request, "attend/del.html", {"shadule": shadule})
 
 
 @router.post("/del/{id}")
@@ -187,8 +187,7 @@ async def get_attend_report(
 
     v_headers = [(beg, beg.strftime("%d/%m")) for beg in begins]
 
-    return templates.TemplateResponse("attend/report.html", {
-        "request": request,  
+    return templates.TemplateResponse(request, "attend/report.html", { 
         "v_headers": v_headers, 
         "matrix": matrix, 
         "classes": shadule.classes})

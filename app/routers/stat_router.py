@@ -35,7 +35,7 @@ async def get_stat_visits(
     logs = db.query(Log).filter(Log.username == username).all()
     
     if len(logs) == 0:
-        return templates.TemplateResponse("stat/visits.html", {"request": request, "student": username, "logs": []})
+        return templates.TemplateResponse(request, "stat/visits.html", {"student": username, "logs": []})
 
     visits_dict: Dict[str, int] = {}
     
@@ -54,7 +54,7 @@ async def get_stat_visits(
 
     last_visit = max(log.when for log in logs) 
 
-    return templates.TemplateResponse("stat/visits.html", {"request": request, 
+    return templates.TemplateResponse(request, "stat/visits.html", {
             "student": username,
             "logs": visits_list, 
             "last_visit": time_to_str(last_visit, "%Y-%m-%d")})

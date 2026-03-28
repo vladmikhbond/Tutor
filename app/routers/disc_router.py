@@ -1,11 +1,10 @@
 import os
-import shutil
 import io
 import zipfile
 import json
 from typing import List
 
-from fastapi import APIRouter, Depends, HTTPException, Request, Form, Response, Security
+from fastapi import APIRouter, Depends, HTTPException, Request, Form
 from fastapi.responses import RedirectResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
@@ -16,7 +15,6 @@ from ..models.models import Disc, Lecture, Picture
 from ..routers.login_router import get_current_tutor
 from ..dal import get_db  # Функція для отримання сесії БД
 from ..lectorium.converter import convert, tune
-from ..routers.lecture_router import export_lecture
 
 # шаблони Jinja2
 templates = Jinja2Templates(directory="app/templates")
@@ -42,9 +40,7 @@ async def get_disc_list(
     """   
     discs = db.query(Disc).filter(Disc.username == user.username).all()
 
-    return templates.TemplateResponse("disc/list.html", 
-            {"request": request, "discs": discs})
-
+    return templates.TemplateResponse(request, "disc/list.html", {"discs": discs})
 
 
 # ------- new
@@ -59,7 +55,7 @@ async def get_disc_new(
     """
     disc = Disc(title="", lang="", theme="", stud_filter="") 
     colors = DEFAULT_LIGHT_COLORS
-    return templates.TemplateResponse("disc/edit.html", {"request": request, "disc": disc, "colors": colors})
+    return templates.TemplateResponse(request, "disc/edit.html", {"disc": disc, "colors": colors})
 
 
 @router.post("/new")
@@ -89,7 +85,7 @@ async def post_disc_new(
         db.commit()
     except Exception as e:
         db.rollback()
-        return templates.TemplateResponse("disc/edit.html", {"request": request, "disc": disc})
+        return templates.TemplateResponse(request, "disc/edit.html", {"disc": disc})
     return RedirectResponse(url="/disc/list", status_code=302)
 
 # ------- edit 
@@ -111,7 +107,7 @@ async def get_disc_edit(
         colors = json.loads(disc.theme)
     except: 
         colors = DEFAULT_LIGHT_COLORS
-    return templates.TemplateResponse("disc/edit.html", {"request": request, "disc": disc, "colors": colors})
+    return templates.TemplateResponse(request, "disc/edit.html", {"disc": disc, "colors": colors})
 
 
 @router.post("/edit/{id}")
@@ -158,7 +154,7 @@ async def get_disc_del(
     if not disc:
         return RedirectResponse(url="/disc/list", status_code=302)
     
-    return templates.TemplateResponse("disc/del.html", {"request": request, "disc": disc})
+    return templates.TemplateResponse(request, "disc/del.html", {"disc": disc})
 
 
 @router.post("/del/{id}")

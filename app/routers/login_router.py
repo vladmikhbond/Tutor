@@ -4,7 +4,6 @@ import bcrypt
 from fastapi.security import APIKeyCookie
 import jwt
 
-from fastapi.security import OAuth2PasswordRequestForm
 from fastapi import APIRouter, HTTPException, Request, Form, Response, Security, Depends
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
@@ -28,7 +27,7 @@ router = APIRouter()
 
 @router.get("/")
 async def get_login(request: Request):
-    return templates.TemplateResponse("login/login.html", {"request": request})
+    return templates.TemplateResponse(request, "login/login.html")
 
 
 @router.post("/")
@@ -41,10 +40,8 @@ async def login(
     # Authenticate locally using DB + helpers from token_router
     user = authenticated_user(db, username, password)
     if user is None:
-        return templates.TemplateResponse("login/login.html", {
-            "request": request,
-            "error": "Invalid credentials."
-        })
+        return templates.TemplateResponse(request, "login/login.html", {
+            "error": "Invalid credentials." })
 
     token = create_access_token(payload={"sub": username, "role": user.role})
 
@@ -72,7 +69,7 @@ async def logout(request: Request):
 @router.get("/login/help")
 async def logout(request: Request, response: Response):
     
-    return templates.TemplateResponse("login/help.html", {"request": request})  
+    return templates.TemplateResponse(request, "login/help.html")  
 
 # ---------------------------- aux
 
@@ -104,7 +101,7 @@ async def get_pass(
     request: Request, 
     user: User = Depends(get_current_user) 
 ):
-    return templates.TemplateResponse("login/pass.html", {"request": request})
+    return templates.TemplateResponse(request, "login/pass.html")
 
 @router.post("/pass")
 async def post_pass (
@@ -121,7 +118,7 @@ async def post_pass (
         db.commit()
     except:
         error = "Не вдалося змінити пароль"
-        return templates.TemplateResponse("login/pass.html", {"request": request, "error": error}) 
+        return templates.TemplateResponse(request, "login/pass.html", {"error": error}) 
 
     html = f'Пароль змінено на "{password}". Для продовження роботи <a href="/">увійдіть з новим паролем</a>.'
     return HTMLResponse(content=html, status_code=200)
