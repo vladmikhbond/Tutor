@@ -30,7 +30,7 @@ async def get_attend_list(
     Всі заняття викладача.
     """
     shadules = db.query(Shadule).filter(Shadule.username == user.username).all()
-    return templates.TemplateResponse("attend/list.html", {"request": request, "shadules": shadules})
+    return templates.TemplateResponse(request, "attend/list.html", {"shadules": shadules})
 
 # -------------------------- new -------------------------
 
