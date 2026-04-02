@@ -5,8 +5,6 @@ from sqlalchemy.engine import Engine
 
 # --------------------------- Tutor.db ------------------------
 
-TUTOR_DB = "sqlite:////data/Tutor.db"
-
 # Підтримка foreign keys для SQLite
 @event.listens_for(Engine, "connect")
 def set_sqlite_pragma(dbapi_connection, connection_record):
@@ -17,7 +15,7 @@ def set_sqlite_pragma(dbapi_connection, connection_record):
 
 # Створюємо engine 
 engine = create_engine(
-    TUTOR_DB,
+    "sqlite:////data/Tutor.db",
     echo=True,
     connect_args={"check_same_thread": False}  # потрібно для SQLite + багатопоточного доступу
 )
@@ -71,8 +69,23 @@ def get_attend_db():
     finally:
         db.close()
 
-# ================================================================
+# --------------------------- PSS.db ------------------------
 
-# from .models.attend_models import Base
+# engine_pss = create_engine(
+#     "sqlite:////data/PSS.db",
+#     echo=True,
+#     connect_args={"check_same_thread": False}  # потрібно для SQLite + багатопоточного доступу
+# )
 
-# Base.metadata.create_all(engine_attend)
+# # Створюємо фабрику сесій
+# SessionLocalAttend = sessionmaker(autocommit=False, autoflush=False, bind=engine_pss)
+
+# # Dependency для роутерів
+# def get_pss_db():
+#     db: Session = SessionLocalAttend()
+#     try:
+#         yield db
+#     finally:
+#         db.close()
+
+
