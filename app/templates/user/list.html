@@ -8,10 +8,8 @@
     
 <fieldset role="group">
   <a href="/user/new">New Users</a>
-  <input id="user_filter" title="Фільтр користувачів" style="max-width: 200px; height: 15px;"> 
-  <a href="https://regex101.com/" style="color: gray; margin-left: 20px;">regex</a>  
 </fieldset>
-<input type="hidden" name="referer" value="{{request.url.path}}" > 
+
   
 
 {% if users and users|length %}

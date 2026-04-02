@@ -13,6 +13,11 @@ from ..models.attend_models import Log
 from ..dal import  get_users_db, get_attend_db, get_pss_db
 from ..routers.utils import time_to_str
 
+import re
+from app.routers.utils import USER_FILTER_KEY
+from urllib.parse import unquote
+
+
 router = APIRouter()
 
 # шаблони Jinja2
@@ -61,9 +66,7 @@ async def get_stat_visits(
 
 
 # ----------------------- report
-import re
-from app.routers.user_router import USER_FILTER_KEY
-from urllib.parse import unquote
+
 
 @router.get("/report")
 async def get_stat_report(

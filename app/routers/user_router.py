@@ -4,19 +4,17 @@ from fastapi import APIRouter, Depends, Request, Form
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
+
+from app.routers.utils import USER_FILTER_KEY
 from ..models.pset_models import User
 from .login_router import get_current_tutor
 from ..dal import get_users_db  # Функція для отримання сесії БД
 from urllib.parse import unquote
 
-
 # шаблони Jinja2
 templates = Jinja2Templates(directory="app/templates")
 
 router = APIRouter()
-
-USER_FILTER_KEY = "TUTOR_user_filter"
-
 
 # ----------------------- list
 

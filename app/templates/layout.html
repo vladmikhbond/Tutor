@@ -29,9 +29,17 @@
                 {% endif %}
             </a></li>
         </ul>
+
+        {# ----------- filters ---------- #}         
+        <fieldset role="group" style="width: 390px; margin-top: 20px;">       
+            <input id="user_filter" title="Фільтр юзерів" class="filter" placeholder="Users"> 
+        </fieldset>
+        
         </nav>
         {% block content %}{% endblock %}
     </main>
     {% block script %}{% endblock %}
+
+    <script src="/static/js/layout.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>
