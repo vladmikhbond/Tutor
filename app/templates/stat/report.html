@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+    
+<h2>Report</h2>   
+
+
+<table>
+    <thead>
+    <tr>
+      <th scope="col">Person</th>
+      <th scope="col">Visits</th>
+      <th scope="col">Probs</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for name in names %}
+    <tr>
+      <td>{{ name }}</td>
+      <td>{{ lect_dict[name]}}</td>
+      <td>{{ prob_dict[name]}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+{% endblock %}
+
+

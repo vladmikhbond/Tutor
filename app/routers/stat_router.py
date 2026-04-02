@@ -10,7 +10,7 @@ from app.models.pset_models import User, Ticket
 from app.routers.login_router import get_current_tutor
 
 from ..models.attend_models import Log
-from ..dal import  get_users_db, get_attend_db #, get_pss_db
+from ..dal import  get_users_db, get_attend_db, get_pss_db
 from ..routers.utils import time_to_str
 
 router = APIRouter()
@@ -50,7 +50,7 @@ async def get_stat_visits(
             visits_dict[lecture] = duration
         
     visits_list = sorted( visits_dict.items(), key=lambda x: x[0])
-    visits_list = [(fst, f"{snd // 60000}' {snd // 1000 % 60}\"") for fst, snd in visits_list] 
+    visits_list = [(lec, f"{msec // 60000}' {msec // 1000 % 60}\"") for lec, msec in visits_list] 
 
     last_visit = max(log.when for log in logs) 
 
@@ -69,7 +69,7 @@ from urllib.parse import unquote
 async def get_stat_report(
     request: Request, 
     users_db: Session = Depends(get_users_db),
-    # pss_db: Session = Depends(get_pss_db),
+    pss_db: Session = Depends(get_pss_db),
     attend_db: Session = Depends(get_attend_db),
     user: User = Depends(get_current_tutor)
 ):
@@ -79,29 +79,30 @@ async def get_stat_report(
     user_names = [username for (username,) in users_db.query(User.username).all()]
     filter_value = unquote(request.cookies.get(USER_FILTER_KEY, "")).strip()
     names = [n for n in user_names if re.search(filter_value, n, re.RegexFlag.U) is not None]
+    names.sort()
     
     # Перегляд конспектів
     logs = attend_db.query(Log).filter(Log.username.in_(names)).all()
-    lec_dict = dict()
+    lect_dict = dict()
     for log in logs:
         obj = json.loads(log.body)
         duration = obj['duration']
-        if log.username in lec_dict:
-            lec_dict[log.username] += duration
+        if log.username in lect_dict:
+            lect_dict[log.username] += duration
         else:
-            lec_dict[log.username] = duration
-
-    return lec_dict 
+            lect_dict[log.username] = duration
+    for k in lect_dict:
+        msec = lect_dict[k]
+        lect_dict[k] = f"{msec // 60000}' {msec // 1000 % 60}\""
     
-    # # Вирішення задач
-    # tickets = pss_db.query(Ticket.username, Ticket.state).filter(Ticket.username.in_(names)).all()
-    # prob_dict = dict()
-    # for username, state in tickets:
-    #     if username in prob_dict:
-    #         prob_dict[username] += state
-    #     else:
-    #         prob_dict[username] = state
-    # return prob_dict
+    # Вирішення задач
+    tickets = pss_db.query(Ticket.username, Ticket.state).filter(Ticket.username.in_(names)).all()
+    prob_dict = dict()
+    for username, state in tickets:
+        if username in prob_dict:
+            prob_dict[username] += state
+        else:
+            prob_dict[username] = state
 
-    # return templates.TemplateResponse(request, "user/list.html", 
-    #         {"users": users, "filter_val": filter_value})
+    return templates.TemplateResponse(request, "stat/report.html", 
+            {"names": names, "lect_dict": lect_dict, "prob_dict": prob_dict})

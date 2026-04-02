@@ -71,21 +71,21 @@ def get_attend_db():
 
 # --------------------------- PSS.db ------------------------
 
-# engine_pss = create_engine(
-#     "sqlite:////data/PSS.db",
-#     echo=True,
-#     connect_args={"check_same_thread": False}  # потрібно для SQLite + багатопоточного доступу
-# )
+engine_pss = create_engine(
+    "sqlite:////data/PSS.db",
+    echo=True,
+    connect_args={"check_same_thread": False}  # потрібно для SQLite + багатопоточного доступу
+)
 
-# # Створюємо фабрику сесій
-# SessionLocalAttend = sessionmaker(autocommit=False, autoflush=False, bind=engine_pss)
+# Створюємо фабрику сесій
+SessionLocalPss = sessionmaker(autocommit=False, autoflush=False, bind=engine_pss)
 
-# # Dependency для роутерів
-# def get_pss_db():
-#     db: Session = SessionLocalAttend()
-#     try:
-#         yield db
-#     finally:
-#         db.close()
+# Dependency для роутерів
+def get_pss_db():
+    db: Session = SessionLocalPss()
+    try:
+        yield db
+    finally:
+        db.close()
 
 
