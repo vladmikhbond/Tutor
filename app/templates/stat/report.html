@@ -6,13 +6,14 @@
     
 <h2>Report</h2>   
 
-
+<div style="color: red;">{{err_mes}}</div>
 <table>
     <thead>
     <tr>
       <th scope="col">Person</th>
       <th scope="col">Visits</th>
       <th scope="col">Probs</th>
+      <th scope="col">Tests</th>
     </tr>
   </thead>
   <tbody>
@@ -21,6 +22,7 @@
       <td>{{ name }}</td>
       <td>{{ lect_dict[name]}}</td>
       <td>{{ prob_dict[name]}}</td>
+      <td>{{ test_dict[name]}}</td>
     </tr>
     {% endfor %}
   </tbody>

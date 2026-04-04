@@ -1,9 +1,10 @@
 import json
 import urllib.parse
 from typing import Dict
-from fastapi import Depends, Request
+from fastapi import Depends, Request, HTTPException
 from fastapi.templating import Jinja2Templates
 from fastapi import APIRouter
+import httpx
 from sqlalchemy.orm import Session
 
 from app.models.pset_models import User, Ticket
@@ -83,7 +84,8 @@ async def get_stat_report(
     filter_value = unquote(request.cookies.get(USER_FILTER_KEY, "")).strip()
     names = [n for n in user_names if re.search(filter_value, n, re.RegexFlag.U) is not None]
     names.sort()
-    
+    err_mes = ""
+
     # Перегляд конспектів
     logs = attend_db.query(Log).filter(Log.username.in_(names)).all()
     lect_dict = dict()
@@ -107,5 +109,39 @@ async def get_stat_report(
         else:
             prob_dict[username] = state
 
-    return templates.TemplateResponse(request, "stat/report.html", 
-            {"names": names, "lect_dict": lect_dict, "prob_dict": prob_dict})
+    # Виконання тестів
+    try:
+        test_dict = await fetch_tests(filter_value)
+        for name in test_dict:
+            scores = test_dict[name]
+            avg = round(sum(scores) / len(scores)) if scores else 0
+            test_dict[name] = f"{avg}%  ({len(scores)})" if len(scores) else ""
+    except Exception as e:
+        test_dict = []
+        err_mes = str(e)
+
+    return templates.TemplateResponse(request, "stat/report.html", {
+        "names": names, "err_mes": err_mes,
+        "lect_dict": lect_dict, "prob_dict": prob_dict, "test_dict": test_dict})
+
+
+
+async def fetch_tests(pattern: str):
+    """
+        {"cAlieksieiev": [100, 57, 75], ... }
+    """
+    URL = "http://duro_cont:7002/ticket/remote"
+
+    async with httpx.AsyncClient() as client:
+        try:
+            client_response = await client.post(
+                URL,
+                json={"pattern": pattern},
+            )
+        except httpx.RequestError as e:
+            raise Exception(f"Cannot get an answer from '{URL}': {e}") from e
+
+    if client_response.is_success:
+        return client_response.json()
+    else:
+        raise Exception(f"Wrong response. Status code: {client_response.status_code}")
