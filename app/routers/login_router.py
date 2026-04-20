@@ -1,6 +1,5 @@
 import os
-
-import bcrypt
+from typing import List
 from fastapi.security import APIKeyCookie
 import jwt
 
@@ -10,9 +9,10 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
 from .. import dal
-from ..routers.token_router import authenticated_user, create_access_token
+from .token_router import authenticated_user, create_access_token
 
 from ..models.pset_models import User
+from ..models.schemas import HelpItem
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
@@ -67,9 +67,28 @@ async def logout(request: Request):
 # -------------------------- help
 
 @router.get("/login/help")
-async def logout(request: Request, response: Response):
+async def help(request: Request):
+    """
+    Читає вміст файлу app/static/help/help.txt в список HelpItem.
+    В head рядок без відступу, в body рядки з відступом.
+    """
+    items: List[HelpItem] = []
+    with open("app/static/help/help.txt", "r", encoding="utf-8") as f:
+        current_item = None
+        for line in f:
+            line = line.rstrip('\n')
+            if line and line[0] != ' ':  # is a head
+                if current_item is not None:
+                    items.append(current_item)
+                current_item = HelpItem(head=line, body=[])
+            elif line and current_item is not None:  # is a body
+                current_item.body.append(line.strip())
+        if current_item is not None:
+            items.append(current_item)
     
-    return templates.TemplateResponse(request, "login/help.html")  
+
+    return templates.TemplateResponse(request, "login/help.html", {"items": items})
+    
 
 # ---------------------------- aux
 
