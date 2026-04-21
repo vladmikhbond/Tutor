@@ -5,12 +5,18 @@
 {% block content %}
   <style>
     summary {
-       font-weight: bold;
+      font-weight: bold;
+      color: darkred !important;
+    }
+    summary small {
+      font-size: small;
+      font-weight:normal;
+      color: black;
     }
   </style>
   {% for item in items %}
   <details name="example" open>
-    <summary>{{item.head}}</summary>
+    <summary>{{item.head | safe}}</summary>
     <ul>
     {% for line in item.body %}
       {% if line[0] == '-' %}

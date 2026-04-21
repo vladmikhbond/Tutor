@@ -78,6 +78,7 @@ async def help(request: Request):
         for line in f:
             line = line.rstrip('\n')
             if line and line[0] != ' ':  # is a head
+                line = line.replace("(", "<small>(").replace(")", ")</small>")
                 if current_item is not None:
                     items.append(current_item)
                 current_item = HelpItem(head=line, body=[])
