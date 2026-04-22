@@ -20,7 +20,7 @@
     <ul>
     {% for line in item.body %}
       {% if line[0] == '-' %}
-        &nbsp;&nbsp;{{line | safe}}<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;{{line[1:] | safe}}<br>
       {% else %} 
         <li>{{line | safe}}</li> 
       {% endif %}       
