@@ -14,7 +14,8 @@
 		"mynet",
 		"--env-file",
         "c:\\docker_bag\\env"
-	]
+	],
 
+	"postCreateCommand": "python run.py"
 	
 }

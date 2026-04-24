@@ -13,4 +13,4 @@ RUN pip install --no-cache-dir -r /tmp/requirements.txt
 # Відкриваємо порт
 EXPOSE 7003
 
-# CMD ["python", "run.py"]
+CMD ["python", "run.py"]
