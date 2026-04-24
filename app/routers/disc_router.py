@@ -7,6 +7,8 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException, Request, Form
 from fastapi.responses import RedirectResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
+from sqlalchemy import select
+from sqlalchemy.orm import Session
 from sqlalchemy.orm import Session
 
 from app.models.pset_models import User
@@ -38,7 +40,7 @@ async def get_disc_list(
     """ 
     Усі дисципліни користувача.
     """   
-    discs = db.query(Disc).filter(Disc.username == user.username).all()
+    discs = db.execute(select(Disc).where(Disc.username == user.username)).scalars().all()
 
     return templates.TemplateResponse(request, "disc/list.html", {"discs": discs})
 
@@ -196,7 +198,7 @@ def save_zip(disc: Disc, db: Session):
             tuned_title = tune(lecture.title)
             zf.writestr(tuned_title + ".txt", lecture.content)
         # Запакувати малюнки
-        pictures: List[Picture] = db.query(Picture).filter(Picture.disc_id == lecture.disc_id ).all()
+        pictures: List[Picture] = db.execute(select(Picture).where(Picture.disc_id == lecture.disc_id)).scalars().all()
         for picture in pictures:
             zf.writestr(f"pic/{picture.title}", picture.image)
 
@@ -230,7 +232,7 @@ async def get_export(
 
 def zip_disc(disc: Disc, db: Session):
     # Get the public lectures only
-    lectures = db.query(Lecture).filter(Lecture.disc_id == disc.id).filter(Lecture.is_public).all()
+    lectures = db.execute(select(Lecture).where(Lecture.disc_id == disc.id, Lecture.is_public)).scalars().all()
     lectures.sort(key = lambda l: l.title)
     
     buffer = io.BytesIO()
@@ -251,7 +253,7 @@ def zip_disc(disc: Disc, db: Session):
         zf.writestr("index.html", index_html)
         
         # Запакувати малюнки
-        pictures: List[Picture] = db.query(Picture).filter(Picture.disc_id == Picture.disc_id ).all()
+        pictures: List[Picture] = db.execute(select(Picture).where(Picture.disc_id == disc.id)).scalars().all()
         for picture in pictures:
             zf.writestr(f"pic/{picture.title}", picture.image)
         

@@ -4,6 +4,8 @@ from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from fastapi import APIRouter
+from sqlalchemy import select
+from sqlalchemy.orm import Session
 from sqlalchemy.orm import Session
 
 from app.models.attend_report import create_matrix
@@ -29,7 +31,7 @@ async def get_attend_list(
     """ 
     Всі заняття викладача.
     """
-    shadules = db.query(Shadule).filter(Shadule.username == user.username).all()
+    shadules = db.execute(select(Shadule).where(Shadule.username == user.username)).scalars().all()
     return templates.TemplateResponse(request, "attend/list.html", {"shadules": shadules})
 
 # -------------------------- new -------------------------
@@ -179,9 +181,9 @@ async def get_attend_report(
     """ 
     Матриця відвідування занять (classes).
     """
-    shadule = db.query(Shadule).filter(Shadule.username == user.username).filter(Shadule.classes == classes).one_or_none()
+    shadule = db.execute(select(Shadule).where(Shadule.username == user.username, Shadule.classes == classes)).scalars().one_or_none()
     
-    shots = db.query(Snapshot).filter(Snapshot.username == user.username).all()
+    shots = db.execute(select(Snapshot).where(Snapshot.username == user.username)).scalars().all()
 
     begins, matrix = create_matrix(shadule, shots)
 

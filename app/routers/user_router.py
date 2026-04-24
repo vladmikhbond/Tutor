@@ -3,6 +3,7 @@ import bcrypt
 from fastapi import APIRouter, Depends, Request, Form
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.routers.utils import USER_FILTER_KEY
@@ -27,7 +28,7 @@ async def get_user_list(
     """ 
     Усі відфільтровані користувачи.
     """  
-    users = db.query(User).all()
+    users = db.execute(select(User)).scalars().all()
     filter = unquote(request.cookies.get(USER_FILTER_KEY, "")).strip()
 
     if filter:

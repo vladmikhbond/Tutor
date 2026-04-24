@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request, Form, File, Resp
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 
-from sqlalchemy import func
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 from ..models.models import Disc, Lecture, Picture
 from ..models.pset_models import User
@@ -227,12 +227,12 @@ def export_lecture(lecture: Lecture, dst_path:str, db:Session, version: str, sli
     lines = [l.lower() for l in get_style(lecture.content, 2)]
 
     pictures = (
-        db.query(Picture)
-        .filter(
-            Picture.disc_id == lecture.disc_id,
-            func.lower(Picture.title).in_([s.lower() for s in lines])
-        )
-        .all()
+        db.execute(
+            select(Picture).where(
+                Picture.disc_id == lecture.disc_id,
+                func.lower(Picture.title).in_([s.lower() for s in lines])
+            )
+        ).scalars().all()
     )
         
     # create folder 'pic'

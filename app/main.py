@@ -5,8 +5,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from .routers import login_router, disc_router, lecture_router, user_router, token_router, attend_router, stat_router
 from .models.pset_models import User
 
+
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
+DURO_URL = os.getenv("DURO_URL")
 
 app = FastAPI()
 

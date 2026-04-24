@@ -1,10 +1,11 @@
-import json
+import os, json
 import urllib.parse
 from typing import Dict
 from fastapi import Depends, Request, HTTPException
 from fastapi.templating import Jinja2Templates
 from fastapi import APIRouter
 import httpx
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.models.pset_models import User, Ticket
@@ -24,6 +25,7 @@ router = APIRouter()
 # шаблони Jinja2
 templates = Jinja2Templates(directory="app/templates")
 
+DURO_URL = os.getenv("DURO_URL")
 
 # -------------------------- visits -------------------------
 
@@ -38,7 +40,7 @@ async def get_stat_visits(
     Перегляд лекцій студентом
     log.body = {lecture: ... , duration: ... }
     """
-    logs = db.query(Log).filter(Log.username == username).all()
+    logs = db.execute(select(Log).where(Log.username == username)).scalars().all()
     
     if len(logs) == 0:
         return templates.TemplateResponse(request, "stat/visits.html", {"student": username, "logs": []})
@@ -80,14 +82,14 @@ async def get_stat_report(
     """ 
     Звіт по відфільтрованим студентам.
     """  
-    user_names = [username for (username,) in users_db.query(User.username).all()]
+    user_names = [username for (username,) in users_db.execute(select(User.username)).all()]
     filter_value = unquote(request.cookies.get(USER_FILTER_KEY, "")).strip()
     names = [n for n in user_names if re.search(filter_value, n, re.RegexFlag.U) is not None]
     names.sort()
     err_mes = ""
 
     # Перегляд конспектів
-    logs = attend_db.query(Log).filter(Log.username.in_(names)).all()
+    logs = attend_db.execute(select(Log).where(Log.username.in_(names))).scalars().all()
     lect_dict = dict()
     for log in logs:
         obj = json.loads(log.body)
@@ -101,7 +103,7 @@ async def get_stat_report(
         lect_dict[k] = f"{msec // 60000}' {msec // 1000 % 60}\""
     
     # Вирішення задач
-    tickets = pss_db.query(Ticket.username, Ticket.state).filter(Ticket.username.in_(names)).all()
+    tickets = pss_db.execute(select(Ticket.username, Ticket.state).where(Ticket.username.in_(names))).all()
     prob_dict = dict()
     for username, state in tickets:
         if username in prob_dict:
@@ -126,11 +128,12 @@ async def get_stat_report(
 
 
 
+
 async def fetch_tests(pattern: str):
     """
         {"cAlieksieiev": [100, 57, 75], ... }
     """
-    URL = "http://duro_cont:7002/ticket/remote"
+    URL = f"{DURO_URL}/ticket/remote"
 
     async with httpx.AsyncClient() as client:
         try:
